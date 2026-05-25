@@ -1,4 +1,5 @@
 import { NavLink } from 'react-router-dom'
+import BrandLogo from '../../../BrandLogo'
 import './Sidebar.css'
 
 const nav = [
@@ -20,13 +21,9 @@ export default function Sidebar() {
   return (
     <aside className="sidebar">
       <div className="sidebar-brand">
-        <div className="brand-icon">
-          <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
-            <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" stroke="var(--cyan)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-          </svg>
-        </div>
+        <BrandLogo />
         <div>
-          <div className="brand-name">Nebula GEP</div>
+          <div className="brand-name"><span className="brand-name-main">GEP</span> <span className="brand-name-accent">Nebular</span></div>
           <div className="brand-role">Administrateur</div>
         </div>
       </div>

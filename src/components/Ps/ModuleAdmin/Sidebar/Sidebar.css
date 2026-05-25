@@ -34,6 +34,19 @@
   color: #ffffff;
 }
 
+.brand-name-main {
+  font-size: 15px;
+  font-weight: 800;
+  color: #ffffff;
+}
+
+.brand-name-accent {
+  font-size: 11px;
+  font-weight: 700;
+  color: #38bdf8;
+  letter-spacing: 0.4px;
+}
+
 .brand-role {
   font-size: 11px;
   color: var(--cyan);
