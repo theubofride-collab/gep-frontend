@@ -1,1 +1,12 @@
-export default function App() { return <div class='min-h-screen bg-slate-900 text-white flex items-center justify-center'><h1 class='text-3xl font-bold text-emerald-400'>GEP - Frontend React Connecté au Réseau Local</h1></div> }
+import { BrowserRouter, Routes, Route } from 'react-router-dom'
+import Home from './pages/Home'
+
+export default function App() {
+  return (
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<Home />} />
+      </Routes>
+    </BrowserRouter>
+  )
+}
