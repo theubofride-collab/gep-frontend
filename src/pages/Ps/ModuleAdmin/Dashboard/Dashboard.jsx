@@ -1,5 +1,6 @@
 import StatCard from '../../../../components/Ps/ModuleAdmin/StatCard/StatCard'
 import LineChart from '../../../../components/Ps/ModuleAdmin/Charts/LineChart'
+import BarChart from '../../../../components/Ps/ModuleAdmin/Charts/BarChart'
 import DoughnutChart from '../../../../components/Ps/ModuleAdmin/Charts/DoughnutChart'
 import './Dashboard.css'
 
@@ -27,6 +28,20 @@ const metrics = [
   { label: 'Présence moyenne', value: '94%', note: '+3% cette semaine' },
   { label: 'Taux de paiement', value: '87%', note: '18 dossiers ouverts' },
   { label: 'Nouveaux inscrits', value: '26', note: 'Depuis lundi' },
+]
+
+const topCards = [
+  { label: 'Élèves', value: '15.0K', color: 'purple', icon: '🎓' },
+  { label: 'Enseignants', value: '200', color: 'cyan', icon: '🧑‍🏫' },
+  { label: 'Frais en attente de paiement', value: '5.6K', color: 'green', icon: '💸' },
+  { label: 'Dépenses mensuelles', value: '18', color: 'orange', icon: '🧾' },
+]
+
+const bottomCards = [
+  { label: 'Collections mensuelles de frais', value: '12.4K', color: 'purple', icon: '💰' },
+  { label: 'Personnel présent aujourd’hui', value: '48', color: 'cyan', icon: '👥' },
+  { label: 'Leads convertis', value: '126', color: 'green', icon: '🤝' },
+  { label: 'Total des cours', value: '64', color: 'orange', icon: '📚' },
 ]
 
 const quickActions = [
@@ -86,6 +101,17 @@ const enrollmentTrend = monthlyFlow.map(item => ({
   value: item.income + item.expense,
 }))
 
+const financeCategories = monthlyFlow.map(item => item.month)
+
+const incomeCircle = [72, 28]
+const expenseCircle = [38, 62]
+
+const feesOverview = [
+  { label: 'Impayés', value: 24, color: 'var(--danger)' },
+  { label: 'Payés', value: 68, color: 'var(--success)' },
+  { label: 'En attente', value: 42, color: 'var(--warning)' },
+]
+
 export default function Dashboard() {
   return (
     <div>
@@ -125,34 +151,191 @@ export default function Dashboard() {
           </section>
 
           <div className="stats-grid dashboard-stat-row">
-            <StatCard label="Élèves" value="15.0K" color="purple" />
-            <StatCard label="Enseignants" value="200" color="cyan" />
-            <StatCard label="Prix" value="5.6K" color="green" />
-            <StatCard label="Alertes" value="18" color="orange" />
+            {topCards.map(card => (
+              <StatCard key={card.label} label={card.label} value={card.value} color={card.color} icon={card.icon} />
+            ))}
           </div>
 
-          <div className="dashboard-grid dashboard-grid-top">
-            <section className="card dashboard-hero-card dashboard-surface-card">
-              <div className="dashboard-hero-header">
-                <div className="dashboard-hero-heading">
-                  <span className="dashboard-section-kicker dashboard-hero-kicker">Pilotage du jour</span>
-                  <span className="dashboard-hero-title">Vue opérationnelle</span>
+          <div className="stats-grid dashboard-stat-row dashboard-stat-row-secondary">
+            {bottomCards.map(card => (
+              <StatCard key={card.label} label={card.label} value={card.value} color={card.color} icon={card.icon} />
+            ))}
+          </div>
+
+          <div className="dashboard-grid dashboard-grid-2 dashboard-finance-grid">
+            <section className="card dashboard-section-card dashboard-chart-card dashboard-chart-card-wide dashboard-finance-card">
+              <div className="card-header dashboard-card-header">
+                <span className="card-title">Encaissements et dépenses de frais</span>
+                <span className="dashboard-mini-chip">Bar chart</span>
+              </div>
+              <div className="dashboard-chart-frame">
+                <BarChart
+                  labels={financeCategories}
+                  datasets={[
+                    {
+                      label: 'Encaissements de frais',
+                      data: monthlyFlow.map(item => item.income),
+                      backgroundColor: 'rgba(6,182,212,0.70)',
+                      borderColor: 'var(--cyan)',
+                      borderWidth: 0,
+                      borderRadius: 10,
+                    },
+                    {
+                      label: 'Dépenses de frais',
+                      data: monthlyFlow.map(item => item.expense),
+                      backgroundColor: 'rgba(124,92,255,0.70)',
+                      borderColor: 'var(--accent)',
+                      borderWidth: 0,
+                      borderRadius: 10,
+                    },
+                  ]}
+                  options={{
+                    plugins: { legend: { position: 'top' } },
+                    scales: {
+                      y: {
+                        beginAtZero: true,
+                        grid: { color: 'rgba(148,163,184,0.18)' },
+                      },
+                      x: {
+                        grid: { display: false },
+                      },
+                    },
+                  }}
+                />
+              </div>
+            </section>
+
+            <section className="card dashboard-section-card dashboard-chart-card dashboard-finance-card">
+              <div className="card-header dashboard-card-header">
+                <span className="card-title">Évolution des encaissements de frais</span>
+                <span className="dashboard-mini-chip">Courbes</span>
+              </div>
+              <div className="dashboard-chart-frame">
+                <LineChart
+                  labels={financeCategories}
+                  datasets={[
+                    {
+                      label: 'Encaissements mensuels',
+                      data: monthlyFlow.map(item => item.income),
+                      backgroundColor: 'rgba(6,182,212,0.10)',
+                      borderColor: 'var(--cyan)',
+                      tension: 0.42,
+                      fill: true,
+                    },
+                    {
+                      label: 'Dépenses mensuelles',
+                      data: monthlyFlow.map(item => item.expense),
+                      backgroundColor: 'rgba(124,92,255,0.10)',
+                      borderColor: 'var(--accent)',
+                      tension: 0.42,
+                      fill: true,
+                    },
+                  ]}
+                  options={{
+                    plugins: { legend: { position: 'top' } },
+                    scales: {
+                      y: {
+                        beginAtZero: true,
+                        grid: { color: 'rgba(148,163,184,0.18)' },
+                      },
+                      x: {
+                        grid: { display: false },
+                      },
+                    },
+                  }}
+                />
+              </div>
+            </section>
+          </div>
+
+          <div className="dashboard-grid dashboard-grid-3 dashboard-fees-grid">
+            <section className="card dashboard-section-card dashboard-chart-card dashboard-circle-card">
+              <div className="card-header dashboard-card-header">
+                <span className="card-title">Recettes de frais</span>
+                <span className="dashboard-mini-chip">Income</span>
+              </div>
+              <div className="dashboard-circle-chart">
+                <DoughnutChart
+                  labels={['Encaissements', 'Reste à encaisser']}
+                  dataPoints={incomeCircle}
+                  colors={['var(--accent)', 'rgba(124,92,255,0.12)']}
+                  options={{
+                    plugins: { legend: { position: 'bottom' } },
+                    cutout: '72%',
+                  }}
+                />
+              </div>
+              <div className="dashboard-chart-legend">
+                <div className="dashboard-donut-legend-item">
+                  <span className="dashboard-donut-marker" style={{ background: 'var(--accent)' }} />
+                  <div>
+                    <strong>Encaissements</strong>
+                    <p>Part collectée ce mois</p>
+                  </div>
                 </div>
-                <a className="view-all" href="#">Voir tout</a>
+                <div className="dashboard-donut-legend-item">
+                  <span className="dashboard-donut-marker" style={{ background: 'rgba(124,92,255,0.35)' }} />
+                  <div>
+                    <strong>Reste à encaisser</strong>
+                    <p>Solde encore dû</p>
+                  </div>
+                </div>
               </div>
-              <div className="dashboard-hero-body">
-                <h2 className="dashboard-hero-title">Tout ce qui demande une action aujourd’hui, au même endroit.</h2>
-                <p className="dashboard-hero-text">
-                  Suivi des inscriptions, relances de paiement, documents à imprimer et échéances de direction.
-                  L’objectif est d’ouvrir le tableau de bord et de savoir quoi traiter en priorité.
-                </p>
+            </section>
+
+            <section className="card dashboard-section-card dashboard-chart-card dashboard-circle-card">
+              <div className="card-header dashboard-card-header">
+                <span className="card-title">Dépenses de frais</span>
+                <span className="dashboard-mini-chip">Expenses</span>
               </div>
-              <div className="dashboard-quick-actions">
-                {quickActions.map(action => (
-                  <button key={action.label} className="dashboard-quick-action" type="button">
-                    <span>{action.icon}</span>
-                    {action.label}
-                  </button>
+              <div className="dashboard-circle-chart">
+                <DoughnutChart
+                  labels={['Dépensé', 'Budget restant']}
+                  dataPoints={expenseCircle}
+                  colors={['var(--cyan)', 'rgba(6,182,212,0.14)']}
+                  options={{
+                    plugins: { legend: { position: 'bottom' } },
+                    cutout: '72%',
+                  }}
+                />
+              </div>
+              <div className="dashboard-chart-legend">
+                <div className="dashboard-donut-legend-item">
+                  <span className="dashboard-donut-marker" style={{ background: 'var(--cyan)' }} />
+                  <div>
+                    <strong>Dépensé</strong>
+                    <p>Charges engagées</p>
+                  </div>
+                </div>
+                <div className="dashboard-donut-legend-item">
+                  <span className="dashboard-donut-marker" style={{ background: 'rgba(6,182,212,0.35)' }} />
+                  <div>
+                    <strong>Budget restant</strong>
+                    <p>Marge disponible</p>
+                  </div>
+                </div>
+              </div>
+            </section>
+
+            <section className="card dashboard-section-card dashboard-fees-card">
+              <div className="card-header dashboard-card-header">
+                <span className="card-title">Aperçu des frais</span>
+                <span className="dashboard-mini-chip">Fees overview</span>
+              </div>
+              <div className="dashboard-fees-list">
+                {feesOverview.map(item => (
+                  <div key={item.label} className="dashboard-fees-item">
+                    <div className="dashboard-fees-meta">
+                      <span className="dashboard-fees-label">{item.label}</span>
+                      <span className="dashboard-fees-value">{item.value}%</span>
+                    </div>
+                    <div className="dashboard-deliverable-bar dashboard-fees-bar">
+                      <div
+                        className="dashboard-deliverable-fill"
+                        style={{ width: `${item.value}%`, background: item.color }}
+                      />
+                    </div>
+                  </div>
                 ))}
               </div>
             </section>
@@ -201,83 +384,6 @@ export default function Dashboard() {
                     <button className="btn-download" type="button">⬇ Télécharger (pdf)</button>
                   </article>
                 ))}
-              </div>
-            </section>
-          </div>
-
-          <div className="dashboard-grid dashboard-grid-3 dashboard-grid-spacious">
-            <section className="card dashboard-section-card dashboard-chart-card dashboard-chart-card-wide">
-              <div className="card-header dashboard-card-header">
-                <span className="card-title">Évolution des inscriptions</span>
-                <a className="view-all" href="#">Voir tout</a>
-              </div>
-              <div style={{ height: 260 }}>
-                <LineChart
-                  labels={enrollmentTrend.map(item => item.month)}
-                  datasets={[
-                    {
-                      label: 'Inscriptions cumulées',
-                      data: enrollmentTrend.map(item => item.value),
-                      backgroundColor: 'rgba(124,92,255,0.10)',
-                      borderColor: 'var(--accent)',
-                      tension: 0.35,
-                      fill: true,
-                    },
-                    {
-                      label: 'Flux financier',
-                      data: monthlyFlow.map(item => item.income),
-                      backgroundColor: 'rgba(6,182,212,0.08)',
-                      borderColor: 'var(--cyan)',
-                      tension: 0.35,
-                      fill: true,
-                    },
-                  ]}
-                />
-              </div>
-            </section>
-
-            <section className="card dashboard-section-card dashboard-chart-card">
-              <div className="card-header dashboard-card-header">
-                <span className="card-title">Statistiques</span>
-                <span className="dashboard-mini-chip">Graphiques</span>
-              </div>
-              <div style={{ height: 260 }}>
-                <DoughnutChart
-                  labels={['Maths', 'Anglais', 'Chimie']}
-                  dataPoints={[40, 35, 25]}
-                  colors={['var(--accent)', 'var(--cyan)', '#A78BFA']}
-                />
-              </div>
-              <div className="dashboard-donut-legend">
-                <div className="legend-item"><span className="legend-dot" style={{ background: 'var(--accent)' }} /> Maths</div>
-                <div className="legend-item"><span className="legend-dot" style={{ background: 'var(--cyan)' }} /> Anglais</div>
-                <div className="legend-item"><span className="legend-dot" style={{ background: '#A78BFA' }} /> Chimie</div>
-              </div>
-            </section>
-
-            <section className="card dashboard-section-card dashboard-chart-card dashboard-classes-card">
-              <div className="card-header dashboard-card-header">
-                <span className="card-title">Meilleurs résultats</span>
-                <select className="period-select" defaultValue="Hebdo" aria-label="Période">
-                  <option>Hebdo</option>
-                  <option>Mensuel</option>
-                </select>
-              </div>
-              <div className="dashboard-performance-list">
-                {performanceRows.map(row => (
-                  <div key={row.level} className="perf-row">
-                    <div className="perf-meta">
-                      <span className="perf-class">{row.level}</span>
-                      <span className="perf-pct">{row.percent}%</span>
-                    </div>
-                    <div className="perf-bar-wrap">
-                      <div className={`perf-bar ${row.className}`} style={{ width: `${row.percent}%` }}>{row.label}</div>
-                    </div>
-                  </div>
-                ))}
-              </div>
-              <div className="dashboard-week-row">
-                <span>Dim</span><span>Lun</span><span>Mar</span><span>Mer</span>
               </div>
             </section>
           </div>
@@ -360,21 +466,29 @@ export default function Dashboard() {
               </div>
             </section>
 
-            <section className="card dashboard-section-card dashboard-indicators-card dashboard-summary-boost">
+            <section className="card dashboard-section-card dashboard-classes-card">
               <div className="card-header dashboard-card-header">
-                <span className="card-title">Indicateurs rapides</span>
-                <span className="dashboard-mini-chip">Synthèse</span>
+                <span className="card-title">Meilleurs résultats</span>
+                <select className="period-select" defaultValue="Hebdo" aria-label="Période">
+                  <option>Hebdo</option>
+                  <option>Mensuel</option>
+                </select>
               </div>
-              <div className="dashboard-metrics-list">
-                {metrics.map(metric => (
-                  <div key={metric.label} className="dashboard-metric-item">
-                    <div>
-                      <p className="dashboard-metric-label">{metric.label}</p>
-                      <p className="dashboard-metric-note">{metric.note}</p>
+              <div className="dashboard-performance-list">
+                {performanceRows.map(row => (
+                  <div key={row.level} className="perf-row">
+                    <div className="perf-meta">
+                      <span className="perf-class">{row.level}</span>
+                      <span className="perf-pct">{row.percent}%</span>
                     </div>
-                    <strong className="dashboard-metric-value">{metric.value}</strong>
+                    <div className="perf-bar-wrap">
+                      <div className={`perf-bar ${row.className}`} style={{ width: `${row.percent}%` }}>{row.label}</div>
+                    </div>
                   </div>
                 ))}
+              </div>
+              <div className="dashboard-week-row">
+                <span>Dim</span><span>Lun</span><span>Mar</span><span>Mer</span>
               </div>
             </section>
           </div>

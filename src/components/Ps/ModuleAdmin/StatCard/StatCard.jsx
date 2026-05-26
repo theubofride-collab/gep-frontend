@@ -1,13 +1,14 @@
 import './StatCard.css'
 
-export default function StatCard({ label, value, color }) {
+export default function StatCard({ label, value, color, icon }) {
   const colors = {
-    purple: { bg: 'var(--accent)', icon: '👥' },
-    cyan:   { bg: 'var(--cyan)', icon: '🏫' },
-    green:  { bg: 'var(--success)', icon: '👤' },
-    orange: { bg: 'var(--warning)', icon: '📊' },
+    purple: { bg: 'var(--accent)' },
+    cyan:   { bg: 'var(--cyan)' },
+    green:  { bg: 'var(--success)' },
+    orange: { bg: 'var(--warning)' },
   }
   const c = colors[color] || colors.purple
+  const emoji = icon || '✨'
 
   return (
     <div className="stat-card card">
@@ -16,7 +17,7 @@ export default function StatCard({ label, value, color }) {
         <p className="stat-value">{value}</p>
       </div>
       <div className="stat-icon" style={{ background: c.bg }}>
-        <span>{c.icon}</span>
+        <span>{emoji}</span>
       </div>
     </div>
   )
