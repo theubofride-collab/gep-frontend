@@ -1,88 +1,462 @@
-const teacherStats = [
-  { label: 'Enseignants actifs', value: '48', note: '4 nouveaux profils' },
-  { label: 'Heures couvertes', value: '312h', note: 'Semaines en cours' },
-  { label: 'Absences signalées', value: '3', note: 'À justifier' },
-]
+import { useEffect, useMemo, useState } from 'react'
+import './Enseignants.css'
 
-const workload = [
-  { subject: 'Mathématiques', load: 92, color: 'var(--accent)' },
-  { subject: 'Français', load: 88, color: 'var(--cyan)' },
-  { subject: 'Sciences', load: 76, color: 'var(--success)' },
-  { subject: 'Histoire-Géo', load: 64, color: 'var(--warning)' },
+const FIRST_NAMES = ['Marie', 'Jean', 'Sophie', 'Paul', 'Claire', 'André', 'Nathalie', 'Bruno', 'Isabelle', 'Luc', 'Fatou', 'Samuel', 'Cécile', 'Hervé', 'Aimée', 'Patrice', 'Monique', 'Serge', 'Laure', 'Alain', 'Béatrice', 'Didier', 'Véronique', 'Thierry', 'Nadège', 'Olivier', 'Pascale', 'Arnaud', 'Linda', 'Rodolphe', 'Esther', 'Clément', 'Viviane', 'François', 'Ornella', 'Alexis', 'Sylvie', 'Boris', 'Élise', 'Médard']
+const LAST_NAMES = ['Mbarga', 'Fotso', 'Nkomo', 'Essama', 'Bilong', 'Kameni', 'Tagne', 'Mongo', 'Abena', 'Ondoa', 'Sop', 'Fomekong', 'Epanda', 'Minkeng', 'Wambo', 'Kuate', 'Nganou', 'Bekolo', 'Tonye', 'Mvogo', 'Ngolle', 'Mbouda', 'Kotto', 'Djike', 'Feudjio', 'Djoumessi', 'Bengono', 'Biyong', 'Fobang', 'Nyambi', 'Nguini', 'Owona', 'Tchoffo', 'Etoundi', 'Batchieh', 'Mba', 'Fouda', 'Soppo', 'Bella', 'Mekongo']
+const DEPTS = ['Sciences', 'Lettres', 'Maths', 'Arts', 'Tech']
+const DEPT_COLORS = { Sciences: 'chip-g', Lettres: 'chip-c', Maths: 'chip-v', Arts: 'chip-a', Tech: 'chip-c' }
+const SUBJECTS_BY_DEPT = {
+  Sciences: ['Physique', 'Chimie', 'SVT', 'Biologie'],
+  Lettres: ['Français', 'Anglais', 'Histoire', 'Géographie', 'Philo'],
+  Maths: ['Mathématiques', 'Statistiques', 'Algèbre', 'Géométrie'],
+  Arts: ['Arts Plastiques', 'Musique', 'EPS', 'Danse'],
+  Tech: ['Informatique', 'Technologie', 'Réseaux', 'Robotique'],
+}
+const CLASSES = ['6e A', '6e B', '5e A', '5e B', '4e A', '4e B', '3e A', '3e B', '2nde', '1ère', 'Terminale']
+const VILLES = ['Yaoundé', 'Douala', 'Bafoussam', 'Garoua', 'Ngaoundéré', 'Ebolowa', 'Buea']
+const AV_CLASSES = ['av1', 'av2', 'av3', 'av4', 'av5', 'av6', 'av7', 'av8']
+const BG_GRADIENTS = [
+  'linear-gradient(135deg,#4C1D95,#6D28D9)',
+  'linear-gradient(135deg,#06B6D4,#6D28D9)',
+  'linear-gradient(135deg,#7C3AED,#06B6D4)',
+  'linear-gradient(135deg,#1E0B3B,#4C1D95)',
+  'linear-gradient(135deg,#DB2777,#4C1D95)',
+  'linear-gradient(135deg,#059669,#06B6D4)',
+  'linear-gradient(135deg,#F59E0B,#D97706)',
+  'linear-gradient(135deg,#0EA5E9,#06B6D4)',
 ]
+const SCHEDULE_DAYS = ['Lun', 'Mar', 'Mer', 'Jeu', 'Ven']
+const SCHEDULE_COLORS = ['', 'cyan', 'green', '', 'cyan']
+const FILTERS = ['Tous', 'Sciences', 'Lettres', 'Maths', 'Arts & Sport', 'Tech & Info']
 
-const teachers = [
-  { name: 'Mme Bamba', subject: 'CM2', classes: 3, status: 'Présente' },
-  { name: 'M. Kouassi', subject: 'Maths', classes: 4, status: 'En cours' },
-  { name: 'Mme Achi', subject: 'Français', classes: 2, status: 'Disponible' },
-  { name: 'M. Traoré', subject: 'EPS', classes: 5, status: 'Présent' },
-]
+function rnd(min, max) {
+  return Math.floor(Math.random() * (max - min + 1)) + min
+}
+
+function pick(items) {
+  return items[rnd(0, items.length - 1)]
+}
+
+function picks(items, count) {
+  const source = [...items]
+  const result = []
+  for (let index = 0; index < count && source.length; index += 1) {
+    const choiceIndex = rnd(0, source.length - 1)
+    result.push(source.splice(choiceIndex, 1)[0])
+  }
+  return result
+}
+
+function genTeachers(count) {
+  return Array.from({ length: count }, (_, index) => {
+    const firstName = pick(FIRST_NAMES)
+    const lastName = pick(LAST_NAMES)
+    const dept = pick(DEPTS)
+    const subjects = picks(SUBJECTS_BY_DEPT[dept], rnd(1, 3))
+    const classes = picks(CLASSES, rnd(2, 5))
+    const experience = rnd(1, 30)
+    const rating = +(3 + Math.random() * 2).toFixed(1)
+    const status = ['active', 'active', 'active', 'away', 'off'][rnd(0, 4)]
+    const avatarIndex = index % AV_CLASSES.length
+    const schedule = SCHEDULE_DAYS.map((day, dayIndex) => {
+      const slots = []
+      if (Math.random() > 0.3) slots.push(`${subjects[0]}${Math.random() > 0.5 ? ` ${classes[rnd(0, classes.length - 1)]}` : ''}`)
+      if (Math.random() > 0.5 && subjects[1]) slots.push(subjects[1])
+      return { day, slots, color: SCHEDULE_COLORS[dayIndex] }
+    })
+    const ratings = [
+      { label: 'Pédagogie', value: rnd(60, 100) },
+      { label: 'Ponctualité', value: rnd(55, 100) },
+      { label: 'Évaluation', value: rnd(60, 100) },
+      { label: 'Disponibilité', value: rnd(50, 100) },
+    ]
+
+    return {
+      id: `ENS${String(1000 + index).padStart(4, '0')}`,
+      name: `${firstName} ${lastName}`,
+      initials: `${firstName[0]}${lastName[0]}`,
+      dept,
+      subs: subjects,
+      classes,
+      exp: experience,
+      rating,
+      status,
+      dotCls: { active: 'dot-online', away: 'dot-away', off: 'dot-off' }[status],
+      avCls: AV_CLASSES[avatarIndex],
+      bg: BG_GRADIENTS[avatarIndex],
+      ville: pick(VILLES),
+      phone: `+237 6${rnd(10, 99)} ${rnd(100, 999)} ${rnd(100, 999)}`,
+      email: `${firstName.toLowerCase()}.${lastName.toLowerCase()}@nebula.school`.replace(' ', ''),
+      schedule,
+      ratings,
+      gender: Math.random() > 0.45 ? 'M' : 'F',
+      contrat: ['CDI', 'CDD', 'Vacataire'][rnd(0, 2)],
+    }
+  })
+}
 
 export default function Enseignants() {
+  const teachers = useMemo(() => genTeachers(200), [])
+  const [activeFilter, setActiveFilter] = useState('Tous')
+  const [searchQ, setSearchQ] = useState('')
+  const [sortCol, setSortCol] = useState('name')
+  const [sortDir, setSortDir] = useState('asc')
+  const [perPage, setPerPage] = useState(20)
+  const [currentPage, setCurrentPage] = useState(1)
+  const [selected, setSelected] = useState(() => new Set())
+  const [modalTeacherId, setModalTeacherId] = useState(null)
+
+  useEffect(() => {
+    document.title = 'Gep Nebula — Enseignants'
+  }, [])
+
+  const filteredTeachers = useMemo(() => {
+    const query = searchQ.trim().toLowerCase()
+    const rows = teachers.filter(teacher => {
+      const deptOk = activeFilter === 'Tous' || (activeFilter === 'Arts & Sport' ? teacher.dept === 'Arts' : activeFilter === 'Tech & Info' ? teacher.dept === 'Tech' : teacher.dept === activeFilter)
+      const searchOk =
+        !query ||
+        teacher.name.toLowerCase().includes(query) ||
+        teacher.subs.join(' ').toLowerCase().includes(query) ||
+        teacher.ville.toLowerCase().includes(query) ||
+        teacher.id.toLowerCase().includes(query)
+
+      return deptOk && searchOk
+    })
+
+    return [...rows].sort((left, right) => {
+      let leftValue
+      let rightValue
+
+      if (sortCol === 'rating') {
+        leftValue = left.rating
+        rightValue = right.rating
+      } else if (sortCol === 'exp') {
+        leftValue = left.exp
+        rightValue = right.exp
+      } else if (sortCol === 'classes') {
+        leftValue = left.classes.length
+        rightValue = right.classes.length
+      } else if (sortCol === 'subjects') {
+        leftValue = left.subs.join()
+        rightValue = right.subs.join()
+      } else if (sortCol === 'dept') {
+        leftValue = left.dept
+        rightValue = right.dept
+      } else if (sortCol === 'status') {
+        leftValue = left.status
+        rightValue = right.status
+      } else {
+        leftValue = left.name.toLowerCase()
+        rightValue = right.name.toLowerCase()
+      }
+
+      if (leftValue < rightValue) return sortDir === 'asc' ? -1 : 1
+      if (leftValue > rightValue) return sortDir === 'asc' ? 1 : -1
+      return 0
+    })
+  }, [teachers, activeFilter, searchQ, sortCol, sortDir])
+
+  const total = filteredTeachers.length
+  const totalPages = Math.max(1, Math.ceil(total / perPage))
+  const safePage = Math.min(currentPage, totalPages)
+  const start = (safePage - 1) * perPage
+  const pageTeachers = filteredTeachers.slice(start, start + perPage)
+  const modalTeacher = teachers.find(teacher => teacher.id === modalTeacherId) ?? null
+
+  const statusLabel = { active: 'En ligne', away: 'Absent', off: 'Hors ligne' }
+  const statusCls = { active: 'b-active', away: 'b-away', off: 'b-off' }
+
+  const totalTeachers = teachers.length
+  const activeTeachers = teachers.filter(teacher => teacher.status === 'active').length
+  const averageRating = (teachers.reduce((sum, teacher) => sum + teacher.rating, 0) / teachers.length).toFixed(1)
+  const subjectsCount = [...new Set(teachers.flatMap(teacher => teacher.subs))].length
+
+  useEffect(() => {
+    if (currentPage > totalPages) setCurrentPage(totalPages)
+  }, [currentPage, totalPages])
+
+  function handleSortColumn(column) {
+    if (sortCol === column) setSortDir(current => (current === 'asc' ? 'desc' : 'asc'))
+    else {
+      setSortCol(column)
+      setSortDir('asc')
+    }
+  }
+
+  function toggleRow(id) {
+    setSelected(prev => {
+      const next = new Set(prev)
+      if (next.has(id)) next.delete(id)
+      else next.add(id)
+      return next
+    })
+  }
+
+  function toggleAll() {
+    setSelected(prev => {
+      const next = new Set(prev)
+      const allSelected = pageTeachers.length > 0 && pageTeachers.every(teacher => next.has(teacher.id))
+
+      if (allSelected) pageTeachers.forEach(teacher => next.delete(teacher.id))
+      else pageTeachers.forEach(teacher => next.add(teacher.id))
+
+      return next
+    })
+  }
+
+  function goToPage(page) {
+    if (page >= 1 && page <= totalPages) setCurrentPage(page)
+  }
+
+  const selectedCurrentPage = pageTeachers.length > 0 && pageTeachers.every(teacher => selected.has(teacher.id))
+
+  const paginationItems = []
+  paginationItems.push({ type: 'prev', label: '‹', page: safePage - 1, disabled: safePage === 1 })
+  for (let page = 1; page <= totalPages; page += 1) {
+    if (page === 1 || page === totalPages || Math.abs(page - safePage) <= 2) paginationItems.push({ type: 'page', label: page, page, active: page === safePage })
+    else if (Math.abs(page - safePage) === 3) paginationItems.push({ type: 'ellipsis', label: '…' })
+  }
+  paginationItems.push({ type: 'next', label: '›', page: safePage + 1, disabled: safePage === totalPages })
+
   return (
-    <div>
-      <div className="page-header">
+    <div className="enseignants-page">
+      <div className="page-header enseignants-page-header">
         <div>
-          <h1 className="page-title">Gestion des enseignants</h1>
-          <p className="page-subtitle">Répartition des charges, présence et classes confiées</p>
+          <h1 className="page-title">🎓 Enseignants</h1>
+          <p className="page-subtitle">Gérez le corps enseignant, leurs matières, classes et évaluations.</p>
         </div>
-        <button className="btn-primary" type="button">+ Nouvel enseignant</button>
+        <div className="enseignants-header-actions">
+          <button className="enseignants-btn-secondary" type="button">⬇ Exporter CSV</button>
+          <button className="enseignants-btn-secondary" type="button">📅 Voir emplois du temps</button>
+          <button className="enseignants-btn-primary" type="button">＋ Nouvel enseignant</button>
+        </div>
       </div>
 
-      <div className="stats-grid">
-        {teacherStats.map(item => (
-          <div key={item.label} className="card" style={{ padding: '18px 20px' }}>
-            <p style={{ fontSize: 12, color: 'var(--text-secondary)', marginBottom: 6 }}>{item.label}</p>
-            <div style={{ fontSize: 28, fontWeight: 700, color: 'var(--text-primary)' }}>{item.value}</div>
-            <p style={{ fontSize: 12, color: 'var(--text-secondary)', marginTop: 4 }}>{item.note}</p>
+      <div className="enseignants-stat-strip">
+        <div className="enseignants-scard"><div className="enseignants-sc-icon ic-v">🎓</div><div><div className="enseignants-sc-val" id="sTotal">{totalTeachers}</div><div className="enseignants-sc-lbl">Total enseignants</div><div className="enseignants-sc-chg cup">▲ +2 ce trimestre</div></div></div>
+        <div className="enseignants-scard"><div className="enseignants-sc-icon ic-c">🟢</div><div><div className="enseignants-sc-val" id="sActive">{activeTeachers}</div><div className="enseignants-sc-lbl">En ligne aujourd'hui</div><div className="enseignants-sc-chg cup">▲ bonne présence</div></div></div>
+        <div className="enseignants-scard"><div className="enseignants-sc-icon ic-g">⭐</div><div><div className="enseignants-sc-val" id="sTop">{averageRating}/5</div><div className="enseignants-sc-lbl">Note moy. satisfaction</div><div className="enseignants-sc-chg cup">▲ +0.3 pts</div></div></div>
+        <div className="enseignants-scard"><div className="enseignants-sc-icon ic-a">📚</div><div><div className="enseignants-sc-val" id="sMatieres">{subjectsCount}</div><div className="enseignants-sc-lbl">Matières enseignées</div><div className="enseignants-sc-chg cup">▲ couverture complète</div></div></div>
+      </div>
+
+      <div className="enseignants-toolbar">
+        <div className="enseignants-filter-tabs" id="filterTabs">
+          {FILTERS.map(filter => (
+            <button key={filter} type="button" className={`enseignants-tab ${activeFilter === filter ? 'active' : ''}`} onClick={() => setActiveFilter(filter)}>
+              {filter}
+            </button>
+          ))}
+        </div>
+        <div className="enseignants-toolbar-right">
+          <select className="enseignants-sel" value={`${sortCol}-${sortDir}`} onChange={event => {
+            const [column, direction] = event.target.value.split('-')
+            setSortCol(column)
+            setSortDir(direction)
+          }}>
+            <option value="name-asc">Nom A → Z</option>
+            <option value="name-desc">Nom Z → A</option>
+            <option value="rating-desc">Meilleure note</option>
+            <option value="exp-desc">Plus expérimenté</option>
+            <option value="classes-desc">Plus de classes</option>
+          </select>
+          <select className="enseignants-sel" value={perPage} onChange={event => setPerPage(Number(event.target.value))}>
+            <option value="10">10 / page</option>
+            <option value="20">20 / page</option>
+            <option value="50">50 / page</option>
+          </select>
+        </div>
+      </div>
+
+      <div className="enseignants-table-card card">
+        <div className="enseignants-table-search-row">
+          <div className="enseignants-tsearch">
+            <span className="enseignants-tsi">🔍</span>
+            <input type="text" value={searchQ} onChange={event => setSearchQ(event.target.value)} placeholder="Rechercher nom, matière, ville..." />
           </div>
-        ))}
+          <div className="enseignants-table-info" id="tableInfo"><strong>{total.toLocaleString('fr')}</strong> enseignants trouvés</div>
+          <div className="enseignants-bulk-actions">
+            <button className="enseignants-bulk-btn" type="button">✉️ Message groupé</button>
+            <button className="enseignants-bulk-btn" type="button">📋 Rapport</button>
+            <button className="enseignants-bulk-btn danger" type="button">🗑 Supprimer</button>
+          </div>
+        </div>
+
+        <div className="enseignants-table-scroll">
+          <table className="enseignants-table">
+            <thead>
+              <tr>
+                <th style={{ width: 36 }}>
+                  <button type="button" className={`enseignants-cb ${selectedCurrentPage ? 'chk' : ''}`} onClick={toggleAll} aria-label="Tout sélectionner">{selectedCurrentPage ? '✓' : ''}</button>
+                </th>
+                {[
+                  ['name', 'Enseignant'],
+                  ['dept', 'Département'],
+                  ['subjects', 'Matières'],
+                  ['classes', 'Classes'],
+                  ['exp', 'Expérience'],
+                  ['rating', 'Évaluation'],
+                  ['status', 'Statut'],
+                ].map(([column, label]) => (
+                  <th key={column} onClick={() => handleSortColumn(column)} className={sortCol === column ? 'sorted' : ''}>
+                    {label} <span className="sort-ico">{sortCol === column ? (sortDir === 'asc' ? '▲' : '▼') : '⇅'}</span>
+                  </th>
+                ))}
+                <th style={{ width: 90 }}>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              {pageTeachers.map(teacher => {
+                const starCount = Math.round(teacher.rating)
+                const expCount = Math.max(1, Math.round(teacher.exp / 6))
+                const chipCls = DEPT_COLORS[teacher.dept] || 'chip-v'
+                const isSelected = selected.has(teacher.id)
+
+                return (
+                  <tr key={teacher.id} className={isSelected ? 'selected' : ''} onClick={() => setModalTeacherId(teacher.id)}>
+                    <td onClick={event => event.stopPropagation()}>
+                      <button type="button" className={`enseignants-cb ${isSelected ? 'chk' : ''}`} onClick={() => toggleRow(teacher.id)}>{isSelected ? '✓' : ''}</button>
+                    </td>
+                    <td>
+                      <div className="teach-cell">
+                        <div className={`teach-av ${teacher.avCls}`}>
+                          {teacher.initials}
+                          <div className={`online-dot ${teacher.dotCls}`} />
+                        </div>
+                        <div>
+                          <div className="tname">{teacher.name}</div>
+                          <div className="tid">{teacher.id} · {teacher.ville}</div>
+                        </div>
+                      </div>
+                    </td>
+                    <td><span className={`chip ${chipCls}`}>{teacher.dept}</span></td>
+                    <td>
+                      <div className="chips">
+                        {teacher.subs.slice(0, 2).map(subject => (
+                          <span key={subject} className={`chip ${chipCls}`}>{subject}</span>
+                        ))}
+                        {teacher.subs.length > 2 && <span className="chip chip-v">+{teacher.subs.length - 2}</span>}
+                      </div>
+                    </td>
+                    <td>
+                      <div className="classes-cell">{teacher.classes.slice(0, 2).join(', ')}{teacher.classes.length > 2 ? ` +${teacher.classes.length - 2}` : ''}</div>
+                      <div className="classes-sub">{teacher.classes.length} classe{teacher.classes.length > 1 ? 's' : ''}</div>
+                    </td>
+                    <td>
+                      <div className="exp-cell">
+                        <div className="exp-dots">
+                          {[1, 2, 3, 4, 5].map(dot => (
+                            <div key={dot} className={`exp-dot ${dot <= expCount ? 'filled' : 'empty'}`} />
+                          ))}
+                        </div>
+                        <span className="exp-label">{teacher.exp} an{teacher.exp > 1 ? 's' : ''}</span>
+                      </div>
+                    </td>
+                    <td>
+                      <div className="stars">
+                        {[1, 2, 3, 4, 5].map(star => (
+                          <span key={star} className={`star ${star <= starCount ? 'on' : 'off'}`}>★</span>
+                        ))}
+                        <span className="rating-val">{teacher.rating}</span>
+                      </div>
+                    </td>
+                    <td><span className={`badge ${statusCls[teacher.status]}`}><span className="bdot" />{statusLabel[teacher.status]}</span></td>
+                    <td onClick={event => event.stopPropagation()}>
+                      <div className="action-cell">
+                        <button type="button" className="act-btn" title="Voir" onClick={() => setModalTeacherId(teacher.id)}>👁</button>
+                        <button type="button" className="act-btn" title="Message">💬</button>
+                        <button type="button" className="act-btn del" title="Supprimer">🗑</button>
+                      </div>
+                    </td>
+                  </tr>
+                )
+              })}
+            </tbody>
+          </table>
+        </div>
+
+        <div className="enseignants-pag-row">
+          <div className="enseignants-pag-info" id="pagInfo">Page <strong>{safePage}</strong>/<strong>{totalPages}</strong> · <strong>{start + 1}–{Math.min(start + perPage, total)}</strong> sur <strong>{total.toLocaleString('fr')}</strong></div>
+          <div className="enseignants-pag-controls" id="pagControls">
+            {paginationItems.map((item, index) => {
+              if (item.type === 'ellipsis') return <div key={`ellipsis-${index}`} className="pag-btn" style={{ pointerEvents: 'none' }}>…</div>
+              return (
+                <button key={`${item.type}-${item.label}`} type="button" className={`pag-btn${item.active ? ' active' : ''}`} disabled={item.disabled} onClick={() => goToPage(item.page)}>
+                  {item.label}
+                </button>
+              )
+            })}
+          </div>
+        </div>
       </div>
 
-      <div className="dashboard-chart-grid">
-        <div className="card dashboard-section-card dashboard-chart-card">
-          <div className="dashboard-section-header">
-            <div>
-              <p className="dashboard-section-kicker">Charge pédagogique</p>
-              <h2 className="activities-title">Répartition par matière</h2>
+      {modalTeacher && (
+        <div className="overlay open" id="overlay" onClick={event => {
+          if (event.target === event.currentTarget) setModalTeacherId(null)
+        }}>
+          <div className="modal">
+            <div className="modal-hero">
+              <div className="mh-bg" style={{ background: modalTeacher.bg }} />
+              <div className="mh-pat" />
+              <div className="m-av" style={{ background: modalTeacher.bg }}>{modalTeacher.initials}</div>
+              <button className="m-close" type="button" onClick={() => setModalTeacherId(null)}>✕</button>
             </div>
-          </div>
-          <div className="dashboard-level-list">
-            {workload.map(item => (
-              <div key={item.subject} className="dashboard-level-row">
-                <div className="dashboard-level-labels">
-                  <span className="dashboard-level-name">{item.subject}</span>
-                  <span className="dashboard-level-count">{item.load}%</span>
-                </div>
-                <div className="dashboard-level-bar">
-                  <div className="dashboard-level-fill" style={{ width: `${item.load}%`, background: item.color }} />
+            <div className="modal-body">
+              <div className="m-name">{modalTeacher.name}</div>
+              <div className="m-sub">{modalTeacher.id} · {modalTeacher.dept} · {modalTeacher.ville}</div>
+              <div className="m-tags">
+                <span className="tag tv">{modalTeacher.dept}</span>
+                {modalTeacher.subs.map(subject => <span key={subject} className="tag tv">{subject}</span>)}
+                <span className="tag tg">{statusLabel[modalTeacher.status]}</span>
+              </div>
+
+              <div className="m-sec">
+                <div className="m-sec-title">Informations personnelles</div>
+                <div className="info-grid">
+                  <div className="info-item"><div className="info-lbl">GENRE</div><div className="info-val">{modalTeacher.gender === 'M' ? 'Masculin' : 'Féminin'}</div></div>
+                  <div className="info-item"><div className="info-lbl">EXPÉRIENCE</div><div className="info-val">{modalTeacher.exp} ans</div></div>
+                  <div className="info-item"><div className="info-lbl">CONTRAT</div><div className="info-val">{modalTeacher.contrat}</div></div>
+                  <div className="info-item"><div className="info-lbl">VILLE</div><div className="info-val">{modalTeacher.ville}</div></div>
+                  <div className="info-item"><div className="info-lbl">EMAIL</div><div className="info-val" style={{ fontSize: 11 }}>{modalTeacher.email}</div></div>
+                  <div className="info-item"><div className="info-lbl">CLASSES</div><div className="info-val">{modalTeacher.classes.join(', ')}</div></div>
                 </div>
               </div>
-            ))}
-          </div>
-        </div>
 
-        <div className="card dashboard-section-card dashboard-chart-card">
-          <div className="dashboard-section-header">
-            <div>
-              <p className="dashboard-section-kicker">Annuaire</p>
-              <h2 className="activities-title">Enseignants clés</h2>
+              <div className="m-sec">
+                <div className="m-sec-title">Emploi du temps hebdomadaire</div>
+                <div className="schedule-grid">
+                  {modalTeacher.schedule.map(day => (
+                    <div key={day.day} className="sched-day">
+                      <div className="sched-day-name">{day.day}</div>
+                      {day.slots.length ? day.slots.map((slot, index) => (
+                        <div key={`${day.day}-${index}`} className={`sched-slot ${index % 2 === 1 ? 'cyan' : ''}`}>{slot.substring(0, 18)}</div>
+                      )) : <div className="sched-empty">—</div>}
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              <div className="m-sec">
+                <div className="m-sec-title">Évaluation pédagogique</div>
+                <div className="rating-bars">
+                  {modalTeacher.ratings.map(rating => (
+                    <div key={rating.label} className="rbar-row">
+                      <span className="rbar-label">{rating.label}</span>
+                      <div className="rbar-track"><div className="rbar-fill" style={{ width: `${rating.value}%` }} /></div>
+                      <span className="rbar-val">{rating.value}%</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+            <div className="modal-footer">
+              <button className="mf-out" type="button" onClick={() => setModalTeacherId(null)}>✏️ Modifier</button>
+              <button className="mf-msg" type="button">💬 Message</button>
+              <button className="mf-sol" type="button">📋 Dossier complet</button>
             </div>
           </div>
-          <div className="dashboard-notice-list">
-            {teachers.map(item => (
-              <div key={item.name} className="dashboard-notice-item">
-                <div className="dashboard-notice-icon">🎓</div>
-                <div className="dashboard-notice-content">
-                  <p className="dashboard-notice-title">{item.name}</p>
-                  <p className="dashboard-notice-meta">{item.subject} · {item.classes} classes</p>
-                </div>
-                <span className="dashboard-chip">{item.status}</span>
-              </div>
-            ))}
-          </div>
         </div>
-      </div>
+      )}
     </div>
   )
 }

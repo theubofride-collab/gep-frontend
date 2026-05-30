@@ -1,88 +1,363 @@
-const enrollmentStats = [
-  { label: 'Inscriptions validées', value: '1,084', note: '+26 cette semaine' },
-  { label: 'Dossiers en attente', value: '18', note: 'À compléter avant vendredi' },
-  { label: 'Élèves boursiers', value: '74', note: 'Suivi social actif' },
-]
+import { useEffect, useMemo, useState } from 'react'
+import './Eleves.css'
 
-const classLoad = [
-  { level: 'CI / CP', students: 82, capacity: 90, color: 'var(--cyan)' },
-  { level: 'CE1 / CE2', students: 105, capacity: 110, color: 'var(--accent)' },
-  { level: 'CM1 / CM2', students: 118, capacity: 120, color: 'var(--success)' },
-  { level: '6e / 5e', students: 156, capacity: 160, color: 'var(--warning)' },
+const FIRST_NAMES = ['Evelyn', 'Diana', 'John', 'Amara', 'Lucas', 'Sophie', 'Karim', 'Ines', 'Paul', 'Marie', 'Théo', 'Fatou', 'Alexis', 'Mireille', 'Samuel', 'Chloe', 'David', 'Aicha', 'Pierre', 'Nadia', 'Kevin', 'Béatrice', 'Amos', 'Rachel', 'Brice', 'Léa', 'Serge', 'Vanessa', 'Herve', 'Claudine', 'Boris', 'Linda', 'Patrick', 'Flore', 'Nathan', 'Astrid', 'Joel', 'Esther', 'Remy', 'Nadège', 'Armel', 'Victoire', 'Franck', 'Laure', 'Cyrille', 'Ornella', 'Alain', 'Pascale', 'Simon', 'Brigitte']
+const LAST_NAMES = ['Harper', 'Plenty', 'Millar', 'Konan', 'Mbarga', 'Bello', 'Tamba', 'Fotso', 'Ateba', 'Essama', 'Nkomo', 'Bilong', 'Ewane', 'Mba', 'Fouda', 'Bella', 'Nganou', 'Soppo', 'Mongo', 'Kotto', 'Djike', 'Feudjio', 'Epanda', 'Bekolo', 'Tonye', 'Abena', 'Ondoa', 'Mvogo', 'Ngolle', 'Kameni', 'Tagne', 'Djoumessi', 'Bengono', 'Biyong', 'Fomekong', 'Nyambi', 'Nguini', 'Owona', 'Etoundi', 'Tchoffo', 'Minkeng', 'Wambo', 'Kuate', 'Ndongo', 'Mbouda', 'Sop', 'Ngah', 'Mekongo', 'Batchieh', 'Fobang']
+const CLASSES = ['Classe 06', 'Classe 04', 'Classe 03', 'Terminale']
+const VILLES = ['Yaoundé', 'Douala', 'Bafoussam', 'Garoua', 'Ngaoundéré', 'Ebolowa', 'Buea', 'Bertoua', 'Maroua', 'Bamenda']
+const MATIERES = ['Mathématiques', 'Littérature', 'Sciences', 'Anglais', 'Histoire', 'Physique', 'Géographie', 'Économie', 'Chimie', 'Informatique']
+const AV_CLASSES = ['av1', 'av2', 'av3', 'av4', 'av5', 'av6', 'av7', 'av8']
+const BG_GRADIENTS = [
+  'linear-gradient(135deg,#4C1D95,#6D28D9)',
+  'linear-gradient(135deg,#06B6D4,#6D28D9)',
+  'linear-gradient(135deg,#7C3AED,#06B6D4)',
+  'linear-gradient(135deg,#1E0B3B,#4C1D95)',
+  'linear-gradient(135deg,#DB2777,#4C1D95)',
+  'linear-gradient(135deg,#059669,#06B6D4)',
+  'linear-gradient(135deg,#F59E0B,#D97706)',
+  'linear-gradient(135deg,#0EA5E9,#06B6D4)',
 ]
+const SUBJECT_POOL = ['Maths', 'Physique', 'Chimie', 'Anglais', 'Français', 'Histoire', 'Géo', 'SVT', 'Philo', 'Info', 'Éco']
+const GRADE_MAP = { A: 'fg ga', B: 'fv gb', C: 'fa gc', D: 'fd gd' }
+const FILTERS = ['Tous', 'Classe 06', 'Classe 04', 'Classe 03', 'Terminale']
 
-const admissions = [
-  { name: 'Awa Traoré', className: 'CE2', date: 'Aujourd’hui', status: 'Validé' },
-  { name: 'Moussa Koné', className: 'CM1', date: 'Hier', status: 'En attente' },
-  { name: 'Sarah Koffi', className: '6e A', date: 'Hier', status: 'Validé' },
-  { name: 'Yao N’Guessan', className: 'CP', date: 'Il y a 2 jours', status: 'Validé' },
-]
+function rnd(min, max) {
+  return Math.floor(Math.random() * (max - min + 1)) + min
+}
+
+function pick(items) {
+  return items[rnd(0, items.length - 1)]
+}
+
+function genStudents(count) {
+  return Array.from({ length: count }, (_, index) => {
+    const firstName = pick(FIRST_NAMES)
+    const lastName = pick(LAST_NAMES)
+    const pct = rnd(42, 99)
+    const avatarIndex = index % AV_CLASSES.length
+    const subjects = SUBJECT_POOL.slice(0, 4).map(subject => ({
+      n: subject,
+      p: rnd(45, 99),
+      g: pct >= 85 ? 'A' : pct >= 70 ? 'B' : pct >= 55 ? 'C' : 'D',
+    }))
+
+    return {
+      id: `PRE${String(40000 + index).padStart(5, '0')}`,
+      name: `${firstName} ${lastName}`,
+      initials: `${firstName[0]}${lastName[0]}`,
+      classe: pick(CLASSES),
+      age: rnd(14, 19),
+      ville: pick(VILLES),
+      matiere: pick(MATIERES),
+      notes: rnd(820, 1220),
+      pct,
+      status: pct >= 85 ? 'active' : pct >= 65 ? 'warning' : 'absent',
+      avCls: AV_CLASSES[avatarIndex],
+      bg: BG_GRADIENTS[avatarIndex],
+      gender: Math.random() > 0.5 ? 'M' : 'F',
+      subjects,
+    }
+  })
+}
 
 export default function Eleves() {
+  const students = useMemo(() => genStudents(1000), [])
+  const [activeFilter, setActiveFilter] = useState('Tous')
+  const [searchQ, setSearchQ] = useState('')
+  const [sortCol, setSortCol] = useState('name')
+  const [sortDir, setSortDir] = useState('asc')
+  const [perPage, setPerPage] = useState(20)
+  const [currentPage, setCurrentPage] = useState(1)
+  const [selected, setSelected] = useState(() => new Set())
+  const [modalStudentId, setModalStudentId] = useState(null)
+
+  useEffect(() => {
+    document.title = 'Gep Nebula — Élèves'
+  }, [])
+
+  const filteredStudents = useMemo(() => {
+    const query = searchQ.trim().toLowerCase()
+    const rows = students.filter(student => {
+      const classOk = activeFilter === 'Tous' || student.classe === activeFilter
+      const searchOk =
+        !query ||
+        student.name.toLowerCase().includes(query) ||
+        student.id.toLowerCase().includes(query) ||
+        student.ville.toLowerCase().includes(query) ||
+        student.classe.toLowerCase().includes(query)
+
+      return classOk && searchOk
+    })
+
+    return [...rows].sort((left, right) => {
+      let leftValue = left[sortCol]
+      let rightValue = right[sortCol]
+
+      if (typeof leftValue === 'string') {
+        leftValue = leftValue.toLowerCase()
+        rightValue = rightValue.toLowerCase()
+      }
+
+      if (leftValue < rightValue) return sortDir === 'asc' ? -1 : 1
+      if (leftValue > rightValue) return sortDir === 'asc' ? 1 : -1
+      return 0
+    })
+  }, [students, activeFilter, searchQ, sortCol, sortDir])
+
+  const total = filteredStudents.length
+  const totalPages = Math.max(1, Math.ceil(total / perPage))
+  const safePage = Math.min(currentPage, totalPages)
+  const start = (safePage - 1) * perPage
+  const pageStudents = filteredStudents.slice(start, start + perPage)
+  const modalStudent = students.find(student => student.id === modalStudentId) ?? null
+  const statusLabel = { active: 'Actif', absent: 'Absent', warning: 'À surveiller' }
+  const statusCls = { active: 'b-active', absent: 'b-absent', warning: 'b-warning' }
+
+  const totalStudents = students.length
+  const activeStudents = students.filter(student => student.status === 'active').length
+  const excellentStudents = students.filter(student => student.pct >= 90).length
+  const warningStudents = students.filter(student => student.status !== 'active').length
+
+  useEffect(() => {
+    if (currentPage > totalPages) setCurrentPage(totalPages)
+  }, [currentPage, totalPages])
+
+  function handleSortColumn(column) {
+    if (sortCol === column) setSortDir(current => (current === 'asc' ? 'desc' : 'asc'))
+    else {
+      setSortCol(column)
+      setSortDir('asc')
+    }
+  }
+
+  function toggleRow(id) {
+    setSelected(prev => {
+      const next = new Set(prev)
+      if (next.has(id)) next.delete(id)
+      else next.add(id)
+      return next
+    })
+  }
+
+  function toggleAll() {
+    setSelected(prev => {
+      const next = new Set(prev)
+      const allSelected = pageStudents.length > 0 && pageStudents.every(student => next.has(student.id))
+
+      if (allSelected) pageStudents.forEach(student => next.delete(student.id))
+      else pageStudents.forEach(student => next.add(student.id))
+
+      return next
+    })
+  }
+
+  function goToPage(page) {
+    if (page >= 1 && page <= totalPages) setCurrentPage(page)
+  }
+
+  const selectedCurrentPage = pageStudents.length > 0 && pageStudents.every(student => selected.has(student.id))
+
+  const paginationItems = []
+  paginationItems.push({ type: 'prev', label: '‹', page: safePage - 1, disabled: safePage === 1 })
+  for (let page = 1; page <= totalPages; page += 1) {
+    if (page === 1 || page === totalPages || Math.abs(page - safePage) <= 2) {
+      paginationItems.push({ type: 'page', label: page, page, active: page === safePage })
+    } else if (Math.abs(page - safePage) === 3) {
+      paginationItems.push({ type: 'ellipsis', label: '…' })
+    }
+  }
+  paginationItems.push({ type: 'next', label: '›', page: safePage + 1, disabled: safePage === totalPages })
+
   return (
-    <div>
-      <div className="page-header">
+    <div className="eleves-page">
+      <div className="page-header eleves-page-header">
         <div>
-          <h1 className="page-title">Gestion des élèves</h1>
-          <p className="page-subtitle">Suivi des inscriptions, dossiers et répartition par niveau</p>
+          <h1 className="page-title">Élèves</h1>
+          <p className="page-subtitle">Gérez et suivez tous les profils de votre établissement.</p>
         </div>
-        <button className="btn-primary" type="button">+ Nouvel élève</button>
+        <div className="eleves-header-actions">
+          <button className="eleves-btn-secondary" type="button">⬇ Exporter CSV</button>
+          <button className="eleves-btn-secondary" type="button">📤 Importer</button>
+          <button className="eleves-btn-primary" type="button">＋ Nouvel élève</button>
+        </div>
       </div>
 
-      <div className="stats-grid">
-        {enrollmentStats.map(item => (
-          <div key={item.label} className="card" style={{ padding: '18px 20px' }}>
-            <p style={{ fontSize: 12, color: 'var(--text-secondary)', marginBottom: 6 }}>{item.label}</p>
-            <div style={{ fontSize: 28, fontWeight: 700, color: 'var(--text-primary)' }}>{item.value}</div>
-            <p style={{ fontSize: 12, color: 'var(--text-secondary)', marginTop: 4 }}>{item.note}</p>
+      <div className="eleves-stat-strip">
+        <div className="eleves-scard"><div className="eleves-sc-icon ic-v">👥</div><div><div className="eleves-sc-val" id="statTotal">{totalStudents.toLocaleString('fr')}</div><div className="eleves-sc-lbl">Total élèves</div><div className="eleves-sc-chg cup">▲ +3.2% ce mois</div></div></div>
+        <div className="eleves-scard"><div className="eleves-sc-icon ic-c">✅</div><div><div className="eleves-sc-val" id="statActive">{activeStudents.toLocaleString('fr')}</div><div className="eleves-sc-lbl">Actifs</div><div className="eleves-sc-chg cup">▲ bonne présence</div></div></div>
+        <div className="eleves-scard"><div className="eleves-sc-icon ic-g">🏆</div><div><div className="eleves-sc-val" id="statExcel">{excellentStudents.toLocaleString('fr')}</div><div className="eleves-sc-lbl">≥ 90% résultat</div><div className="eleves-sc-chg cup">▲ en progression</div></div></div>
+        <div className="eleves-scard"><div className="eleves-sc-icon ic-a">⚠️</div><div><div className="eleves-sc-val" id="statWarn">{warningStudents.toLocaleString('fr')}</div><div className="eleves-sc-lbl">À surveiller</div><div className="eleves-sc-chg cdn">▼ nécessite suivi</div></div></div>
+      </div>
+
+      <div className="eleves-toolbar">
+        <div className="eleves-filter-tabs" id="filterTabs">
+          {FILTERS.map(filter => (
+            <button key={filter} type="button" className={`eleves-tab ${activeFilter === filter ? 'active' : ''}`} onClick={() => setActiveFilter(filter)}>
+              {filter}
+            </button>
+          ))}
+        </div>
+        <div className="eleves-toolbar-right">
+          <select className="eleves-sel" value={`${sortCol}-${sortDir}`} onChange={event => {
+            const [column, direction] = event.target.value.split('-')
+            setSortCol(column)
+            setSortDir(direction)
+          }}>
+            <option value="name-asc">Nom A → Z</option>
+            <option value="name-desc">Nom Z → A</option>
+            <option value="pct-desc">Meilleur résultat</option>
+            <option value="pct-asc">Moins bon résultat</option>
+            <option value="notes-desc">Notes ↓</option>
+          </select>
+          <select className="eleves-sel" value={perPage} onChange={event => setPerPage(Number(event.target.value))}>
+            <option value="10">10 / page</option>
+            <option value="20">20 / page</option>
+            <option value="50">50 / page</option>
+            <option value="100">100 / page</option>
+          </select>
+        </div>
+      </div>
+
+      <div className="eleves-table-card card">
+        <div className="eleves-table-search-row">
+          <div className="eleves-tsearch">
+            <span className="eleves-tsi">🔍</span>
+            <input type="text" value={searchQ} onChange={event => setSearchQ(event.target.value)} placeholder="Rechercher nom, ID, ville..." />
           </div>
-        ))}
+          <div className="eleves-table-info" id="tableInfo"><strong>{total.toLocaleString('fr')}</strong> élèves trouvés</div>
+          <div className="eleves-bulk-actions">
+            <button className="eleves-bulk-btn" type="button">✉️ Message groupé</button>
+            <button className="eleves-bulk-btn" type="button">📥 Exporter sélection</button>
+            <button className="eleves-bulk-btn danger" type="button">🗑 Supprimer</button>
+          </div>
+        </div>
+
+        <div className="eleves-table-scroll">
+          <table className="eleves-table">
+            <thead>
+              <tr>
+                <th style={{ width: 36 }}>
+                  <button type="button" className={`eleves-cb ${selectedCurrentPage ? 'chk' : ''}`} onClick={toggleAll} aria-label="Tout sélectionner">{selectedCurrentPage ? '✓' : ''}</button>
+                </th>
+                {[
+                  ['name', 'Élève'],
+                  ['classe', 'Classe'],
+                  ['age', 'Âge'],
+                  ['ville', 'Ville'],
+                  ['notes', 'Notes'],
+                  ['pct', 'Résultat'],
+                  ['status', 'Statut'],
+                ].map(([column, label]) => (
+                  <th key={column} onClick={() => handleSortColumn(column)} className={sortCol === column ? 'sorted' : ''}>
+                    {label} <span className="sort-ico">{sortCol === column ? (sortDir === 'asc' ? '▲' : '▼') : '⇅'}</span>
+                  </th>
+                ))}
+                <th style={{ width: 90 }}>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              {pageStudents.map(student => {
+                const fillCls = student.pct >= 85 ? '' : student.pct >= 65 ? ' warn' : ' low'
+                const isSelected = selected.has(student.id)
+
+                return (
+                  <tr key={student.id} className={isSelected ? 'selected' : ''} onClick={() => setModalStudentId(student.id)}>
+                    <td onClick={event => event.stopPropagation()}>
+                      <button type="button" className={`eleves-cb ${isSelected ? 'chk' : ''}`} onClick={() => toggleRow(student.id)}>{isSelected ? '✓' : ''}</button>
+                    </td>
+                    <td>
+                      <div className="eleves-stu-cell">
+                        <div className={`eleves-stu-av ${student.avCls}`}>{student.initials}</div>
+                        <div><div className="eleves-sname">{student.name}</div><div className="eleves-sid">{student.id}</div></div>
+                      </div>
+                    </td>
+                    <td><span className="eleves-class-tag">{student.classe}</span></td>
+                    <td>{student.age} ans</td>
+                    <td>{student.ville}</td>
+                    <td><strong>{student.notes}</strong></td>
+                    <td><div className="eleves-pct-cell"><div className="eleves-pbar"><div className={`eleves-pbar-fill${fillCls}`} style={{ width: `${student.pct}%` }} /></div><span className="eleves-pct-val">{student.pct}%</span></div></td>
+                    <td><span className={`eleves-badge ${statusCls[student.status]}`}><span className="eleves-bdot" />{statusLabel[student.status]}</span></td>
+                    <td onClick={event => event.stopPropagation()}>
+                      <div className="eleves-action-cell">
+                        <button type="button" className="eleves-act-btn" title="Voir" onClick={() => setModalStudentId(student.id)}>👁</button>
+                        <button type="button" className="eleves-act-btn" title="Modifier">✏️</button>
+                        <button type="button" className="eleves-act-btn del" title="Supprimer">🗑</button>
+                      </div>
+                    </td>
+                  </tr>
+                )
+              })}
+            </tbody>
+          </table>
+        </div>
+
+        <div className="eleves-pag-row">
+          <div className="eleves-pag-info" id="pagInfo">
+            Page <strong>{safePage}</strong> / <strong>{totalPages}</strong> · <strong>{start + 1}–{Math.min(start + perPage, total)}</strong> sur <strong>{total.toLocaleString('fr')}</strong>
+          </div>
+          <div className="eleves-pag-controls" id="pagControls">
+            {paginationItems.map((item, index) => {
+              if (item.type === 'ellipsis') return <div key={`ellipsis-${index}`} className="eleves-pag-btn" style={{ pointerEvents: 'none' }}>…</div>
+              return (
+                <button key={`${item.type}-${item.label}`} type="button" className={`eleves-pag-btn${item.active ? ' active' : ''}`} disabled={item.disabled} onClick={() => goToPage(item.page)}>
+                  {item.label}
+                </button>
+              )
+            })}
+          </div>
+        </div>
       </div>
 
-      <div className="dashboard-chart-grid">
-        <div className="card dashboard-section-card dashboard-chart-card">
-          <div className="dashboard-section-header">
-            <div>
-              <p className="dashboard-section-kicker">Capacité par niveau</p>
-              <h2 className="activities-title">Charge des classes</h2>
+      {modalStudent && (
+        <div className="eleves-overlay open" id="overlay" onClick={event => {
+          if (event.target === event.currentTarget) setModalStudentId(null)
+        }}>
+          <div className="eleves-modal">
+            <div className="eleves-modal-hero">
+              <div className="eleves-mh-bg" style={{ background: modalStudent.bg }} />
+              <div className="eleves-mh-pat" />
+              <div className="eleves-m-av" style={{ background: modalStudent.bg }}>{modalStudent.initials}</div>
+              <button className="eleves-m-close" type="button" onClick={() => setModalStudentId(null)}>✕</button>
             </div>
-          </div>
-          <div className="dashboard-level-list">
-            {classLoad.map(item => (
-              <div key={item.level} className="dashboard-level-row">
-                <div className="dashboard-level-labels">
-                  <span className="dashboard-level-name">{item.level}</span>
-                  <span className="dashboard-level-count">{item.students}/{item.capacity}</span>
-                </div>
-                <div className="dashboard-level-bar">
-                  <div className="dashboard-level-fill" style={{ width: `${(item.students / item.capacity) * 100}%`, background: item.color }} />
+            <div className="eleves-modal-body">
+              <div className="eleves-m-name">{modalStudent.name}</div>
+              <div className="eleves-m-sub">{modalStudent.id} · {modalStudent.classe} · {modalStudent.matiere}</div>
+              <div className="eleves-m-tags">
+                <span className="eleves-tag tv">{modalStudent.classe}</span>
+                <span className="eleves-tag tc">{modalStudent.matiere}</span>
+                <span className={`eleves-tag ${modalStudent.status === 'active' ? 'tg' : 'ta'}`}>{statusLabel[modalStudent.status]}</span>
+              </div>
+              <div className="eleves-m-sec">
+                <div className="eleves-m-sec-title">Informations personnelles</div>
+                <div className="eleves-info-grid">
+                  <div className="eleves-info-item"><div className="eleves-info-lbl">ÂGE</div><div className="eleves-info-val">{modalStudent.age} ans</div></div>
+                  <div className="eleves-info-item"><div className="eleves-info-lbl">GENRE</div><div className="eleves-info-val">{modalStudent.gender === 'F' ? 'Féminin' : 'Masculin'}</div></div>
+                  <div className="eleves-info-item"><div className="eleves-info-lbl">VILLE</div><div className="eleves-info-val">{modalStudent.ville}</div></div>
+                  <div className="eleves-info-item"><div className="eleves-info-lbl">RÉSULTAT GLOBAL</div><div className="eleves-info-val">{modalStudent.pct}%</div></div>
+                  <div className="eleves-info-item"><div className="eleves-info-lbl">NOTES TOTALES</div><div className="eleves-info-val">{modalStudent.notes}</div></div>
+                  <div className="eleves-info-item"><div className="eleves-info-lbl">IDENTIFIANT</div><div className="eleves-info-val monospace">{modalStudent.id}</div></div>
                 </div>
               </div>
-            ))}
-          </div>
-        </div>
-
-        <div className="card dashboard-section-card dashboard-chart-card">
-          <div className="dashboard-section-header">
-            <div>
-              <p className="dashboard-section-kicker">Admissions récentes</p>
-              <h2 className="activities-title">Derniers dossiers</h2>
+              <div className="eleves-m-sec">
+                <div className="eleves-m-sec-title">Performance académique</div>
+                {modalStudent.subjects.map(subject => {
+                  const [fillCls, gradeCls] = (GRADE_MAP[subject.g] || 'fv gb').split(' ')
+                  return (
+                    <div key={subject.n} className="eleves-perf-row">
+                      <div className="eleves-perf-head"><span className="eleves-psubj">{subject.n}</span><span className={`eleves-pgrade ${gradeCls}`}>{subject.g} · {subject.p}%</span></div>
+                      <div className="eleves-pbar2"><div className={`eleves-pbar2-fill ${fillCls}`} style={{ width: `${subject.p}%` }} /></div>
+                    </div>
+                  )
+                })}
+              </div>
+            </div>
+            <div className="eleves-modal-footer">
+              <button className="eleves-mf-out" type="button" onClick={() => setModalStudentId(null)}>✏️ Modifier</button>
+              <button className="eleves-mf-sol" type="button">📋 Dossier complet</button>
             </div>
           </div>
-          <div className="dashboard-notice-list">
-            {admissions.map(item => (
-              <div key={item.name} className="dashboard-notice-item">
-                <div className="dashboard-notice-icon">👤</div>
-                <div className="dashboard-notice-content">
-                  <p className="dashboard-notice-title">{item.name}</p>
-                  <p className="dashboard-notice-meta">{item.className} · {item.date}</p>
-                </div>
-                <span className="dashboard-chip">{item.status}</span>
-              </div>
-            ))}
-          </div>
         </div>
-      </div>
+      )}
     </div>
   )
 }

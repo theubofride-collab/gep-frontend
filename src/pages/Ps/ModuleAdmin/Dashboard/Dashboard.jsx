@@ -142,7 +142,7 @@ export default function Dashboard() {
           <section className="dashboard-page-header">
             <div>
               <h1>Bienvenue. 👋</h1>
-              <p>Naviguez vers l'avenir de l'éducation avec Schooli.</p>
+              <p>Naviguez vers l'avenir de l'éducation avec Gep Nebula.</p>
             </div>
             <div className="dashboard-header-actions">
               <span className="dashboard-chip dashboard-chip-primary">Année active 2025-2026</span>
