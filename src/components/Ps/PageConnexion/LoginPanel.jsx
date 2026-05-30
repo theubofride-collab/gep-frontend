@@ -17,7 +17,7 @@ export default function LoginPanel({
 				<div className="login-panel-header">
 					<div>
 						<h2>Connexion</h2>
-						<p>Choisissez votre rôle puis entrez vos identifiants.</p>
+						<p>Choisissez votre profil puis entrez vos identifiants.</p>
 					</div>
 					<span className="login-panel-chip">Accès sécurisé</span>
 				</div>
@@ -95,7 +95,7 @@ export default function LoginPanel({
 				</form>
 
 				<div className="login-footer-note">
-					Connexion disponible pour le rôle <strong>{roles.find(role => role.id === activeRole)?.label}</strong>.
+					Connexion disponible pour le profil <strong>{roles.find(role => role.id === activeRole)?.label}</strong>.
 				</div>
 			</div>
 		</section>

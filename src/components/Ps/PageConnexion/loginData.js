@@ -1,5 +1,4 @@
 export const roles = [
-	{ id: 'admin', label: 'Admin', icon: '🛠️' },
 	{ id: 'secretaire', label: 'Secrétaire', icon: '📋' },
 	{ id: 'comptable', label: 'Comptable', icon: '💳' },
 	{ id: 'parent', label: 'Parent', icon: '👨‍👩‍👧‍👦' },
@@ -11,7 +10,7 @@ export const rolesWithMatricule = new Set(['secretaire', 'comptable', 'enseignan
 export const highlights = [
 	{ title: 'Inscriptions', detail: 'Centralisez les dossiers élèves et les affectations.', tone: 'login-tone-cyan' },
 	{ title: 'Paiements', detail: 'Suivez les règlements et les impayés en temps réel.', tone: 'login-tone-violet' },
-	{ title: 'Tableaux de bord', detail: 'Accédez aux indicateurs clés du module admin.', tone: 'login-tone-green' },
+	{ title: 'Tableaux de bord', detail: 'Accédez aux indicateurs clés de l’école.', tone: 'login-tone-green' },
 ]
 
 export const metrics = [

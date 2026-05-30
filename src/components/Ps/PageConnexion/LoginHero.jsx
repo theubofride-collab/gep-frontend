@@ -10,7 +10,7 @@ export default function LoginHero({ highlights, metrics }) {
 						<span>GEP</span>
 						<strong>Nebula</strong>
 					</div>
-					<p className="login-brand-kicker">Accès aux acteurs</p>
+					<p className="login-brand-kicker">Accès à la communauté scolaire</p>
 				</div>
 			</div>
 
@@ -25,7 +25,7 @@ export default function LoginHero({ highlights, metrics }) {
 			</h1>
 
 			<p className="login-hero-copy">
-				Connectez-vous pour piloter les inscriptions, les paiements, les classes et les tableaux de bord du module admin.
+				Connectez-vous pour piloter les inscriptions, les paiements, les classes et les tableaux de bord de l’école.
 			</p>
 
 			<div className="login-highlights">

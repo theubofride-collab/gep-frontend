@@ -7,7 +7,7 @@ import './Login.css'
 
 export default function Login() {
 	const navigate = useNavigate()
-	const [activeRole, setActiveRole] = useState('admin')
+	const [activeRole, setActiveRole] = useState('parent')
 	const [email, setEmail] = useState('')
 	const [matricule, setMatricule] = useState('')
 	const [password, setPassword] = useState('')
