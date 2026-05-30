@@ -9,7 +9,6 @@ import Classes from '../pages/Ps/ModuleAdmin/Classes/Classes'
 import Examens from '../pages/Ps/ModuleAdmin/Examens/Examens'
 import Transport from '../pages/Ps/ModuleAdmin/Transport/Transport'
 import Annonces from '../pages/Ps/ModuleAdmin/Annonces/Annonces'
-import TypesPaiement from '../pages/Ps/ModuleAdmin/TypesPaiement/TypesPaiement'
 import Parametres from '../pages/Ps/ModuleAdmin/Parametres/Parametres'
 import Sauvegardes from '../pages/Ps/ModuleAdmin/Sauvegardes/Sauvegardes'
 
@@ -29,7 +28,7 @@ export default function AppRouter() {
           <Route path="examens" element={<Examens />} />
           <Route path="transport" element={<Transport />} />
           <Route path="annonces" element={<Annonces />} />
-          <Route path="types-paiement" element={<TypesPaiement />} />
+          
           <Route path="parametres" element={<Parametres />} />
           <Route path="sauvegardes" element={<Sauvegardes />} />
           <Route path="*" element={<Navigate to="dashboard" replace />} />

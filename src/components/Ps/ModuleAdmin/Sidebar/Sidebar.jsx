@@ -12,7 +12,6 @@ const nav = [
   { to: '/admin/examens', icon: '📝', label: 'Examens' },
   { to: '/admin/transport', icon: '🚌', label: 'Transport' },
   { to: '/admin/annonces', icon: '📢', label: 'Annonces' },
-  { to: '/admin/types-paiement', icon: '💳', label: 'Types de paiement' },
   { to: '/admin/parametres', icon: '⚙️', label: 'Paramètres' },
   { to: '/admin/sauvegardes', icon: '🗄️', label: 'Sauvegardes' },
 ]

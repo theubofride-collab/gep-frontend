@@ -30,6 +30,23 @@
   --radius-lg: 16px;
   --font: 'Plus Jakarta Sans', sans-serif;
   --font-body: 'DM Sans', sans-serif;
+
+  /* Aliases for legacy French variable names used in page-specific CSS */
+  --fond-page: var(--bg);
+  --fond-carte: var(--card-bg);
+  --bordure: var(--border);
+  --texte-principal: var(--text-primary);
+  --texte-sec: var(--text-secondary);
+  --texte-muted: var(--text-muted);
+  --violet-profond: var(--accent);
+  --violet-hover: var(--accent-hover);
+  --succes: var(--success);
+  --danger: var(--danger);
+  --avertissement: var(--warning);
+  --cyan: var(--info);
+  --shadow-sm: var(--shadow-sm);
+  --shadow: var(--shadow);
+  --shadow-md: var(--shadow-md);
 }
 
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }

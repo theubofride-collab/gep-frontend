@@ -71,9 +71,10 @@
 .btn-prim:hover { background: linear-gradient(135deg, var(--violet-hover), var(--cyan)); }
 
 .stat-strip {
-	display: grid;
-	grid-template-columns: repeat(4, 1fr);
+	display: flex;
 	gap: 12px;
+	width: 100%;
+	align-items: stretch;
 }
 
 .scard {
@@ -82,6 +83,7 @@
 	border-radius: 14px;
 	padding: 14px 16px;
 	display: flex;
+	flex: 1 1 0;
 	align-items: center;
 	gap: 12px;
 	transition: box-shadow .2s;
@@ -105,6 +107,10 @@
 .sc-lbl { font-size: 11px; color: var(--texte-sec); margin-top: 3px; font-weight: 500; }
 .sc-chg { font-size: 10px; font-weight: 700; margin-top: 3px; }
 .cup { color: var(--succes); }
+
+/* Prevent children content from causing the grid to overflow or push to one side */
+.scard, .scard > div { min-width: 0; }
+.scard > div:last-child { display: flex; flex-direction: column; gap: 4px; min-width: 0; }
 
 .tabs-row {
 	display: flex;
