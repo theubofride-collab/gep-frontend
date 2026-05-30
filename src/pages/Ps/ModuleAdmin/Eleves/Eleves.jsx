@@ -3,7 +3,24 @@ import './Eleves.css'
 
 const FIRST_NAMES = ['Evelyn', 'Diana', 'John', 'Amara', 'Lucas', 'Sophie', 'Karim', 'Ines', 'Paul', 'Marie', 'Théo', 'Fatou', 'Alexis', 'Mireille', 'Samuel', 'Chloe', 'David', 'Aicha', 'Pierre', 'Nadia', 'Kevin', 'Béatrice', 'Amos', 'Rachel', 'Brice', 'Léa', 'Serge', 'Vanessa', 'Herve', 'Claudine', 'Boris', 'Linda', 'Patrick', 'Flore', 'Nathan', 'Astrid', 'Joel', 'Esther', 'Remy', 'Nadège', 'Armel', 'Victoire', 'Franck', 'Laure', 'Cyrille', 'Ornella', 'Alain', 'Pascale', 'Simon', 'Brigitte']
 const LAST_NAMES = ['Harper', 'Plenty', 'Millar', 'Konan', 'Mbarga', 'Bello', 'Tamba', 'Fotso', 'Ateba', 'Essama', 'Nkomo', 'Bilong', 'Ewane', 'Mba', 'Fouda', 'Bella', 'Nganou', 'Soppo', 'Mongo', 'Kotto', 'Djike', 'Feudjio', 'Epanda', 'Bekolo', 'Tonye', 'Abena', 'Ondoa', 'Mvogo', 'Ngolle', 'Kameni', 'Tagne', 'Djoumessi', 'Bengono', 'Biyong', 'Fomekong', 'Nyambi', 'Nguini', 'Owona', 'Etoundi', 'Tchoffo', 'Minkeng', 'Wambo', 'Kuate', 'Ndongo', 'Mbouda', 'Sop', 'Ngah', 'Mekongo', 'Batchieh', 'Fobang']
-const CLASSES = ['Classe 06', 'Classe 04', 'Classe 03', 'Terminale']
+const CLASS_GROUPS = [
+  { label: 'CP', section: 'Francophone', minAge: 5, maxAge: 6 },
+  { label: 'CE1', section: 'Francophone', minAge: 6, maxAge: 7 },
+  { label: 'CE2', section: 'Francophone', minAge: 7, maxAge: 8 },
+  { label: 'CM1', section: 'Francophone', minAge: 8, maxAge: 9 },
+  { label: 'CM2', section: 'Francophone', minAge: 9, maxAge: 10 },
+  { label: 'Class 1', section: 'Anglophone', minAge: 5, maxAge: 6 },
+  { label: 'Class 2', section: 'Anglophone', minAge: 6, maxAge: 7 },
+  { label: 'Class 3', section: 'Anglophone', minAge: 7, maxAge: 8 },
+  { label: 'Class 4', section: 'Anglophone', minAge: 8, maxAge: 9 },
+  { label: 'Class 5', section: 'Anglophone', minAge: 9, maxAge: 10 },
+  { label: 'CP Bilingue', section: 'Bilingue', minAge: 5, maxAge: 6 },
+  { label: 'CE1 Bilingue', section: 'Bilingue', minAge: 6, maxAge: 7 },
+  { label: 'CE2 Bilingue', section: 'Bilingue', minAge: 7, maxAge: 8 },
+  { label: 'Class 1 Bilingue', section: 'Bilingue', minAge: 5, maxAge: 6 },
+  { label: 'Class 2 Bilingue', section: 'Bilingue', minAge: 6, maxAge: 7 },
+]
+const CLASSES = CLASS_GROUPS.map(item => item.label)
 const VILLES = ['Yaoundé', 'Douala', 'Bafoussam', 'Garoua', 'Ngaoundéré', 'Ebolowa', 'Buea', 'Bertoua', 'Maroua', 'Bamenda']
 const MATIERES = ['Mathématiques', 'Littérature', 'Sciences', 'Anglais', 'Histoire', 'Physique', 'Géographie', 'Économie', 'Chimie', 'Informatique']
 const AV_CLASSES = ['av1', 'av2', 'av3', 'av4', 'av5', 'av6', 'av7', 'av8']
@@ -19,7 +36,8 @@ const BG_GRADIENTS = [
 ]
 const SUBJECT_POOL = ['Maths', 'Physique', 'Chimie', 'Anglais', 'Français', 'Histoire', 'Géo', 'SVT', 'Philo', 'Info', 'Éco']
 const GRADE_MAP = { A: 'fg ga', B: 'fv gb', C: 'fa gc', D: 'fd gd' }
-const FILTERS = ['Tous', 'Classe 06', 'Classe 04', 'Classe 03', 'Terminale']
+const FILTERS = ['Tous', ...CLASSES]
+const SECTION_FILTERS = ['Tous', 'Francophone', 'Anglophone', 'Bilingue']
 
 function rnd(min, max) {
   return Math.floor(Math.random() * (max - min + 1)) + min
@@ -29,12 +47,18 @@ function pick(items) {
   return items[rnd(0, items.length - 1)]
 }
 
+function pickClassGroup() {
+  return CLASS_GROUPS[rnd(0, CLASS_GROUPS.length - 1)]
+}
+
 function genStudents(count) {
   return Array.from({ length: count }, (_, index) => {
     const firstName = pick(FIRST_NAMES)
     const lastName = pick(LAST_NAMES)
     const pct = rnd(42, 99)
     const avatarIndex = index % AV_CLASSES.length
+    const classGroup = pickClassGroup()
+    const age = rnd(classGroup.minAge, classGroup.maxAge)
     const subjects = SUBJECT_POOL.slice(0, 4).map(subject => ({
       n: subject,
       p: rnd(45, 99),
@@ -45,8 +69,9 @@ function genStudents(count) {
       id: `PRE${String(40000 + index).padStart(5, '0')}`,
       name: `${firstName} ${lastName}`,
       initials: `${firstName[0]}${lastName[0]}`,
-      classe: pick(CLASSES),
-      age: rnd(14, 19),
+      classe: classGroup.label,
+      section: classGroup.section,
+      age,
       ville: pick(VILLES),
       matiere: pick(MATIERES),
       notes: rnd(820, 1220),
@@ -63,6 +88,7 @@ function genStudents(count) {
 export default function Eleves() {
   const students = useMemo(() => genStudents(1000), [])
   const [activeFilter, setActiveFilter] = useState('Tous')
+  const [activeSection, setActiveSection] = useState('Tous')
   const [searchQ, setSearchQ] = useState('')
   const [sortCol, setSortCol] = useState('name')
   const [sortDir, setSortDir] = useState('asc')
@@ -79,14 +105,16 @@ export default function Eleves() {
     const query = searchQ.trim().toLowerCase()
     const rows = students.filter(student => {
       const classOk = activeFilter === 'Tous' || student.classe === activeFilter
+      const sectionOk = activeSection === 'Tous' || student.section === activeSection
       const searchOk =
         !query ||
         student.name.toLowerCase().includes(query) ||
         student.id.toLowerCase().includes(query) ||
         student.ville.toLowerCase().includes(query) ||
-        student.classe.toLowerCase().includes(query)
+        student.classe.toLowerCase().includes(query) ||
+        student.section.toLowerCase().includes(query)
 
-      return classOk && searchOk
+      return classOk && sectionOk && searchOk
     })
 
     return [...rows].sort((left, right) => {
@@ -198,6 +226,11 @@ export default function Eleves() {
           ))}
         </div>
         <div className="eleves-toolbar-right">
+          <select className="eleves-sel" value={activeSection} onChange={event => setActiveSection(event.target.value)} aria-label="Filtrer par section">
+            {SECTION_FILTERS.map(section => (
+              <option key={section} value={section}>{section === 'Tous' ? 'Toutes les sections' : section}</option>
+            ))}
+          </select>
           <select className="eleves-sel" value={`${sortCol}-${sortDir}`} onChange={event => {
             const [column, direction] = event.target.value.split('-')
             setSortCol(column)
@@ -321,9 +354,10 @@ export default function Eleves() {
             </div>
             <div className="eleves-modal-body">
               <div className="eleves-m-name">{modalStudent.name}</div>
-              <div className="eleves-m-sub">{modalStudent.id} · {modalStudent.classe} · {modalStudent.matiere}</div>
+              <div className="eleves-m-sub">{modalStudent.id} · {modalStudent.classe} · {modalStudent.section} · {modalStudent.matiere}</div>
               <div className="eleves-m-tags">
                 <span className="eleves-tag tv">{modalStudent.classe}</span>
+                <span className="eleves-tag tc">{modalStudent.section}</span>
                 <span className="eleves-tag tc">{modalStudent.matiere}</span>
                 <span className={`eleves-tag ${modalStudent.status === 'active' ? 'tg' : 'ta'}`}>{statusLabel[modalStudent.status]}</span>
               </div>

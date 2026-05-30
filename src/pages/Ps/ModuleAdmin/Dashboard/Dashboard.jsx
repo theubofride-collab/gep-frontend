@@ -14,8 +14,8 @@ const levelDistribution = [
   { level: 'CI / CP', value: 82, color: 'var(--cyan)' },
   { level: 'CE1 / CE2', value: 105, color: 'var(--accent)' },
   { level: 'CM1 / CM2', value: 118, color: 'var(--success)' },
-  { level: '6e / 5e', value: 156, color: 'var(--warning)' },
-  { level: '4e / 3e', value: 126, color: 'var(--danger)' },
+  { level: 'Class 2 / Class 1', value: 156, color: 'var(--warning)' },
+  { level: 'Class 4 / Class 3', value: 126, color: 'var(--danger)' },
 ]
 
 const deadlines = [
@@ -90,10 +90,10 @@ const notifications = [
 ]
 
 const performanceRows = [
-  { level: 'Classe 06', percent: 60, label: 'Maths', className: 'bar-violet' },
-  { level: 'Classe 04', percent: 70, label: 'GK', className: 'bar-cyan' },
-  { level: 'Classe 03', percent: 72, label: 'Sciences', className: 'bar-mixed' },
-  { level: 'Classe 08', percent: 47, label: 'Anglais', className: 'bar-light' },
+  { level: 'Class 1', percent: 60, label: 'Maths', className: 'bar-violet' },
+  { level: 'Class 2', percent: 70, label: 'GK', className: 'bar-cyan' },
+  { level: 'CE1', percent: 72, label: 'Sciences', className: 'bar-mixed' },
+  { level: 'CE2', percent: 47, label: 'Anglais', className: 'bar-light' },
 ]
 
 const enrollmentTrend = monthlyFlow.map(item => ({

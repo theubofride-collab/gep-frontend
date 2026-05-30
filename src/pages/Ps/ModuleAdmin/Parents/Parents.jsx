@@ -2,15 +2,31 @@ import { useEffect, useMemo, useState } from 'react'
 import './Parents.css'
 
 const STATUSES = ['Actif', 'Inactif', 'En attente']
-const CLASSES = ['Classe 01', 'Classe 02', 'Classe 03', 'Classe 04']
+const CLASSES = [
+  'CP',
+  'CE1',
+  'CE2',
+  'CM1',
+  'CM2',
+  'Class 1',
+  'Class 2',
+  'Class 3',
+  'Class 4',
+  'Class 5',
+  'CP Bilingue',
+  'CE1 Bilingue',
+  'CE2 Bilingue',
+  'Class 1 Bilingue',
+  'Class 2 Bilingue',
+]
 
 const PARENTS = [
-  { id: 'P-001', name: 'Famille Touré', email: 'famille.toure@example.com', phone: '05 45 22 11 09', children: ['Awa T. · CE2', 'Moussa T. · CM1'], classes: ['Classe 01', 'Classe 02'], status: 'Actif', access: 'Portail actif' },
-  { id: 'P-002', name: 'Famille Kone', email: 'famille.kone@example.com', phone: '07 33 01 41 77', children: ['Mariam K. · 6e'], classes: ['Classe 03'], status: 'En attente', access: 'Invitation envoyée' },
-  { id: 'P-003', name: 'Famille Kouadio', email: 'famille.kouadio@example.com', phone: '01 88 19 04 35', children: ['Joël K. · 4e', 'Nadia K. · 2nde', 'Sara K. · 5e'], classes: ['Classe 01', 'Classe 04'], status: 'Actif', access: 'Portail actif' },
-  { id: 'P-004', name: 'Famille N’Dri', email: 'famille.ndri@example.com', phone: '05 12 30 92 11', children: ['Aminata N. · CE1', 'Ibrahim N. · CP'], classes: ['Classe 02'], status: 'Actif', access: 'Portail actif' },
-  { id: 'P-005', name: 'Famille Bamba', email: 'famille.bamba@example.com', phone: '06 41 19 02 55', children: ['Koffi B. · CM2'], classes: ['Classe 03'], status: 'Inactif', access: 'Compte suspendu' },
-  { id: 'P-006', name: 'Famille Koné', email: 'famille.kone2@example.com', phone: '05 74 90 13 22', children: ['Hawa K. · 3e'], classes: ['Classe 04'], status: 'En attente', access: 'Vérification requise' },
+  { id: 'P-001', name: 'Famille Touré', email: 'famille.toure@example.com', phone: '05 45 22 11 09', children: ['Awa T. · CE2', 'Moussa T. · CM1'], classes: ['CE2', 'CM1'], status: 'Actif', access: 'Portail actif' },
+  { id: 'P-002', name: 'Famille Kone', email: 'famille.kone@example.com', phone: '07 33 01 41 77', children: ['Mariam K. · Class 1', 'Ibrahima K. · Class 2'], classes: ['Class 1', 'Class 2'], status: 'En attente', access: 'Invitation envoyée' },
+  { id: 'P-003', name: 'Famille Kouadio', email: 'famille.kouadio@example.com', phone: '01 88 19 04 35', children: ['Joël K. · Class 4', 'Nadia K. · Class 2', 'Sara K. · CE1'], classes: ['Class 4', 'Class 2'], status: 'Actif', access: 'Portail actif' },
+  { id: 'P-004', name: 'Famille N’Dri', email: 'famille.ndri@example.com', phone: '05 12 30 92 11', children: ['Aminata N. · CE1', 'Ibrahim N. · CP'], classes: ['CE1', 'CP'], status: 'Actif', access: 'Portail actif' },
+  { id: 'P-005', name: 'Famille Bamba', email: 'famille.bamba@example.com', phone: '06 41 19 02 55', children: ['Koffi B. · CE2 Bilingue'], classes: ['CE2 Bilingue'], status: 'Inactif', access: 'Compte suspendu' },
+  { id: 'P-006', name: 'Famille Koné', email: 'famille.kone2@example.com', phone: '05 74 90 13 22', children: ['Hawa K. · Class 2 Bilingue'], classes: ['Class 2 Bilingue'], status: 'En attente', access: 'Vérification requise' },
 ]
 
 const MESSAGES = [

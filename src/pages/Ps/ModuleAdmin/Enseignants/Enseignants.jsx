@@ -3,16 +3,24 @@ import './Enseignants.css'
 
 const FIRST_NAMES = ['Marie', 'Jean', 'Sophie', 'Paul', 'Claire', 'André', 'Nathalie', 'Bruno', 'Isabelle', 'Luc', 'Fatou', 'Samuel', 'Cécile', 'Hervé', 'Aimée', 'Patrice', 'Monique', 'Serge', 'Laure', 'Alain', 'Béatrice', 'Didier', 'Véronique', 'Thierry', 'Nadège', 'Olivier', 'Pascale', 'Arnaud', 'Linda', 'Rodolphe', 'Esther', 'Clément', 'Viviane', 'François', 'Ornella', 'Alexis', 'Sylvie', 'Boris', 'Élise', 'Médard']
 const LAST_NAMES = ['Mbarga', 'Fotso', 'Nkomo', 'Essama', 'Bilong', 'Kameni', 'Tagne', 'Mongo', 'Abena', 'Ondoa', 'Sop', 'Fomekong', 'Epanda', 'Minkeng', 'Wambo', 'Kuate', 'Nganou', 'Bekolo', 'Tonye', 'Mvogo', 'Ngolle', 'Mbouda', 'Kotto', 'Djike', 'Feudjio', 'Djoumessi', 'Bengono', 'Biyong', 'Fobang', 'Nyambi', 'Nguini', 'Owona', 'Tchoffo', 'Etoundi', 'Batchieh', 'Mba', 'Fouda', 'Soppo', 'Bella', 'Mekongo']
-const DEPTS = ['Sciences', 'Lettres', 'Maths', 'Arts', 'Tech']
-const DEPT_COLORS = { Sciences: 'chip-g', Lettres: 'chip-c', Maths: 'chip-v', Arts: 'chip-a', Tech: 'chip-c' }
-const SUBJECTS_BY_DEPT = {
-  Sciences: ['Physique', 'Chimie', 'SVT', 'Biologie'],
-  Lettres: ['Français', 'Anglais', 'Histoire', 'Géographie', 'Philo'],
-  Maths: ['Mathématiques', 'Statistiques', 'Algèbre', 'Géométrie'],
-  Arts: ['Arts Plastiques', 'Musique', 'EPS', 'Danse'],
-  Tech: ['Informatique', 'Technologie', 'Réseaux', 'Robotique'],
+const DEPTS = ['Maths', 'Langues', 'Sciences', 'Arts', 'Éducation physique']
+const DEPT_COLORS = { Maths: 'chip-v', Langues: 'chip-c', Sciences: 'chip-g', Arts: 'chip-a', 'Éducation physique': 'chip-c' }
+const SECTION_CATALOG = {
+  Francophone: {
+    classes: ['CP', 'CE1', 'CE2', 'CM1', 'CM2'],
+    subjects: ['Mathématiques', 'Français', 'Sciences', 'Histoire-Géographie', 'Anglais', 'EPS', 'Arts plastiques'],
+  },
+  Anglophone: {
+    classes: ['Class 1', 'Class 2', 'Class 3', 'Class 4', 'Class 5'],
+    subjects: ['Mathematics', 'English', 'Basic Science', 'Social Studies', 'Phonics', 'Civic Education', 'Creative Arts', 'PE'],
+  },
+  Bilingue: {
+    classes: ['CP Bilingue', 'CE1 Bilingue', 'CE2 Bilingue', 'Class 1 Bilingue', 'Class 2 Bilingue'],
+    subjects: ['Mathématiques / Mathematics', 'Français / French', 'Anglais / English', 'Sciences / Basic Science', 'Lecture', 'EPS / PE', 'Arts'],
+  },
 }
-const CLASSES = ['6e A', '6e B', '5e A', '5e B', '4e A', '4e B', '3e A', '3e B', '2nde', '1ère', 'Terminale']
+const SECTION_ORDER = ['Francophone', 'Anglophone', 'Bilingue']
+const CLASSES = SECTION_ORDER.flatMap(section => SECTION_CATALOG[section].classes)
 const VILLES = ['Yaoundé', 'Douala', 'Bafoussam', 'Garoua', 'Ngaoundéré', 'Ebolowa', 'Buea']
 const AV_CLASSES = ['av1', 'av2', 'av3', 'av4', 'av5', 'av6', 'av7', 'av8']
 const BG_GRADIENTS = [
@@ -27,7 +35,7 @@ const BG_GRADIENTS = [
 ]
 const SCHEDULE_DAYS = ['Lun', 'Mar', 'Mer', 'Jeu', 'Ven']
 const SCHEDULE_COLORS = ['', 'cyan', 'green', '', 'cyan']
-const FILTERS = ['Tous', 'Sciences', 'Lettres', 'Maths', 'Arts & Sport', 'Tech & Info']
+const FILTERS = ['Tous', ...SECTION_ORDER]
 
 function rnd(min, max) {
   return Math.floor(Math.random() * (max - min + 1)) + min
@@ -40,7 +48,7 @@ function pick(items) {
 function picks(items, count) {
   const source = [...items]
   const result = []
-  for (let index = 0; index < count && source.length; index += 1) {
+  for (let index = 0; index < count && source.length > 0; index += 1) {
     const choiceIndex = rnd(0, source.length - 1)
     result.push(source.splice(choiceIndex, 1)[0])
   }
@@ -51,9 +59,11 @@ function genTeachers(count) {
   return Array.from({ length: count }, (_, index) => {
     const firstName = pick(FIRST_NAMES)
     const lastName = pick(LAST_NAMES)
+    const section = pick(SECTION_ORDER)
     const dept = pick(DEPTS)
-    const subjects = picks(SUBJECTS_BY_DEPT[dept], rnd(1, 3))
-    const classes = picks(CLASSES, rnd(2, 5))
+    const curriculum = SECTION_CATALOG[section]
+    const subjects = picks(curriculum.subjects, rnd(2, 4))
+    const classes = picks(curriculum.classes, rnd(2, 4))
     const experience = rnd(1, 30)
     const rating = +(3 + Math.random() * 2).toFixed(1)
     const status = ['active', 'active', 'active', 'away', 'off'][rnd(0, 4)]
@@ -76,6 +86,7 @@ function genTeachers(count) {
       name: `${firstName} ${lastName}`,
       initials: `${firstName[0]}${lastName[0]}`,
       dept,
+      section,
       subs: subjects,
       classes,
       exp: experience,
@@ -98,6 +109,7 @@ function genTeachers(count) {
 export default function Enseignants() {
   const teachers = useMemo(() => genTeachers(200), [])
   const [activeFilter, setActiveFilter] = useState('Tous')
+  const [activeSection, setActiveSection] = useState('Tous')
   const [searchQ, setSearchQ] = useState('')
   const [sortCol, setSortCol] = useState('name')
   const [sortDir, setSortDir] = useState('asc')
@@ -113,15 +125,18 @@ export default function Enseignants() {
   const filteredTeachers = useMemo(() => {
     const query = searchQ.trim().toLowerCase()
     const rows = teachers.filter(teacher => {
-      const deptOk = activeFilter === 'Tous' || (activeFilter === 'Arts & Sport' ? teacher.dept === 'Arts' : activeFilter === 'Tech & Info' ? teacher.dept === 'Tech' : teacher.dept === activeFilter)
+      const deptOk = activeFilter === 'Tous' || teacher.section === activeFilter
+      const sectionOk = activeSection === 'Tous' || teacher.section === activeSection
       const searchOk =
         !query ||
         teacher.name.toLowerCase().includes(query) ||
         teacher.subs.join(' ').toLowerCase().includes(query) ||
         teacher.ville.toLowerCase().includes(query) ||
-        teacher.id.toLowerCase().includes(query)
+        teacher.id.toLowerCase().includes(query) ||
+        teacher.classes.join(' ').toLowerCase().includes(query) ||
+        teacher.section.toLowerCase().includes(query)
 
-      return deptOk && searchOk
+      return deptOk && sectionOk && searchOk
     })
 
     return [...rows].sort((left, right) => {
@@ -249,6 +264,11 @@ export default function Enseignants() {
           ))}
         </div>
         <div className="enseignants-toolbar-right">
+          <select className="enseignants-sel" value={activeSection} onChange={event => setActiveSection(event.target.value)} aria-label="Filtrer par section">
+            {['Tous', ...SECTION_ORDER].map(section => (
+              <option key={section} value={section}>{section === 'Tous' ? 'Toutes les sections' : section}</option>
+            ))}
+          </select>
           <select className="enseignants-sel" value={`${sortCol}-${sortDir}`} onChange={event => {
             const [column, direction] = event.target.value.split('-')
             setSortCol(column)
@@ -291,7 +311,7 @@ export default function Enseignants() {
                 </th>
                 {[
                   ['name', 'Enseignant'],
-                  ['dept', 'Département'],
+                  ['dept', 'Section'],
                   ['subjects', 'Matières'],
                   ['classes', 'Classes'],
                   ['exp', 'Expérience'],
@@ -325,11 +345,11 @@ export default function Enseignants() {
                         </div>
                         <div>
                           <div className="tname">{teacher.name}</div>
-                          <div className="tid">{teacher.id} · {teacher.ville}</div>
+                                <div className="tid">{teacher.id} · {teacher.ville} · {teacher.section}</div>
                         </div>
                       </div>
                     </td>
-                    <td><span className={`chip ${chipCls}`}>{teacher.dept}</span></td>
+                          <td><span className={`chip ${chipCls}`}>{teacher.section}</span></td>
                     <td>
                       <div className="chips">
                         {teacher.subs.slice(0, 2).map(subject => (
@@ -403,9 +423,9 @@ export default function Enseignants() {
             </div>
             <div className="modal-body">
               <div className="m-name">{modalTeacher.name}</div>
-              <div className="m-sub">{modalTeacher.id} · {modalTeacher.dept} · {modalTeacher.ville}</div>
+              <div className="m-sub">{modalTeacher.id} · {modalTeacher.section} · {modalTeacher.ville}</div>
               <div className="m-tags">
-                <span className="tag tv">{modalTeacher.dept}</span>
+                <span className="tag tv">{modalTeacher.section}</span>
                 {modalTeacher.subs.map(subject => <span key={subject} className="tag tv">{subject}</span>)}
                 <span className="tag tg">{statusLabel[modalTeacher.status]}</span>
               </div>

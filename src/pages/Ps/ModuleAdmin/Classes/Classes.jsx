@@ -1,25 +1,49 @@
 import { useEffect, useMemo, useState } from 'react'
 import './Classes.css'
 
-const LEVEL_CONFIG = {
-	'6e': { label: 'Sixième (6e)', color: '#4C1D95', emoji: ['📐', '📏', '🔬', '📚', '🎨', '🌍', '💡', '🎵'] },
-	'5e': { label: 'Cinquième (5e)', color: '#6D28D9', emoji: ['🔭', '📝', '🧪', '📖', '🎯', '🌱', '⚗️', '🎶'] },
-	'4e': { label: 'Quatrième (4e)', color: '#06B6D4', emoji: ['🧮', '📊', '🌐', '📑', '🔍', '🏛️', '🎲', '🖥️'] },
-	'3e': { label: 'Troisième (3e)', color: '#059669', emoji: ['🏆', '📜', '🔬', '📐', '🎭', '🌿', '💻', '🎸'] },
-	'2nde': { label: 'Seconde', color: '#D97706', emoji: ['⚡', '🧲', '📈', '🗺️', '✏️', '🔑', '🎓', '🌟'] },
-	'1ere': { label: 'Première', color: '#DB2777', emoji: ['🧬', '📡', '🎯', '📋', '🔐', '🌌', '🖊️', '🏅'] },
-	Tle: { label: 'Terminale', color: '#E11D48', emoji: ['🎓', '🏆', '🔮', '📚', '⭐', '🚀', '💎', '🦋'] },
+const CLASS_CONFIG = {
+	CP: { label: 'CP', section: 'Francophone', color: '#4C1D95', emoji: ['📘', '✏️', '📚', '🎨', '🌍', '💡', '🎵', '🧩'], capacity: 30 },
+	CE1: { label: 'CE1', section: 'Francophone', color: '#6D28D9', emoji: ['📗', '🔤', '📖', '📝', '🎯', '🌱', '🎶', '🖍️'], capacity: 32 },
+	CE2: { label: 'CE2', section: 'Francophone', color: '#06B6D4', emoji: ['📙', '🧮', '📊', '🌐', '📑', '🔍', '🏛️', '🎲'], capacity: 34 },
+	CM1: { label: 'CM1', section: 'Francophone', color: '#059669', emoji: ['📒', '🏆', '📜', '🔬', '📐', '🎭', '🌿', '💻'], capacity: 36 },
+	CM2: { label: 'CM2', section: 'Francophone', color: '#0F766E', emoji: ['📒', '🎓', '🏅', '📚', '⭐', '🚀', '💎', '🦋'], capacity: 36 },
+	'Class 1': { label: 'Class 1', section: 'Anglophone', color: '#D97706', emoji: ['🔤', '📘', '🎵', '🧮', '📖', '🌟', '🧠', '🖍️'], capacity: 30 },
+	'Class 2': { label: 'Class 2', section: 'Anglophone', color: '#DB2777', emoji: ['🔠', '📗', '🎯', '📊', '🌱', '🎨', '💡', '🧪'], capacity: 32 },
+	'Class 3': { label: 'Class 3', section: 'Anglophone', color: '#4F46E5', emoji: ['🔡', '📙', '🧪', '📑', '🔍', '🌍', '🎲', '🎶'], capacity: 34 },
+	'Class 4': { label: 'Class 4', section: 'Anglophone', color: '#7C3AED', emoji: ['🔢', '📕', '🏆', '📜', '🎭', '🌿', '💻', '🎸'], capacity: 36 },
+	'Class 5': { label: 'Class 5', section: 'Anglophone', color: '#1D4ED8', emoji: ['🏫', '🎓', '🧭', '📚', '⭐', '🚀', '💎', '🦋'], capacity: 36 },
+	'CP Bilingue': { label: 'CP Bilingue', section: 'Bilingue', color: '#B45309', emoji: ['📘', '📗', '✏️', '📖', '🌍', '💡', '🎨', '🧩'], capacity: 28 },
+	'CE1 Bilingue': { label: 'CE1 Bilingue', section: 'Bilingue', color: '#0891B2', emoji: ['📘', '📙', '📝', '🔤', '📚', '🎯', '🎵', '🖍️'], capacity: 30 },
+	'CE2 Bilingue': { label: 'CE2 Bilingue', section: 'Bilingue', color: '#0EA5E9', emoji: ['📗', '📘', '🧮', '📊', '🌐', '🧪', '🎲', '🧠'], capacity: 32 },
+	'Class 1 Bilingue': { label: 'Class 1 Bilingue', section: 'Bilingue', color: '#8B5CF6', emoji: ['🔤', '📘', '📖', '🎯', '🌱', '🎨', '💡', '🧪'], capacity: 28 },
+	'Class 2 Bilingue': { label: 'Class 2 Bilingue', section: 'Bilingue', color: '#7C3AED', emoji: ['🔡', '📗', '📝', '📚', '🌍', '🎭', '💻', '🎶'], capacity: 30 },
 }
 
-const LEVEL_ORDER = ['6e', '5e', '4e', '3e', '2nde', '1ere', 'Tle']
-const SECTION_ORDER = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H']
+const CLASS_ORDER = ['CP', 'CE1', 'CE2', 'CM1', 'CM2', 'Class 1', 'Class 2', 'Class 3', 'Class 4', 'Class 5', 'CP Bilingue', 'CE1 Bilingue', 'CE2 Bilingue', 'Class 1 Bilingue', 'Class 2 Bilingue']
+const SECTION_ORDER = ['Francophone', 'Anglophone', 'Bilingue']
+const CLASS_GROUPS = {
+	Francophone: ['CP', 'CE1', 'CE2', 'CM1', 'CM2'],
+	Anglophone: ['Class 1', 'Class 2', 'Class 3', 'Class 4', 'Class 5'],
+	Bilingue: ['CP Bilingue', 'CE1 Bilingue', 'CE2 Bilingue', 'Class 1 Bilingue', 'Class 2 Bilingue'],
+}
 const TEACHERS = ['M. Mbarga', 'Mme Fotso', 'M. Nkomo', 'Mme Bilong', 'M. Kameni', 'Mme Tagne', 'M. Mongo', 'Mme Abena']
-const SUBJECTS = [
-	['Mathématiques', 'Physique', 'Chimie', 'SVT'],
-	['Français', 'Anglais', 'Histoire', 'Géo'],
-	['Maths', 'Sciences', 'Français', 'EPS'],
-	['Info', 'Maths', 'Physique', 'Philo'],
-]
+const SUBJECTS_BY_SECTION = {
+	Francophone: [
+		['Mathématiques', 'Français', 'Sciences', 'EPS'],
+		['Lecture', 'Écriture', 'Mathématiques', 'Arts plastiques'],
+		['Découverte du monde', 'Français', 'EPS', 'Musique'],
+	],
+	Anglophone: [
+		['Mathematics', 'English', 'Basic Science', 'PE'],
+		['Reading', 'Writing', 'Numeracy', 'Creative Arts'],
+		['Social Studies', 'English', 'Mathematics', 'Music'],
+	],
+	Bilingue: [
+		['Mathématiques / Mathematics', 'Français / French', 'Anglais / English', 'EPS / PE'],
+		['Lecture / Reading', 'Sciences / Basic Science', 'Arts', 'Musique / Music'],
+		['Écriture / Writing', 'Découverte du monde / Social Studies', 'Maths / Numeracy', 'Créativité'],
+	],
+}
 const AVATAR_BACKGROUNDS = [
 	'linear-gradient(135deg,#4C1D95,#6D28D9)',
 	'linear-gradient(135deg,#06B6D4,#22D3EE)',
@@ -58,6 +82,10 @@ function picks(items, count) {
 	return result
 }
 
+function makeClassId(level, section) {
+	return `${level}-${section}`.replace(/\s+/g, '-').replace(/--+/g, '-')
+}
+
 function buildStudentName(levelIndex, sectionIndex, studentIndex) {
 	const firstNames = ['Evelyn', 'Diana', 'John', 'Amara', 'Sophie', 'Karim', 'Ines', 'Paul']
 	const lastNames = ['Harper', 'Plenty', 'Millar', 'Konan', 'Bello', 'Tamba', 'Fotso', 'Ateba']
@@ -67,12 +95,13 @@ function buildStudentName(levelIndex, sectionIndex, studentIndex) {
 }
 
 function buildClasses(level, count) {
-	const config = LEVEL_CONFIG[level]
+	const config = CLASS_CONFIG[level]
+	const subjects = SUBJECTS_BY_SECTION[config.section]
 	return Array.from({ length: count }, (_, index) => {
 		const section = SECTION_ORDER[index % SECTION_ORDER.length]
 		const effectif = rnd(28, 42)
 		const perf = rnd(58, 97)
-		const subs = pick(SUBJECTS)
+		const subs = pick(subjects)
 		const teacherIndex = index % TEACHERS.length
 		const heroIndex = index % HERO_BACKGROUNDS.length
 		const avatarIndex = index % AVATAR_BACKGROUNDS.length
@@ -83,12 +112,13 @@ function buildClasses(level, count) {
 		}))
 
 		return {
-			id: `${level}${section}`,
-			name: `${level} ${section}`,
+			id: makeClassId(level, section),
+			name: `${config.label} ${section}`,
 			level,
+			sectionType: config.section,
 			section,
 			effectif,
-			capacity: level === 'Tle' ? 35 : level === '1ere' ? 36 : 42,
+			capacity: config.capacity,
 			perf,
 			subs,
 			teacher: TEACHERS[teacherIndex],
@@ -105,13 +135,21 @@ function buildClasses(level, count) {
 
 function buildInitialData() {
 	return {
-		'6e': buildClasses('6e', 8),
-		'5e': buildClasses('5e', 8),
-		'4e': buildClasses('4e', 7),
-		'3e': buildClasses('3e', 7),
-		'2nde': buildClasses('2nde', 7),
-		'1ere': buildClasses('1ere', 6),
-		Tle: buildClasses('Tle', 5),
+		CP: buildClasses('CP', 6),
+		CE1: buildClasses('CE1', 6),
+		CE2: buildClasses('CE2', 6),
+		CM1: buildClasses('CM1', 5),
+		CM2: buildClasses('CM2', 5),
+		'Class 1': buildClasses('Class 1', 6),
+		'Class 2': buildClasses('Class 2', 6),
+		'Class 3': buildClasses('Class 3', 5),
+		'Class 4': buildClasses('Class 4', 5),
+		'Class 5': buildClasses('Class 5', 5),
+		'CP Bilingue': buildClasses('CP Bilingue', 4),
+		'CE1 Bilingue': buildClasses('CE1 Bilingue', 4),
+		'CE2 Bilingue': buildClasses('CE2 Bilingue', 4),
+		'Class 1 Bilingue': buildClasses('Class 1 Bilingue', 4),
+		'Class 2 Bilingue': buildClasses('Class 2 Bilingue', 4),
 	}
 }
 
@@ -129,14 +167,15 @@ function getProgressTextColor(perf) {
 
 export default function Classes() {
 	const [classData, setClassData] = useState(() => buildInitialData())
-	const [selectedLevel, setSelectedLevel] = useState('6e')
+	const [selectedLevel, setSelectedLevel] = useState('CP')
+	const [selectedSection, setSelectedSection] = useState('Tous')
 	const [levelSearch, setLevelSearch] = useState('')
 	const [classSearch, setClassSearch] = useState('')
 	const [sortMode, setSortMode] = useState('name')
 	const [viewMode, setViewMode] = useState('grid')
 	const [modalClassId, setModalClassId] = useState(null)
 	const [createOpen, setCreateOpen] = useState(false)
-	const [createForm, setCreateForm] = useState({ name: '', level: '6e', section: 'A', capacity: 35, teacher: '' })
+	const [createForm, setCreateForm] = useState({ name: '', level: 'CP', section: 'A', capacity: 30, teacher: '' })
 
 	useEffect(() => {
 		document.title = 'Gep Nebula — Classes'
@@ -150,8 +189,8 @@ export default function Classes() {
 
 	const visibleLevels = useMemo(() => {
 		const query = levelSearch.trim().toLowerCase()
-		return LEVEL_ORDER.filter(level => {
-			const label = LEVEL_CONFIG[level].label.toLowerCase()
+		return CLASS_ORDER.filter(level => {
+			const label = CLASS_CONFIG[level].label.toLowerCase()
 			return !query || label.includes(query) || level.toLowerCase().includes(query)
 		})
 	}, [levelSearch])
@@ -160,12 +199,14 @@ export default function Classes() {
 		const current = selectedLevel === 'Tous' ? allClasses : classData[selectedLevel] || []
 		const query = classSearch.trim().toLowerCase()
 		const filtered = current.filter(item => {
+			if (selectedSection !== 'Tous' && item.sectionType !== selectedSection) return false
 			const searchOk =
 				!query ||
 				item.name.toLowerCase().includes(query) ||
 				item.teacher.toLowerCase().includes(query) ||
 				item.subs.join(' ').toLowerCase().includes(query) ||
-				item.salle.toLowerCase().includes(query)
+				item.salle.toLowerCase().includes(query) ||
+				item.sectionType.toLowerCase().includes(query)
 			return searchOk
 		})
 
@@ -174,7 +215,7 @@ export default function Classes() {
 			if (sortMode === 'perf-desc') return right.perf - left.perf
 			return left.name.localeCompare(right.name)
 		})
-	}, [allClasses, classData, classSearch, selectedLevel, sortMode])
+	}, [allClasses, classData, classSearch, selectedLevel, selectedSection, sortMode])
 
 	const modalClass = useMemo(() => filteredClasses.find(item => item.id === modalClassId) ?? allClasses.find(item => item.id === modalClassId) ?? null, [allClasses, filteredClasses, modalClassId])
 
@@ -183,21 +224,30 @@ export default function Classes() {
 		setModalClassId(null)
 	}
 
+	function filterSection(section) {
+		setSelectedSection(section)
+		setSelectedLevel('Tous')
+		setModalClassId(null)
+	}
+
 	function addClass() {
 		if (!createForm.name.trim()) return
+		const sectionKey = CLASS_CONFIG[createForm.level]?.section || 'Francophone'
+		const sectionSubjects = SUBJECTS_BY_SECTION[sectionKey] || SUBJECTS_BY_SECTION.Francophone
 		const newClass = {
-			id: `${createForm.level}${createForm.section}`,
+			id: makeClassId(createForm.level, createForm.section),
 			name: createForm.name.trim(),
 			level: createForm.level,
+			sectionType: sectionKey,
 			section: createForm.section,
 			effectif: 0,
-			capacity: Number(createForm.capacity) || 35,
+			capacity: Number(createForm.capacity) || 30,
 			perf: 0,
-			subs: ['Mathématiques', 'Français'],
+			subs: sectionSubjects[0].slice(0, 2),
 			teacher: createForm.teacher.trim() || 'Enseignant à assigner',
 			bg: 'linear-gradient(135deg,#4C1D95,#06B6D4)',
 			emoji: '📚',
-			color: LEVEL_CONFIG[createForm.level]?.color || '#4C1D95',
+			color: CLASS_CONFIG[createForm.level]?.color || '#4C1D95',
 			students: [],
 			salle: `Salle ${100 + rnd(1, 30)}`,
 			horaire: '08h00 – 16h00',
@@ -208,7 +258,7 @@ export default function Classes() {
 			...prev,
 			[createForm.level]: [...(prev[createForm.level] || []), newClass],
 		}))
-		setCreateForm({ name: '', level: '6e', section: 'A', capacity: 35, teacher: '' })
+		setCreateForm({ name: '', level: 'CP', section: 'A', capacity: 30, teacher: '' })
 		setCreateOpen(false)
 	}
 
@@ -306,7 +356,7 @@ export default function Classes() {
 			<div className="page-header">
 				<div>
 					<h1 className="page-title">🏫 Classes</h1>
-					<p className="page-subtitle">Gérez les classes, leurs effectifs, enseignants et performances.</p>
+					<p className="page-subtitle">Gérez les classes de primaire francophones, anglophones et bilingues.</p>
 				</div>
 				<div className="header-actions">
 					<button className="btn-sec" type="button">📊 Rapport global</button>
@@ -325,29 +375,39 @@ export default function Classes() {
 			<div className="main-layout">
 				<aside className="niveau-panel">
 					<div className="niveau-header">
-						<div className="niveau-title">Niveaux</div>
-						<div className="niveau-sub">Filtrer par niveau scolaire</div>
+						<div className="niveau-title">Classes</div>
+						<div className="niveau-sub">Filtrer par classe scolaire</div>
 					</div>
 					<div className="niveau-search">
 						<input type="text" value={levelSearch} onChange={event => setLevelSearch(event.target.value)} placeholder="Chercher..." />
 					</div>
 					<div className="niveau-list">
 						<div className="niveau-group">
-							<div className="niveau-group-title">Collège</div>
-							{visibleLevels.filter(level => ['6e', '5e', '4e', '3e'].includes(level)).map(level => (
+							<div className="niveau-group-title">Francophone</div>
+							{visibleLevels.filter(level => CLASS_CONFIG[level].section === 'Francophone').map(level => (
 								<div key={level} className={`niveau-item ${selectedLevel === level ? 'active' : ''}`} onClick={() => filterLevel(level)}>
-									<div className="ni-color" style={{ background: LEVEL_CONFIG[level].color }} />
-									<span className="ni-name">{LEVEL_CONFIG[level].label}</span>
+									<div className="ni-color" style={{ background: CLASS_CONFIG[level].color }} />
+									<span className="ni-name">{CLASS_CONFIG[level].label}</span>
 									<span className="ni-count">{getLevelCount(level)}</span>
 								</div>
 							))}
 						</div>
 						<div className="niveau-group">
-							<div className="niveau-group-title">Lycée</div>
-							{visibleLevels.filter(level => ['2nde', '1ere', 'Tle'].includes(level)).map(level => (
+							<div className="niveau-group-title">Anglophone</div>
+							{visibleLevels.filter(level => CLASS_CONFIG[level].section === 'Anglophone').map(level => (
 								<div key={level} className={`niveau-item ${selectedLevel === level ? 'active' : ''}`} onClick={() => filterLevel(level)}>
-									<div className="ni-color" style={{ background: LEVEL_CONFIG[level].color }} />
-									<span className="ni-name">{LEVEL_CONFIG[level].label}</span>
+									<div className="ni-color" style={{ background: CLASS_CONFIG[level].color }} />
+									<span className="ni-name">{CLASS_CONFIG[level].label}</span>
+									<span className="ni-count">{getLevelCount(level)}</span>
+								</div>
+							))}
+						</div>
+						<div className="niveau-group">
+							<div className="niveau-group-title">Bilingue</div>
+							{visibleLevels.filter(level => CLASS_CONFIG[level].section === 'Bilingue').map(level => (
+								<div key={level} className={`niveau-item ${selectedLevel === level ? 'active' : ''}`} onClick={() => filterLevel(level)}>
+									<div className="ni-color" style={{ background: CLASS_CONFIG[level].color }} />
+									<span className="ni-name">{CLASS_CONFIG[level].label}</span>
 									<span className="ni-count">{getLevelCount(level)}</span>
 								</div>
 							))}
@@ -365,9 +425,19 @@ export default function Classes() {
 
 				<section className="classes-area">
 					<div className="area-toolbar">
-						<span className="area-title">{selectedLevel === 'Tous' ? 'Toutes les classes' : LEVEL_CONFIG[selectedLevel].label}</span>
+									<span className="area-title">
+										{selectedLevel === 'Tous'
+											? selectedSection === 'Tous'
+												? 'Toutes les classes'
+												: `Toutes les classes ${selectedSection.toLowerCase()}`
+											: CLASS_CONFIG[selectedLevel].label}
+									</span>
 						<span className="area-count">{filteredClasses.length} classe{filteredClasses.length > 1 ? 's' : ''}</span>
 						<div className="area-toolbar-right">
+										<select className="sel" value={selectedSection} onChange={event => filterSection(event.target.value)}>
+											<option value="Tous">Toutes les sections</option>
+											{SECTION_ORDER.map(section => <option key={section} value={section}>{section}</option>)}
+										</select>
 							<select className="sel" value={sortMode} onChange={event => handleSortChange(event.target.value)}>
 								<option value="name">Nom A → Z</option>
 								<option value="effectif-desc">Plus grand effectif</option>
@@ -410,7 +480,7 @@ export default function Classes() {
 						</div>
 						<div className="modal-body">
 							<div className="m-name">Classe {modalClass.name}</div>
-							<div className="m-sub">{LEVEL_CONFIG[modalClass.level].label} · {modalClass.teacher} · {modalClass.salle}</div>
+							<div className="m-sub">{CLASS_CONFIG[modalClass.level].label} · {modalClass.sectionType} · {modalClass.teacher} · {modalClass.salle}</div>
 							<div className="m-sec">
 								<div className="m-sec-title">Informations générales</div>
 								<div className="info-grid">
@@ -419,7 +489,7 @@ export default function Classes() {
 									<div className="info-item"><div className="info-lbl">SALLE</div><div className="info-val">{modalClass.salle}</div></div>
 									<div className="info-item"><div className="info-lbl">HORAIRE</div><div className="info-val">{modalClass.horaire}</div></div>
 									<div className="info-item"><div className="info-lbl">MATIÈRES</div><div className="info-val">{modalClass.subs.length}</div></div>
-									<div className="info-item"><div className="info-lbl">NIVEAU</div><div className="info-val">{LEVEL_CONFIG[modalClass.level].label}</div></div>
+									<div className="info-item"><div className="info-lbl">CLASSE</div><div className="info-val">{CLASS_CONFIG[modalClass.level].label}</div></div>
 								</div>
 							</div>
 
@@ -486,16 +556,16 @@ export default function Classes() {
 								<div className="info-grid create-grid">
 									<div className="info-item create-item create-wide">
 										<div className="info-lbl">NOM DE LA CLASSE</div>
-										<input className="create-input" value={createForm.name} onChange={event => setCreateForm(prev => ({ ...prev, name: event.target.value }))} placeholder="Ex: 6e A" />
+										<input className="create-input" value={createForm.name} onChange={event => setCreateForm(prev => ({ ...prev, name: event.target.value }))} placeholder="Ex: CP A" />
 									</div>
 									<div className="info-item create-item">
-										<div className="info-lbl">NIVEAU</div>
+										<div className="info-lbl">CLASSE</div>
 										<select className="create-input" value={createForm.level} onChange={event => setCreateForm(prev => ({ ...prev, level: event.target.value }))}>
-											{LEVEL_ORDER.map(level => <option key={level} value={level}>{LEVEL_CONFIG[level].label}</option>)}
+											{CLASS_ORDER.map(level => <option key={level} value={level}>{CLASS_CONFIG[level].label}</option>)}
 										</select>
 									</div>
 									<div className="info-item create-item">
-										<div className="info-lbl">SECTION</div>
+										<div className="info-lbl">SOUS-SECTION</div>
 										<select className="create-input" value={createForm.section} onChange={event => setCreateForm(prev => ({ ...prev, section: event.target.value }))}>
 											{SECTION_ORDER.map(section => <option key={section} value={section}>{section}</option>)}
 										</select>

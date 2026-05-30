@@ -1,8 +1,8 @@
 import { useEffect, useMemo, useState } from 'react'
 import './Examens.css'
 
-const SUBJECTS = ['Mathématiques', 'Français', 'Sciences', 'Anglais', 'Histoire-Géo', 'Physique-Chimie', 'SVT', 'Philosophie']
-const LEVELS = ['6e', '5e', '4e', '3e', '2nde', '1ère', 'Tle']
+const LEVELS = ['CP', 'CE1', 'CE2', 'CM1', 'CM2', 'Class 1', 'Class 2', 'Class 3', 'Class 4', 'Class 5', 'CP Bilingue', 'CE1 Bilingue', 'CE2 Bilingue', 'Class 1 Bilingue', 'Class 2 Bilingue']
+const SUBJECTS = ['Mathématiques', 'Français', 'Anglais', 'Sciences', 'Lecture', 'Écriture', 'Maths / Numeracy', 'Basic Science', 'Social Studies', 'Arts', 'EPS']
 const TYPES = ['Examen final', 'Contrôle continu', 'Devoir maison']
 const STATUSES = ['Planifié', 'Planifié', 'Planifié', 'En cours', 'Terminé', 'Terminé', 'Terminé', 'Reporté']
 const TEACHERS = ['M. Bernard', 'Mme Lefèvre', 'M. Martin', 'Mme Dupont', 'M. Koffi', 'Mme Abena', 'M. Tamba']
@@ -12,12 +12,15 @@ const EXAMS_TOTAL = 12
 const SUBJECT_META = {
 	'Mathématiques': { emoji: '➕', color: 'linear-gradient(135deg,#4C1D95,#6D28D9)' },
 	'Français': { emoji: '📖', color: 'linear-gradient(135deg,#06B6D4,#0891B2)' },
-	'Sciences': { emoji: '🔬', color: 'linear-gradient(135deg,#059669,#10B981)' },
 	'Anglais': { emoji: '🌍', color: 'linear-gradient(135deg,#D97706,#F59E0B)' },
-	'Histoire-Géo': { emoji: '🗺️', color: 'linear-gradient(135deg,#DB2777,#EC4899)' },
-	'Physique-Chimie': { emoji: '⚗️', color: 'linear-gradient(135deg,#7C3AED,#A78BFA)' },
-	SVT: { emoji: '🌿', color: 'linear-gradient(135deg,#065F46,#059669)' },
-	Philosophie: { emoji: '🧠', color: 'linear-gradient(135deg,#1E40AF,#3B82F6)' },
+	'Sciences': { emoji: '🔬', color: 'linear-gradient(135deg,#059669,#10B981)' },
+	'Lecture': { emoji: '📚', color: 'linear-gradient(135deg,#DB2777,#EC4899)' },
+	'Écriture': { emoji: '✍️', color: 'linear-gradient(135deg,#7C3AED,#A78BFA)' },
+	'Maths / Numeracy': { emoji: '🧮', color: 'linear-gradient(135deg,#065F46,#059669)' },
+	'Basic Science': { emoji: '🧪', color: 'linear-gradient(135deg,#1E40AF,#3B82F6)' },
+	'Social Studies': { emoji: '🗺️', color: 'linear-gradient(135deg,#B45309,#F59E0B)' },
+	'Arts': { emoji: '🎨', color: 'linear-gradient(135deg,#9D174D,#EC4899)' },
+	'EPS': { emoji: '🏃', color: 'linear-gradient(135deg,#0F766E,#14B8A6)' },
 }
 
 const FILTERS = {
@@ -38,14 +41,17 @@ function pick(items) {
 
 function buildTitle(subject) {
 	const titles = {
-		'Mathématiques': ['Algèbre linéaire', 'Géométrie analytique', 'Probabilités', 'Fonctions & dérivées', 'Équations différentielles'],
-		Français: ['Lecture & compréhension', 'Rédaction de texte', 'Grammaire avancée', 'Expression écrite', 'Littérature classique'],
-		Sciences: ['Biologie cellulaire', 'Écosystèmes', 'Génétique', 'Corps humain', 'Classification du vivant'],
-		Anglais: ['Reading comprehension', 'Oral & writing', 'Grammar & vocab', 'Listening test', 'Literature review'],
-		'Histoire-Géo': ['Première Guerre mondiale', 'Géographie de l\'Afrique', 'La Révolution française', 'Mondialisation', 'Géopolitique contemporaine'],
-		'Physique-Chimie': ['Mécanique & forces', 'Réactions chimiques', 'Optique', 'Électricité', 'Thermodynamique'],
-		SVT: ['Évolution des espèces', 'Système nerveux', 'Photosynthèse', 'Nutrition', 'Reproduction'],
-		Philosophie: ['Conscience & inconscient', 'La liberté', 'L\'art & la beauté', 'Théorie de la connaissance', 'Éthique & morale'],
+		'Mathématiques': ['Numération', 'Opérations et calcul', 'Géométrie', 'Mesures', 'Problèmes'],
+		Français: ['Lecture & compréhension', 'Vocabulaire', 'Grammaire simple', 'Dictée', 'Expression écrite'],
+		Anglais: ['Vocabulary basics', 'Reading comprehension', 'Oral practice', 'Listening test', 'Spelling'],
+		Sciences: ['Découverte du monde', 'Le corps humain', 'Les plantes', 'L’eau et l’air', 'Le vivant'],
+		Lecture: ['Lecture de texte', 'Compréhension', 'Lecture à voix haute', 'Repérage des mots', 'Texte court'],
+		'Écriture': ['Copie', 'Dictée', 'Phrase simple', 'Production écrite', 'Calligraphie'],
+		'Maths / Numeracy': ['Counting', 'Addition', 'Subtraction', 'Shapes', 'Word problems'],
+		'Basic Science': ['Living things', 'Materials', 'Weather', 'Body parts', 'Nature'],
+		'Social Studies': ['Family and school', 'Community', 'Maps', 'People and places', 'Civic life'],
+		'Arts': ['Drawing', 'Colour work', 'Craft', 'Music and rhythm', 'Creative activity'],
+		'EPS': ['Jeux collectifs', 'Motricité', 'Course', 'Coordination', 'Endurance'],
 	}
 
 	return pick(titles[subject] || ['Évaluation'])
@@ -128,7 +134,7 @@ export default function Examens() {
 		title: '',
 		subject: 'Mathématiques',
 		type: 'Examen final',
-		level: '6ème A',
+		level: 'CP A',
 		teacher: 'M. Bernard',
 		date: '',
 		time: '08:00',
@@ -487,8 +493,7 @@ export default function Examens() {
 								<div className="form-group">
 									<div className="form-label">Classe / Niveau</div>
 									<select className="form-select" value={createForm.level} onChange={event => setCreateForm(current => ({ ...current, level: event.target.value }))}>
-										{LEVELS.map(level => <option key={level} value={`${level} A`}>{level} A</option>)}
-										{LEVELS.map(level => <option key={`${level} B`} value={`${level} B`}>{level} B</option>)}
+										{LEVELS.map(level => <option key={level} value={level}>{level}</option>)}
 									</select>
 								</div>
 								<div className="form-group">

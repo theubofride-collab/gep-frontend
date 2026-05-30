@@ -25,6 +25,23 @@ const MODELES = ['Toyota Coaster','Isuzu NQR','Mercedes Sprinter','Mitsubishi Ro
 const ROUTES = [
   'Bastos → École','Mvan → École','Omnisport → École','Biyem-Assi → École','Essos → École','Nkol-Foulou → École','Mendong → École','Ekounou → École'
 ]
+const STUDENT_CLASSES = [
+  'CP',
+  'CE1',
+  'CE2',
+  'CM1',
+  'CM2',
+  'Class 1',
+  'Class 2',
+  'Class 3',
+  'Class 4',
+  'Class 5',
+  'CP Bilingue',
+  'CE1 Bilingue',
+  'CE2 Bilingue',
+  'Class 1 Bilingue',
+  'Class 2 Bilingue',
+]
 const ARRETS = [
   ['Départ quartier','Arrêt marché','Arrêt hôpital','Arrêt carrefour','École — Arrivée'],
   ['Départ terminus','Arrêt église','Arrêt stade','Arrêt commissariat','École — Arrivée'],
@@ -319,11 +336,20 @@ export default function Transport() {
               </select>
             </div>
             <div className="sc-list">
-              {['Dupont A.','Kamga B.','Nkomo C.','Biya D.','Fouda E.','Mfou F.','Ateba G.','Essoh H.'].map((n,i)=> (
-                <div key={n} className="sc-row">
-                  <div className="sc-av" style={{ background: AV_BGS[i % AV_BGS.length] }}>{n[0]}</div>
-                  <div className="sc-name">{n}</div>
-                  <div className="sc-classe">6eA</div>
+              {[
+                { name: 'Dupont A.', classe: 'CP' },
+                { name: 'Kamga B.', classe: 'CE1' },
+                { name: 'Nkomo C.', classe: 'CE2' },
+                { name: 'Biya D.', classe: 'Class 1' },
+                { name: 'Fouda E.', classe: 'Class 2' },
+                { name: 'Mfou F.', classe: 'CE1 Bilingue' },
+                { name: 'Ateba G.', classe: 'Class 1 Bilingue' },
+                { name: 'Essoh H.', classe: 'CM1' },
+              ].map((student, i) => (
+                <div key={student.name} className="sc-row">
+                  <div className="sc-av" style={{ background: AV_BGS[i % AV_BGS.length] }}>{student.name[0]}</div>
+                  <div className="sc-name">{student.name}</div>
+                  <div className="sc-classe">{student.classe}</div>
                   <span className={`sc-badge ${i<6?'st-en-route':'st-arret'}`}>{i<6?'✅ À bord':'⏳ Attente'}</span>
                 </div>
               ))}
