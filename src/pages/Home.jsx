@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import BrandLogo from "../components/BrandLogo";
 
 const STATS = [
   { value: "500+", label: "Élèves gérés", icon: "🎓" },
@@ -77,14 +78,9 @@ export default function Home() {
       }}>
         {/* Logo */}
         <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-          <div style={{
-            width: 38, height: 38, borderRadius: 10,
-            background: "linear-gradient(135deg, #4C1D95, #06B6D4)",
-            display: "flex", alignItems: "center", justifyContent: "center",
-            fontWeight: 900, fontSize: 16, color: "#fff", letterSpacing: 1,
-          }}>G</div>
-          <span style={{ fontWeight: 800, fontSize: 20, color: "#fff", letterSpacing: 0.5 }}>
-            GEP <span style={{ color: "#06B6D4", fontWeight: 300, fontSize: 16 }}>Nebula</span>
+          <BrandLogo />
+          <span style={{ fontWeight: 800, fontSize: 20, color: "#fff", letterSpacing: 0.5, lineHeight: 1 }}>
+            GEP <span style={{ color: "#38bdf8", fontWeight: 700, fontSize: 13 }}>Nebular</span>
           </span>
         </div>
 
@@ -496,7 +492,7 @@ export default function Home() {
             onMouseEnter={e => { e.currentTarget.style.transform = "translateY(-4px) scale(1.02)"; e.currentTarget.style.boxShadow = "0 18px 50px rgba(76,29,149,0.45)"; }}
             onMouseLeave={e => { e.currentTarget.style.transform = "none"; e.currentTarget.style.boxShadow = "0 10px 40px rgba(76,29,149,0.3)"; }}
           >
-            Accéder à GEP Nebula →
+            Accéder à GEP Nebular →
           </a>
         </div>
       </section>
@@ -510,16 +506,13 @@ export default function Home() {
         borderTop: "1px solid rgba(6,182,212,0.15)",
       }}>
         <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-          <div style={{
-            width: 32, height: 32, borderRadius: 8,
-            background: "linear-gradient(135deg, #4C1D95, #06B6D4)",
-            display: "flex", alignItems: "center", justifyContent: "center",
-            fontWeight: 900, fontSize: 13, color: "#fff",
-          }}>G</div>
-          <span style={{ color: "#fff", fontWeight: 700, fontSize: 15 }}>GEP <span style={{ color: "#06B6D4", fontWeight: 300 }}>Nebula</span></span>
+          <BrandLogo size={32} radius={8} fontSize={13} />
+          <span style={{ color: "#fff", fontWeight: 700, fontSize: 15, lineHeight: 1 }}>
+            GEP <span style={{ color: "#38bdf8", fontWeight: 700, fontSize: 11 }}>Nebular</span>
+          </span>
         </div>
         <p style={{ color: "rgba(255,255,255,0.3)", fontSize: 13, margin: 0, fontWeight: 300 }}>
-          © 2026 GEP Nebula — Génie Informatique — Réseau intranet scolaire
+          © 2026 GEP Nebular — Génie Informatique — Réseau intranet scolaire
         </p>
         <div style={{ display: "flex", gap: 20 }}>
           {["Connexion", "À propos", "Support"].map(l => (
