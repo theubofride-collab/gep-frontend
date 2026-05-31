@@ -1,3 +1,81 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=DM+Sans:wght@300;400;500;600&display=swap');
+
+:root {
+  /* Couleurs principales - fidèles aux maquettes */
+  --sidebar-bg: #1a1a2e;
+  --sidebar-darker: #12122a;
+  --sidebar-active: #2d2d5e;
+  --sidebar-hover: rgba(255,255,255,0.06);
+  --sidebar-text: #a0a0c0;
+  --sidebar-text-active: #ffffff;
+  --sidebar-section: #6b6b8a;
+
+  --primary: #6c3fc5;
+  --primary-dark: #5a2fa8;
+  --primary-light: #8b5cf6;
+  --accent-cyan: #06b6d4;
+  --accent-cyan-light: #22d3ee;
+
+  --bg-main: #f4f5fb;
+  --bg-card: #ffffff;
+  --bg-card-hover: #fafbff;
+
+  --text-primary: #1e1e3a;
+  --text-secondary: #6b7280;
+  --text-muted: #9ca3af;
+
+  --border: #e5e7f0;
+  --border-light: #f0f1f8;
+
+  /* Gravité */
+  --grave-bg: #fee2e2;
+  --grave-text: #dc2626;
+  --moyenne-bg: #fef3c7;
+  --moyenne-text: #d97706;
+  --faible-bg: #d1fae5;
+  --faible-text: #059669;
+
+  /* Statut */
+  --traite-bg: #d1fae5;
+  --traite-text: #059669;
+  --encours-bg: #e0f2fe;
+  --encours-text: #0284c7;
+
+  --shadow-sm: 0 1px 3px rgba(0,0,0,0.06);
+  --shadow-md: 0 4px 16px rgba(108,63,197,0.08);
+  --shadow-lg: 0 8px 32px rgba(108,63,197,0.12);
+
+  --radius: 12px;
+  --radius-sm: 8px;
+  --radius-lg: 16px;
+  --sidebar-width: 260px;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'DM Sans', sans-serif;
+  background: var(--bg-main);
+  color: var(--text-primary);
+  font-size: 14px;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+
+h1, h2, h3, h4, h5 {
+  font-family: 'Outfit', sans-serif;
+  font-weight: 600;
+}
+
+button { cursor: pointer; font-family: inherit; }
+input, select, textarea { font-family: inherit; }
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 5px; height: 5px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: #d1d5f0; border-radius: 10px; }
+::-webkit-scrollbar-thumb:hover { background: var(--primary-light); }
