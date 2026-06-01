@@ -1,6 +1,11 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import Home from './pages/Home'
-import Login from './pages/Ps/PageConnexion/Login'
+import Login from './pages/auth/Login'
+import PsLogin from './pages/Ps/PageConnexion/Login'
+import AdminDashboard from './pages/dashboard/AdminDashboard'
+import ComptableDashboard from './pages/dashboard/ComptableDashboard'
+import EnseignantDashboard from './pages/dashboard/EnseignantDashboard'
+import SecretaireDashboard from './pages/dashboard/SecretaireDashboard'
 import AppRouter from './routes/AppRouter'
 import Module33Router from './routes/Module33Router'
 import Module34Router from './routes/Module34Router'
@@ -12,6 +17,11 @@ export default function App() {
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/login" element={<Login />} />
+        <Route path="/ps/login" element={<PsLogin />} />
+        <Route path="/dashboard/admin" element={<AdminDashboard />} />
+        <Route path="/dashboard/comptable" element={<ComptableDashboard />} />
+        <Route path="/dashboard/enseignant" element={<EnseignantDashboard />} />
+        <Route path="/dashboard/secretaire" element={<SecretaireDashboard />} />
         <Route path="/admin/*" element={<AppRouter />} />
         <Route path="/eleves/*" element={<Module33Router />} />
         <Route path="/ps/module-3-3/*" element={<Module33Router />} />

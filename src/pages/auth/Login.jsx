@@ -1,26 +1,30 @@
 import { useState } from "react";
-
-const ROLES = ["Enseignant", "Administrateur", "Secrétaire", "Comptable"];
+import BrandLogo from '../../components/BrandLogo'
 
 export default function Login() {
-  const [role, setRole] = useState(ROLES[0]);
   const [email, setEmail] = useState("");
+  const [matricule, setMatricule] = useState("");
   const [password, setPassword] = useState("");
   const [remember, setRemember] = useState(true);
   const [message, setMessage] = useState("");
 
   function handleSubmit(event) {
     event.preventDefault();
-    setMessage(`Connexion en cours pour ${role}...`);
+    if ((!email.trim() && !matricule.trim()) || !password.trim()) {
+      setMessage("Veuillez renseigner votre adresse e-mail ou votre matricule, et votre mot de passe.");
+      return;
+    }
+
+    setMessage("Connexion en cours...");
     window.setTimeout(() => {
-      setMessage(`Prêt à ouvrir l'espace ${role} de GEP Nebular.`);
+      setMessage(`Prêt à ouvrir l'espace sécurisé de GEP Nebula.`);
     }, 500);
   }
 
   return (
     <div className="login-shell" style={{
       minHeight: "100vh",
-      background: "#F8F5FF",
+      background: "radial-gradient(circle at top, rgba(30, 11, 59, 0.15), transparent 32%), #F8F5FF",
       display: "flex",
       alignItems: "center",
       justifyContent: "center",
@@ -30,40 +34,228 @@ export default function Login() {
       <style>{`
         .login-card {
           width: 100%;
-          max-width: 1100px;
-          min-height: 640px;
+          max-width: 1120px;
+          min-height: 680px;
           display: flex;
-          border-radius: 28px;
+          border-radius: 32px;
           overflow: hidden;
-          box-shadow: 0 36px 90px rgba(76, 29, 149, 0.18);
-          border: 1px solid rgba(109, 40, 217, 0.12);
+          box-shadow: 0 40px 96px rgba(30, 11, 59, 0.18);
+          border: 1px solid rgba(124, 58, 237, 0.14);
           background: #FFFFFF;
+          position: relative;
         }
 
         .login-side {
-          flex: 0 0 35%;
-          background: linear-gradient(180deg, #5B21B6 0%, #7C3AED 100%);
+          flex: 0 0 36%;
+          background: linear-gradient(180deg, #1E0B3B 0%, #4C1D95 100%);
           color: #FFFFFF;
           display: flex;
           flex-direction: column;
           justify-content: center;
-          padding: 48px 32px;
-          gap: 24px;
+          padding: 52px 36px;
+          gap: 28px;
+          position: relative;
+        }
+
+        .login-side::before {
+          content: "";
+          position: absolute;
+          top: 24px;
+          right: -42px;
+          width: 150px;
+          height: 150px;
+          background: rgba(255, 255, 255, 0.08);
+          border-radius: 50%;
+          filter: blur(10px);
+        }
+
+        .login-side::after {
+          content: "";
+          position: absolute;
+          bottom: 24px;
+          left: -36px;
+          width: 120px;
+          height: 120px;
+          background: rgba(255, 255, 255, 0.06);
+          border-radius: 50%;
+          filter: blur(8px);
+        }
+
+        .login-side h1 {
+          font-size: clamp(2.4rem, 2vw, 3.2rem);
+          line-height: 1.05;
+          margin: 0;
+          font-weight: 800;
+          letter-spacing: -0.04em;
+        }
+
+        .login-side p {
+          margin: 0;
+          font-size: 1rem;
+          line-height: 1.75;
+          color: rgba(255, 255, 255, 0.88);
+        }
+
+        .login-side-features {
+          display: grid;
+          gap: 12px;
+          margin-top: 12px;
+        }
+
+        .login-side-chip {
+          display: inline-flex;
+          align-items: center;
+          gap: 10px;
+          padding: 11px 14px;
+          border-radius: 999px;
+          background: rgba(255, 255, 255, 0.14);
+          color: #FFFFFF;
+          font-size: 0.88rem;
+          font-weight: 600;
+          border: 1px solid rgba(255, 255, 255, 0.2);
         }
 
         .login-main {
           flex: 1;
-          background: #FFFFFF;
-          padding: 40px 48px;
+          padding: 44px 48px;
           display: flex;
           flex-direction: column;
           justify-content: center;
         }
 
-        .role-buttons {
-          display: flex;
-          flex-wrap: wrap;
+        .login-main h2 {
+          margin: 16px 0 10px;
+          font-size: clamp(2rem, 2.2vw, 2.6rem);
+          line-height: 1.05;
+          color: #1E1B4B;
+          font-weight: 800;
+        }
+
+        .login-main p {
+          margin: 0;
+          color: #6B7280;
+          font-size: 0.95rem;
+          line-height: 1.75;
+        }
+
+        .login-credential-card {
+          margin-top: 34px;
+          display: grid;
+          gap: 14px;
+          padding: 26px;
+          border-radius: 24px;
+          background: #F8F3FF;
+          border: 1px solid rgba(124, 58, 237, 0.16);
+        }
+
+        .login-credential-card p {
+          margin: 0;
+          color: #1E0B3B;
+        }
+
+        .login-credential-card p strong {
+          color: #4C1D95;
+        }
+
+        .login-form {
+          display: grid;
+          gap: 18px;
+          margin-top: 30px;
+        }
+
+        .login-field {
+          display: grid;
           gap: 10px;
+          color: #374151;
+          font-weight: 600;
+          font-size: 0.95rem;
+        }
+
+        .login-field input {
+          width: 100%;
+          padding: 16px 18px;
+          border-radius: 18px;
+          border: 1px solid #E5E7EB;
+          background: #F8FAFF;
+          color: #111827;
+          outline: none;
+          font-size: 0.95rem;
+          transition: border-color 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .login-field input:focus {
+          border-color: #7C3AED;
+          box-shadow: 0 0 0 4px rgba(124, 58, 237, 0.12);
+        }
+
+        /* Ensure label and input always stack vertically in case global CSS overrides occur */
+        .login-main .login-form > .login-field {
+          display: grid !important;
+          grid-template-columns: 1fr !important;
+          gap: 10px !important;
+          align-items: start !important;
+        }
+
+        .login-main .login-form > .login-field > span {
+          display: block !important;
+        }
+
+        .login-actions {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          gap: 12px;
+          flex-wrap: wrap;
+        }
+
+        .login-actions label {
+          display: inline-flex;
+          align-items: center;
+          gap: 10px;
+          color: #6B7280;
+          font-size: 0.92rem;
+          font-weight: 500;
+        }
+
+        .login-actions button {
+          border: none;
+          background: none;
+          color: #4C1D95;
+          font-weight: 700;
+          text-decoration: underline;
+          font-size: 0.93rem;
+          cursor: pointer;
+        }
+
+        .login-submit {
+          width: 100%;
+          padding: 18px 20px;
+          border-radius: 18px;
+          border: none;
+          background: linear-gradient(135deg, #7C3AED 0%, #4C1D95 100%);
+          color: #FFFFFF;
+          font-size: 1rem;
+          font-weight: 700;
+          cursor: pointer;
+          box-shadow: 0 18px 40px rgba(124, 58, 237, 0.25);
+          transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .login-submit:hover {
+          transform: translateY(-1px);
+          box-shadow: 0 24px 48px rgba(124, 58, 237, 0.28);
+        }
+
+        .login-message {
+          color: #1E0B3B;
+          font-weight: 600;
+          font-size: 0.95rem;
+          margin-top: 22px;
+          padding: 18px;
+          border-radius: 16px;
+          background: #F3E8FF;
+          border: 1px solid #E9D5FF;
+          line-height: 1.7;
         }
 
         @media (max-width: 960px) {
@@ -91,7 +283,7 @@ export default function Login() {
 
           .login-card {
             max-width: 100%;
-            border-radius: 22px;
+            border-radius: 24px;
           }
 
           .login-side {
@@ -101,208 +293,126 @@ export default function Login() {
           .login-main {
             padding: 24px 18px;
           }
-
-          .role-buttons {
-            flex-direction: column;
-          }
         }
       `}</style>
-      <div className="login-card">
 
+      <div className="login-card">
         <div className="login-side">
-          <div style={{ display: "flex", alignItems: "center", gap: "14px" }}>
-            <div style={{
-              width: "56px",
-              height: "56px",
-              borderRadius: "16px",
-              background: "rgba(255,255,255,0.18)",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              fontSize: "24px",
-              boxShadow: "0 12px 30px rgba(0,0,0,0.08)",
-            }}>
-              G
-            </div>
+          <div style={{ display: "flex", alignItems: "center", gap: "18px" }}>
+            <BrandLogo
+              size={64}
+              radius={18}
+              fontSize={26}
+              bg="linear-gradient(135deg, #7C3AED 0%, #4C1D95 100%)"
+              color="#FFFFFF"
+              shadow="0 18px 40px rgba(124, 58, 237, 0.28)"
+              label="G"
+            />
             <div>
-              <p style={{ fontSize: "12px", letterSpacing: "0.18em", textTransform: "uppercase", margin: 0, opacity: 0.9 }}>
-                GEP Nebular
-              </p>
-              <p style={{ fontSize: "14px", margin: "4px 0 0", opacity: 0.85 }}>
+              <p style={{ fontSize: "12px", letterSpacing: "0.18em", textTransform: "uppercase", margin: 0, opacity: 0.88 }}>
                 Portail du personnel
               </p>
+              <p style={{ fontSize: "18px", margin: "6px 0 0", fontWeight: 800, letterSpacing: "0.04em" }}>
+                GEP Nebula
+              </p>
             </div>
           </div>
+
           <div>
-            <h1 style={{ fontSize: "40px", lineHeight: 1.05, margin: 0, fontWeight: 800 }}>
-              GEP Nebular
+            <h1 style={{ fontSize: "clamp(2.4rem, 2vw, 3.2rem)", lineHeight: 1.05, margin: 0, fontWeight: 800 }}>
+              Bienvenue dans votre espace
             </h1>
-            <p style={{ fontSize: "20px", margin: "16px 0 0", lineHeight: 1.5, maxWidth: "320px", color: "rgba(255,255,255,0.92)" }}>
-              vous souhaite la bienvenue. 
-              Un espace d'accès sécurisé pour l'ensemble des équipes pédagogiques et administratives.
+            <p style={{ fontSize: "1rem", margin: "18px 0 0", lineHeight: 1.75, maxWidth: "340px", color: "rgba(255,255,255,0.88)" }}>
+              Bienvenue sur le portail GEP Nebula. Connectez-vous pour retrouver vos tableaux de bord, classes et documents.
             </p>
           </div>
-          <div style={{
-            marginTop: "auto",
-            borderTop: "1px solid rgba(255,255,255,0.16)",
-            paddingTop: "20px",
-          }}>
-            <p style={{ fontSize: "13px", margin: 0, opacity: 0.9 }}>
-              Connectez-vous avec votre compte professionnel pour accéder aux outils de gestion scolaire.
-            </p>
-            <div style={{ display: "grid", gap: "10px", marginTop: "18px" }}>
-              <span style={{ fontSize: "13px", color: "rgba(255,255,255,0.85)", padding: "12px 16px", borderRadius: "16px", background: "rgba(255,255,255,0.08)" }}>
-                Administrateur · Secrétaire · Enseignant · Comptable
-              </span>
-            </div>
+
+          <div className="login-side-features">
+            <span className="login-side-chip">Connexion dédiée</span>
+            <span className="login-side-chip">Sécurité renforcée</span>
+            <span className="login-side-chip">Design Nebula</span>
           </div>
         </div>
 
         <div className="login-main">
           <div style={{ maxWidth: "460px", width: "100%" }}>
-            <p style={{ margin: 0, color: "#6D28D9", fontWeight: 700, fontSize: "13px", letterSpacing: "0.16em", textTransform: "uppercase" }}>
-              Connexion personnel
+              <p style={{ margin: 0, color: "#1E0B3B", fontWeight: 700, fontSize: "13px", letterSpacing: "0.16em", textTransform: "uppercase" }}>
+              Connexion sécurisée
             </p>
             <h2 style={{ margin: "16px 0 8px", fontSize: "32px", fontWeight: 800, color: "#1E1B4B" }}>
-              Accédez à votre espace GEP Nebular
+              Entrez votre e-mail ou votre matricule
             </h2>
             <p style={{ margin: 0, color: "#6B7280", fontSize: "15px", lineHeight: 1.7 }}>
-              Sélectionnez votre rôle, saisissez vos identifiants et commencez votre journée de gestion scolaire.
+              L'accès au portail est réservé au personnel autorisé. Merci d'utiliser vos identifiants professionnels.
             </p>
 
-            <div style={{ marginTop: "28px", display: "grid", gap: "12px" }}>
-              <p style={{ margin: 0, fontSize: "13px", color: "#374151", fontWeight: 600 }}>
-                Rôle
-              </p>
-              <div className="role-buttons">
-                {ROLES.map((item) => {
-                  const isActive = item === role;
-                  return (
-                    <button
-                      key={item}
-                      type="button"
-                      onClick={() => setRole(item)}
-                      style={{
-                        flex: "1 1 45%",
-                        minWidth: "130px",
-                        padding: "12px 18px",
-                        borderRadius: "14px",
-                        border: isActive ? "2px solid #6D28D9" : "1px solid #E5E7EB",
-                        background: isActive ? "#EDE9FE" : "#F8FAFF",
-                        color: isActive ? "#4C1D95" : "#475569",
-                        cursor: "pointer",
-                        fontWeight: 700,
-                        textAlign: "center",
-                      }}>
-                      {item}
-                    </button>
-                  );
-                })}
-              </div>
+            <div className="login-credential-card">
+                <p style={{ color: "#1E0B3B", fontWeight: 700, fontSize: "14px" }}>
+                  Accès interne
+                </p>
+                <p style={{ color: "#1E0B3B", fontSize: "15px", lineHeight: 1.6 }}>
+                  Renseignez soit votre adresse e-mail, soit votre matricule selon votre préférence.
+                </p>
             </div>
 
-            <form onSubmit={handleSubmit} style={{ display: "grid", gap: "18px", marginTop: "30px" }}>
-              <label style={{ display: "grid", gap: "10px", color: "#374151", fontWeight: 600, fontSize: "14px" }}>
-                Adresse e-mail
+            <form className="login-form" onSubmit={handleSubmit}>
+              <div className="login-field">
+                <span>Adresse e-mail</span>
                 <input
                   type="email"
                   value={email}
                   onChange={(event) => setEmail(event.target.value)}
-                  placeholder="votre.nom@gepnebular.school"
-                  style={{
-                    width: "100%",
-                    padding: "16px 18px",
-                    borderRadius: "16px",
-                    border: "1px solid #E5E7EB",
-                    background: "#F8FAFF",
-                    color: "#111827",
-                    outline: "none",
-                    fontSize: "15px",
-                  }}
-                  required
+                  placeholder="votre.nom@gepnebula.school"
                 />
-              </label>
+              </div>
 
-              <label style={{ display: "grid", gap: "10px", color: "#374151", fontWeight: 600, fontSize: "14px" }}>
-                Mot de passe
+              <div className="login-field">
+                <span>Matricule</span>
+                <input
+                  type="text"
+                  value={matricule}
+                  onChange={(event) => setMatricule(event.target.value)}
+                  placeholder="123456"
+                />
+              </div>
+
+              <div className="login-field">
+                <span>Mot de passe</span>
                 <input
                   type="password"
                   value={password}
                   onChange={(event) => setPassword(event.target.value)}
                   placeholder="••••••••••"
-                  style={{
-                    width: "100%",
-                    padding: "16px 18px",
-                    borderRadius: "16px",
-                    border: "1px solid #E5E7EB",
-                    background: "#F8FAFF",
-                    color: "#111827",
-                    outline: "none",
-                    fontSize: "15px",
-                  }}
                   required
                 />
-              </label>
+              </div>
 
-              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", gap: "12px", flexWrap: "wrap" }}>
-                <label style={{ display: "inline-flex", alignItems: "center", gap: "10px", color: "#6B7280", fontSize: "14px" }}>
+              <div className="login-actions">
+                <label>
                   <input
                     type="checkbox"
                     checked={remember}
                     onChange={(event) => setRemember(event.target.checked)}
-                    style={{ width: "18px", height: "18px", accentColor: "#6D28D9" }}
+                    style={{ width: "18px", height: "18px", accentColor: "#7C3AED" }}
                   />
                   Se souvenir de moi
                 </label>
-                <button
-                  type="button"
-                  style={{
-                    background: "transparent",
-                    border: "none",
-                    color: "#6D28D9",
-                    cursor: "pointer",
-                    fontSize: "14px",
-                    fontWeight: 700,
-                  }}>
-                  Mot de passe oublié ?
-                </button>
+                <button type="button">Mot de passe oublié ?</button>
               </div>
 
-              <button
-                type="submit"
-                style={{
-                  width: "100%",
-                  padding: "16px 20px",
-                  borderRadius: "16px",
-                  border: "none",
-                  background: "#6D28D9",
-                  color: "#FFFFFF",
-                  fontSize: "16px",
-                  fontWeight: 700,
-                  cursor: "pointer",
-                  boxShadow: "0 18px 30px rgba(109, 40, 217, 0.22)",
-                }}>
+              <button className="login-submit" type="submit">
                 Se connecter
               </button>
             </form>
 
             {message && (
-              <div style={{
-                marginTop: "22px",
-                padding: "18px",
-                borderRadius: "16px",
-                background: "#F3E8FF",
-                color: "#5B21B6",
-                fontSize: "14px",
-                lineHeight: 1.7,
-                border: "1px solid #E9D5FF",
-              }}>
+              <div className="login-message">
                 {message}
               </div>
             )}
 
             <p style={{ marginTop: "26px", color: "#6B7280", fontSize: "13px", textAlign: "center" }}>
-              GEP Nebular — accès sécurisé pour le personnel administratif et pédagogique.
+              GEP Nebula — accès sécurisé pour le personnel administratif et pédagogique.
             </p>
           </div>
         </div>
