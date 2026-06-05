@@ -1,7 +1,9 @@
+import { useState, useEffect } from 'react'
 import StatCard from '../../../../components/Ps/ModuleAdmin/StatCard/StatCard'
 import LineChart from '../../../../components/Ps/ModuleAdmin/Charts/LineChart'
 import BarChart from '../../../../components/Ps/ModuleAdmin/Charts/BarChart'
 import DoughnutChart from '../../../../components/Ps/ModuleAdmin/Charts/DoughnutChart'
+import { getPaiements } from '../../../../api/paiement.api'
 import './Dashboard.css'
 
 const reminders = [
@@ -113,6 +115,26 @@ const feesOverview = [
 ]
 
 export default function Dashboard() {
+  const [paiements, setPaiements] = useState([])
+  const [paiementsLoading, setPaiementsLoading] = useState(true)
+
+  useEffect(() => {
+    const loadPaiements = async () => {
+      try {
+        setPaiementsLoading(true)
+        const data = await getPaiements()
+        setPaiements(data || [])
+      } catch (error) {
+        console.error('Erreur lors du chargement des paiements:', error)
+        setPaiements([])
+      } finally {
+        setPaiementsLoading(false)
+      }
+    }
+
+    loadPaiements()
+  }, [])
+
   return (
     <div>
       <div className="dashboard-shell">

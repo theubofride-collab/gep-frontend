@@ -4,10 +4,11 @@ import './Sidebar.css'
 
 const nav = [
   { to: '/admin/dashboard', icon: '⊞', label: 'Tableau de bord' },
+  { to: '/admin/paiements', icon: '💳', label: 'Paiements' },
   { to: '/admin/eleves', icon: '👤', label: 'Élèves' },
   { to: '/admin/enseignants', icon: '🎓', label: 'Enseignants' },
   { to: '/admin/parents', icon: '👨‍👩‍👧', label: 'Parents' },
-  { to: '/admin/compte', icon: '💳', label: 'Compte' },
+  { to: '/admin/compte', icon: '💰', label: 'Compte' },
   { to: '/admin/classes', icon: '🏫', label: 'Classes' },
   { to: '/admin/examens', icon: '📝', label: 'Examens' },
   { to: '/admin/transport', icon: '🚌', label: 'Transport' },

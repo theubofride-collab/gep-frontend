@@ -11,6 +11,7 @@ import Transport from '../pages/Ps/ModuleAdmin/Transport/Transport'
 import Annonces from '../pages/Ps/ModuleAdmin/Annonces/Annonces'
 import Parametres from '../pages/Ps/ModuleAdmin/Parametres/Parametres'
 import Sauvegardes from '../pages/Ps/ModuleAdmin/Sauvegardes/Sauvegardes'
+import Paiements from '../pages/Ps/ModuleAdmin/Paiements/Paiements'
 
 export default function AppRouter() {
   return (
@@ -20,6 +21,7 @@ export default function AppRouter() {
         <Routes>
           <Route index element={<Navigate to="dashboard" replace />} />
           <Route path="dashboard" element={<Dashboard />} />
+          <Route path="paiements" element={<Paiements />} />
           <Route path="eleves" element={<Eleves />} />
           <Route path="enseignants" element={<Enseignants />} />
           <Route path="parents" element={<Parents />} />
