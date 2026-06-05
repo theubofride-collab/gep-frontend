@@ -1,57 +1,41 @@
 export default function LoginPanel({
-	roles,
-	rolesWithMatricule,
-	activeRole,
-	onRoleChange,
+	userType,
+	onUserTypeChange,
 	email,
 	onEmailChange,
-	matricule,
-	onMatriculeChange,
 	password,
 	onPasswordChange,
+	matricule,
+	onMatriculeChange,
+	showPassword,
+	onToggleShowPassword,
+	isLoading,
+	feedback,
 	onSubmit,
 }) {
 	return (
 		<section className="login-panel">
 			<div className="login-panel-inner">
 				<div className="login-panel-header">
-					<div>
-						<h2>Connexion</h2>
-						<p>Choisissez votre profil puis entrez vos identifiants.</p>
+					<div className="login-panel-heading">
+						<span className="login-panel-eyebrow">Portail Nebula</span>
+						<span className="login-panel-chip">Accès sécurisé</span>
+						<h2>Accédez à votre espace de gestion</h2>
+						<p>Connectez-vous pour piloter vos opérations et suivre vos données depuis un seul tableau de bord.</p>
 					</div>
-					<span className="login-panel-chip">Accès sécurisé</span>
 				</div>
 
-				<div className="login-role-grid" aria-label="Sélection du rôle">
-					{roles.map(role => (
-						<button
-							key={role.id}
-							type="button"
-							className={`login-role ${activeRole === role.id ? 'is-active' : ''}`}
-							onClick={() => onRoleChange(role.id)}
-						>
-							<span className="login-role-icon" aria-hidden="true">{role.icon}</span>
-							<span>{role.label}</span>
-						</button>
-					))}
-				</div>
+				<label className="login-parent-check">
+					<input
+						type="checkbox"
+						checked={userType === 'parent'}
+						onChange={(e) => onUserTypeChange(e.target.checked ? 'parent' : 'staff')}
+					/>
+					<span>Je suis un parent</span>
+				</label>
 
 				<form className="login-form" onSubmit={onSubmit}>
-					<label className="login-field">
-						<span>Email</span>
-						<div className="login-input-wrap">
-							<span className="login-input-icon" aria-hidden="true">@</span>
-							<input
-								type="email"
-								value={email}
-								onChange={event => onEmailChange(event.target.value)}
-								placeholder="contact@ecole.fr"
-								autoComplete="email"
-							/>
-						</div>
-					</label>
-
-					{rolesWithMatricule.has(activeRole) && (
+					{userType === 'staff' && (
 						<label className="login-field">
 							<span>Matricule</span>
 							<div className="login-input-wrap">
@@ -68,16 +52,37 @@ export default function LoginPanel({
 					)}
 
 					<label className="login-field">
+						<span>Email</span>
+						<div className="login-input-wrap">
+							<span className="login-input-icon" aria-hidden="true">@</span>
+							<input
+								type="email"
+								value={email}
+								onChange={event => onEmailChange(event.target.value)}
+								placeholder="contact@ecole.fr"
+								autoComplete="email"
+							/>
+						</div>
+					</label>
+
+					<label className="login-field">
 						<span>Mot de passe</span>
 						<div className="login-input-wrap">
 							<span className="login-input-icon" aria-hidden="true">🔒</span>
 							<input
-								type="password"
+								type={showPassword ? 'text' : 'password'}
 								value={password}
 								onChange={event => onPasswordChange(event.target.value)}
 								placeholder="••••••••"
 								autoComplete="current-password"
 							/>
+							<button
+								type="button"
+								className="login-password-toggle"
+								onClick={onToggleShowPassword}
+							>
+								{showPassword ? 'Masquer' : 'Afficher'}
+							</button>
 						</div>
 					</label>
 
@@ -89,14 +94,16 @@ export default function LoginPanel({
 						<button type="button" className="login-link">Mot de passe oublié ?</button>
 					</div>
 
-					<button className="login-submit" type="submit">
-						Se connecter
+					<button className="login-submit" type="submit" disabled={isLoading}>
+						{isLoading ? 'Connexion en cours...' : 'Se connecter'}
 					</button>
-				</form>
 
-				<div className="login-footer-note">
-					Connexion disponible pour le profil <strong>{roles.find(role => role.id === activeRole)?.label}</strong>.
-				</div>
+					{feedback?.message && (
+						<div className={`login-feedback ${feedback.type === 'error' ? 'is-error' : 'is-warning'}`}>
+							{feedback.message}
+						</div>
+					)}
+				</form>
 			</div>
 		</section>
 	)

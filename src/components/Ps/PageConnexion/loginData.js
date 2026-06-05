@@ -1,12 +1,3 @@
-export const roles = [
-	{ id: 'secretaire', label: 'Secrétaire', icon: '📋' },
-	{ id: 'comptable', label: 'Comptable', icon: '💳' },
-	{ id: 'parent', label: 'Parent', icon: '👨‍👩‍👧‍👦' },
-	{ id: 'enseignant', label: 'Enseignant', icon: '🧑‍🏫' },
-]
-
-export const rolesWithMatricule = new Set(['secretaire', 'comptable', 'enseignant'])
-
 export const highlights = [
 	{ title: 'Inscriptions', detail: 'Centralisez les dossiers élèves et les affectations.', tone: 'login-tone-cyan' },
 	{ title: 'Paiements', detail: 'Suivez les règlements et les impayés en temps réel.', tone: 'login-tone-violet' },
