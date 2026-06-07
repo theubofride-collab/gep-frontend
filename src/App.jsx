@@ -5,6 +5,7 @@ import AppRouter from './routes/AppRouter'
 import Module33Router from './routes/Module33Router'
 import Module34Router from './routes/Module34Router'
 import Module35Router from './routes/Module35Router'
+import Module36Router from './routes/Module36Router'
 
 export default function App() {
   return (
@@ -19,6 +20,8 @@ export default function App() {
         <Route path="/ps/module-3-4/*" element={<Module34Router />} />
         <Route path="/classes/*" element={<Module35Router />} />
         <Route path="/ps/module-3-5/*" element={<Module35Router />} />
+        <Route path="/paiements/*" element={<Module36Router />} />
+        <Route path="/ps/module-3-6/*" element={<Module36Router />} />
       </Routes>
     </BrowserRouter>
   )
