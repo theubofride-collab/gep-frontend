@@ -80,6 +80,8 @@ const ICONS = {
     </svg>
   ),
 };
+import { useState, useEffect } from "react";
+import BrandLogo from "../components/BrandLogo";
 
 const STATS = [
   { value: "500+", label: "Élèves gérés", icon: ICONS.student },
@@ -174,6 +176,7 @@ export default function Home() {
         justifyContent: "space-between",
         height: 72,
       }}>
+<<<<<<< HEAD
         <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
           <div style={{ width: 40, height: 40, borderRadius: 12, background: "linear-gradient(135deg, #4C1D95, #06B6D4)", display: "grid", placeItems: "center", color: "#fff", fontWeight: 900, letterSpacing: 0.5 }}>
             G
@@ -182,6 +185,14 @@ export default function Home() {
             <div style={{ fontSize: 16, fontWeight: 800, color: "#fff" }}>GEP Nebula</div>
             <div style={{ fontSize: 12, color: "#94A3B8" }}>Intranet scolaire</div>
           </div>
+=======
+        {/* Logo */}
+        <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+          <BrandLogo />
+          <span style={{ fontWeight: 800, fontSize: 20, color: "#fff", letterSpacing: 0.5, lineHeight: 1 }}>
+            GEP <span style={{ color: "#38bdf8", fontWeight: 700, fontSize: 13 }}>Nebular</span>
+          </span>
+>>>>>>> 74920de87e379dc60ab0258d2e4a9eae8d89057c
         </div>
 
         <div style={{ display: "flex", gap: 32, alignItems: "center" }}>
@@ -341,11 +352,12 @@ export default function Home() {
             onMouseEnter={(e) => { e.currentTarget.style.transform = "translateY(-2px)"; e.currentTarget.style.boxShadow = "0 18px 50px rgba(76,29,149,0.35)"; }}
             onMouseLeave={(e) => { e.currentTarget.style.transform = "none"; e.currentTarget.style.boxShadow = "0 14px 40px rgba(76,29,149,0.28)"; }}
           >
-            Accéder à GEP Nebula →
+            Accéder à GEP Nebular →
           </a>
         </div>
       </section>
 
+<<<<<<< HEAD
       <footer style={{ background: "#090E20", padding: "42px 8%", display: "flex", flexWrap: "wrap", justifyContent: "space-between", alignItems: "center", gap: 16, borderTop: "1px solid rgba(6,182,212,0.15)" }}>
         <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
           <div style={{ width: 34, height: 34, borderRadius: 10, background: "linear-gradient(135deg, #4C1D95, #06B6D4)", display: "grid", placeItems: "center", color: "#fff", fontWeight: 900 }}>G</div>
@@ -363,6 +375,35 @@ export default function Home() {
             >
               {label}
             </a>
+=======
+      {/* ══════════════════ FOOTER ══════════════════ */}
+      <footer style={{
+        background: "#1E0B3B",
+        padding: "40px 8%",
+        display: "flex", justifyContent: "space-between",
+        alignItems: "center", flexWrap: "wrap", gap: 16,
+        borderTop: "1px solid rgba(6,182,212,0.15)",
+      }}>
+        <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+          <BrandLogo size={32} radius={8} fontSize={13} />
+          <span style={{ color: "#fff", fontWeight: 700, fontSize: 15, lineHeight: 1 }}>
+            GEP <span style={{ color: "#38bdf8", fontWeight: 700, fontSize: 11 }}>Nebular</span>
+          </span>
+        </div>
+        <p style={{ color: "rgba(255,255,255,0.3)", fontSize: 13, margin: 0, fontWeight: 300 }}>
+          © 2026 GEP Nebular — Génie Informatique — Réseau intranet scolaire
+        </p>
+        <div style={{ display: "flex", gap: 20 }}>
+          {["Connexion", "À propos", "Support"].map(l => (
+            <a key={l} href="#" style={{
+              color: "rgba(255,255,255,0.35)", fontSize: 13,
+              textDecoration: "none", fontWeight: 300,
+              transition: "color 0.2s",
+            }}
+              onMouseEnter={e => e.target.style.color = "#06B6D4"}
+              onMouseLeave={e => e.target.style.color = "rgba(255,255,255,0.35)"}
+            >{l}</a>
+>>>>>>> 74920de87e379dc60ab0258d2e4a9eae8d89057c
           ))}
         </div>
       </footer>
