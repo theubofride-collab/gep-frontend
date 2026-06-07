@@ -10,6 +10,8 @@ const nav = [
   { to: '/admin/compte', icon: '💳', label: 'Compte' },
   { to: '/admin/classes', icon: '🏫', label: 'Classes' },
   { to: '/admin/examens', icon: '📝', label: 'Examens' },
+  { to: '/notes', icon: '📊', label: 'Notes' },
+  { to: '/discipline', icon: '🛡️', label: 'Discipline' },
   { to: '/admin/transport', icon: '🚌', label: 'Transport' },
   { to: '/admin/annonces', icon: '📢', label: 'Annonces' },
   { to: '/admin/parametres', icon: '⚙️', label: 'Paramètres' },

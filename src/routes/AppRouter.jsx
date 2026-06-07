@@ -24,6 +24,8 @@ export default function AppRouter() {
           <Route path="compte" element={<Compte />} />
           <Route path="classes" element={<Navigate to="/classes" replace />} />
           <Route path="examens" element={<Examens />} />
+          <Route path="notes" element={<Navigate to="/notes" replace />} />
+          <Route path="discipline" element={<Navigate to="/discipline" replace />} />
           <Route path="transport" element={<Transport />} />
           <Route path="annonces" element={<Annonces />} />
           <Route path="parametres" element={<Parametres />} />
