@@ -1,7 +1,7 @@
 import { useMemo, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import Module33Layout from '../../../../components/Ps/Module_3.3/Module33Layout'
-import { module33Profile, module33SchoolYears } from '../../../../components/Ps/Module_3.3/module33Data'
+import Module33Layout from '../inscriptions/Module33Layout'
+import { module33Profile, module33SchoolYears } from '../inscriptions/module33Data'
 
 const EDIT_TABS = [
   { id: 'identite', label: 'Identité', icon: '👤' },

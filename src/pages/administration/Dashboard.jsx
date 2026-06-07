@@ -1,7 +1,7 @@
-import StatCard from '../../../../components/Ps/ModuleAdmin/StatCard/StatCard'
-import LineChart from '../../../../components/Ps/ModuleAdmin/Charts/LineChart'
-import BarChart from '../../../../components/Ps/ModuleAdmin/Charts/BarChart'
-import DoughnutChart from '../../../../components/Ps/ModuleAdmin/Charts/DoughnutChart'
+import StatCard from '../../components/ui/StatCard'
+import LineChart from '../../components/ui/LineChart'
+import BarChart from '../../components/ui/BarChart'
+import DoughnutChart from '../../components/ui/DoughnutChart'
 import './Dashboard.css'
 
 const reminders = [

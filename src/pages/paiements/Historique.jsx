@@ -1,5 +1,5 @@
 import { useMemo, useState } from 'react'
-import Module36Layout from '../../../../components/Ps/Module_3.6/Module36Layout'
+import Module36Layout from './Module36Layout'
 import {
   filterPaymentHistory,
   formatFcfa,
@@ -8,7 +8,7 @@ import {
   module36PaymentStatusColors,
   module36PaymentStatusRings,
   module36StudentPaymentHistory,
-} from '../../../../components/Ps/Module_3.6/module36Data'
+} from './module36Data'
 
 const DEFAULT_STUDENT = 'Mariama Bah'
 

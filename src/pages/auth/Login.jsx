@@ -1,25 +1,51 @@
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import LoginHero from '../../../components/Ps/PageConnexion/LoginHero'
-import LoginPanel from '../../../components/Ps/PageConnexion/LoginPanel'
-import { highlights, metrics, roles, rolesWithMatricule } from '../../../components/Ps/PageConnexion/loginData'
+import LoginHero from '../../components/auth/LoginHero'
+import LoginPanel from '../../components/auth/LoginPanel'
+import { highlights, metrics } from '../../components/auth/loginData'
 import './Login.css'
 
 export default function Login() {
 	const navigate = useNavigate()
-	const [activeRole, setActiveRole] = useState('parent')
+	const [userType, setUserType] = useState('staff')
 	const [email, setEmail] = useState('')
 	const [matricule, setMatricule] = useState('')
 	const [password, setPassword] = useState('')
+	const [isLoading, setIsLoading] = useState(false)
+	const [feedback, setFeedback] = useState({ type: '', message: '' })
+	const [showPassword, setShowPassword] = useState(false)
 
 	useEffect(() => {
 		document.title = 'Gep Nebula — Connexion'
 	}, [])
 
-	function handleSubmit(event) {
+	async function handleSubmit(event) {
 		event.preventDefault()
-		if (!email.trim() || !password.trim()) return
-		if (rolesWithMatricule.has(activeRole) && !matricule.trim()) return
+		if (isLoading) return
+
+		if (!email.trim() || !password.trim()) {
+			setFeedback({
+				type: 'warning',
+				message: 'Veuillez remplir votre email et votre mot de passe avant de continuer.',
+			})
+			return
+		}
+
+		setFeedback({ type: '', message: '' })
+		setIsLoading(true)
+
+		await new Promise(resolve => setTimeout(resolve, 900))
+
+		if (password !== 'nebula2026') {
+			setIsLoading(false)
+			setFeedback({
+				type: 'error',
+				message: 'Mot de passe incorrect. Vérifiez vos identifiants puis réessayez.',
+			})
+			return
+		}
+
+		setIsLoading(false)
 		navigate('/admin/dashboard')
 	}
 
@@ -31,16 +57,27 @@ export default function Login() {
 				<LoginHero highlights={highlights} metrics={metrics} />
 
 				<LoginPanel
-					roles={roles}
-					rolesWithMatricule={rolesWithMatricule}
-					activeRole={activeRole}
-					onRoleChange={setActiveRole}
+					userType={userType}
+					onUserTypeChange={setUserType}
 					email={email}
-					onEmailChange={setEmail}
+					onEmailChange={value => {
+						setEmail(value)
+						if (feedback.message) setFeedback({ type: '', message: '' })
+					}}
 					matricule={matricule}
-					onMatriculeChange={setMatricule}
+					onMatriculeChange={value => {
+						setMatricule(value)
+						if (feedback.message) setFeedback({ type: '', message: '' })
+					}}
 					password={password}
-					onPasswordChange={setPassword}
+					onPasswordChange={value => {
+						setPassword(value)
+						if (feedback.message) setFeedback({ type: '', message: '' })
+					}}
+					showPassword={showPassword}
+					onToggleShowPassword={() => setShowPassword(prev => !prev)}
+					isLoading={isLoading}
+					feedback={feedback}
 					onSubmit={handleSubmit}
 				/>
 			</div>

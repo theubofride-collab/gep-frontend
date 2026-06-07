@@ -1,6 +1,6 @@
 import { useNavigate } from 'react-router-dom'
-import Module34Layout from '../../../../components/Ps/Module_3.4/Module34Layout'
-import { getInscriptionById } from '../../../../components/Ps/Module_3.4/module34Data'
+import Module34Layout from './Module34Layout'
+import { getInscriptionById } from './module34Data'
 
 export default function Show() {
   const navigate = useNavigate()

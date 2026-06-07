@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import Modal from '../../../../components/Ps/ModuleAdmin/Modal/Modal'
+import Modal from '../../components/ui/Modal'
 import './Matieres.css'
 
 const bgColors = ['var(--accent)','var(--success)','var(--info)','var(--warning)','var(--danger)','var(--cyan)','var(--accent-hover)','var(--warning)']

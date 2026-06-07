@@ -1,7 +1,7 @@
 import { useMemo, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import Module33Layout from '../../../../components/Ps/Module_3.3/Module33Layout'
-import { buildMatricule, module33ClassFilters, module33Profile, module33SchoolYears, module33Sections, module33SectionClasses } from '../../../../components/Ps/Module_3.3/module33Data'
+import Module33Layout from '../inscriptions/Module33Layout'
+import { buildMatricule, module33ClassFilters, module33Profile, module33SchoolYears, module33Sections, module33SectionClasses } from '../inscriptions/module33Data'
 
 const INITIAL_FORM = {
   firstName: '',

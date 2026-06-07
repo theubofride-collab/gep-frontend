@@ -1,18 +1,18 @@
 import { Navigate, Route, Routes } from 'react-router-dom'
-import Classes from '../pages/Ps/Module_3.5/Classes/Classes'
-import Create from '../pages/Ps/Module_3.5/Create/Create'
-import Show from '../pages/Ps/Module_3.5/Show/Show'
-import Edit from '../pages/Ps/Module_3.5/Edit/Edit'
-import Affecter from '../pages/Ps/Module_3.5/Affecter/Affecter'
-import AffecterEnseignant from '../pages/Ps/Module_3.5/AffecterEnseignant/AffecterEnseignant'
+import ClasseIndex from '../pages/classes/ClasseIndex'
+import ClasseCreate from '../pages/classes/ClasseCreate'
+import ClasseShow from '../pages/classes/ClasseShow'
+import ClasseEdit from '../pages/classes/ClasseEdit'
+import Affecter from '../pages/classes/Affecter'
+import AffecterEnseignant from '../pages/classes/AffecterEnseignant'
 
 export default function Module35Router() {
   return (
     <Routes>
-      <Route index element={<Classes />} />
-      <Route path="create" element={<Create />} />
-      <Route path="show" element={<Show />} />
-      <Route path="edit" element={<Edit />} />
+      <Route index element={<ClasseIndex />} />
+      <Route path="create" element={<ClasseCreate />} />
+      <Route path="show" element={<ClasseShow />} />
+      <Route path="edit" element={<ClasseEdit />} />
       <Route path="affecter" element={<Affecter />} />
       <Route path="affecter-enseignant" element={<AffecterEnseignant />} />
       <Route path="*" element={<Navigate to="." replace />} />

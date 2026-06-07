@@ -1,11 +1,11 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import Module36Layout from '../../../../components/Ps/Module_3.6/Module36Layout'
+import Module36Layout from './Module36Layout'
 import {
   module36PaymentModes,
   module36PaymentTypes,
   module36Students,
-} from '../../../../components/Ps/Module_3.6/module36Data'
+} from './module36Data'
 
 const INITIAL_FORM = {
   eleve: '',

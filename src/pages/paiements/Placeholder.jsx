@@ -1,4 +1,4 @@
-import Module36Layout from '../../../../components/Ps/Module_3.6/Module36Layout'
+import Module36Layout from './Module36Layout'
 
 export default function Placeholder({ title, description = 'Cette page sera disponible prochainement.' }) {
   return (

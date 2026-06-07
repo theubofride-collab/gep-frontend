@@ -1,7 +1,7 @@
 import { useMemo, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import Module34Layout from '../../../../components/Ps/Module_3.4/Module34Layout'
-import { buildInscriptionNumber, module34SectionClasses, module34SchoolYears, module34Sections } from '../../../../components/Ps/Module_3.4/module34Data'
+import Module34Layout from './Module34Layout'
+import { buildInscriptionNumber, module34SectionClasses, module34SchoolYears, module34Sections } from './module34Data'
 
 const INITIAL_FORM = {
   studentName: 'Emile Fouda',

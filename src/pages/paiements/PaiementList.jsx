@@ -1,6 +1,6 @@
 import { useMemo, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import Module36Layout from '../../../../components/Ps/Module_3.6/Module36Layout'
+import Module36Layout from './Module36Layout'
 import {
   filterPaymentsList,
   formatFcfa,
@@ -8,7 +8,7 @@ import {
   module36ListStatusStyles,
   module36PaymentsList,
   module36PaymentsTotalCount,
-} from '../../../../components/Ps/Module_3.6/module36Data'
+} from './module36Data'
 
 const PAGE_COUNT = 4
 

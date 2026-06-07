@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import Module33Layout from '../../../../components/Ps/Module_3.3/Module33Layout'
-import { module33Profile } from '../../../../components/Ps/Module_3.3/module33Data'
+import Module33Layout from '../inscriptions/Module33Layout'
+import { module33Profile } from '../inscriptions/module33Data'
 
 const TABS = [
   { id: 'identite', label: 'Identité', icon: '👤' },
