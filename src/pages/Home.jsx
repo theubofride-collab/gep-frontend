@@ -1,357 +1,282 @@
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
+
+const ICONS = {
+  student: (
+    <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M12 12c2.5 0 4-1.4 4-4s-1.5-4-4-4-4 1.4-4 4 1.5 4 4 4Z" />
+      <path d="M6 20c0-3.3 2.7-6 6-6s6 2.7 6 6" />
+    </svg>
+  ),
+  classroom: (
+    <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+      <rect x="3" y="6" width="18" height="12" rx="2" />
+      <path d="M3 10h18" />
+      <path d="M7 14h3" />
+      <path d="M14 14h3" />
+    </svg>
+  ),
+  payment: (
+    <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+      <rect x="3" y="7" width="18" height="10" rx="2" />
+      <path d="M3 11h18" />
+      <path d="M7 15h4" />
+    </svg>
+  ),
+  users: (
+    <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M17 21v-2a4 4 0 0 0-4-4H7a4 4 0 0 0-4 4v2" />
+      <circle cx="9" cy="7" r="4" />
+      <path d="M23 21v-2a4 4 0 0 0-3-3.87" />
+      <path d="M16 3.13a4 4 0 0 1 0 7.75" />
+    </svg>
+  ),
+  clipboard: (
+    <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M9 3h6a2 2 0 0 1 2 2v2H7V5a2 2 0 0 1 2-2Z" />
+      <rect x="7" y="7" width="10" height="14" rx="2" />
+      <path d="M9.5 12h5" />
+      <path d="M9.5 16h5" />
+    </svg>
+  ),
+  creditCard: (
+    <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+      <rect x="3" y="5" width="18" height="14" rx="3" />
+      <path d="M3 10h18" />
+      <path d="M7 15h4" />
+    </svg>
+  ),
+  notebook: (
+    <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M7 3h10a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2Z" />
+      <path d="M7 7h10" />
+      <path d="M10 11h4" />
+      <path d="M10 15h4" />
+    </svg>
+  ),
+  bus: (
+    <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M4 12V7a3 3 0 0 1 3-3h10a3 3 0 0 1 3 3v5" />
+      <path d="M4 12h16" />
+      <path d="M7 19h3" />
+      <path d="M14 19h3" />
+      <path d="M5 12v3" />
+      <path d="M19 12v3" />
+    </svg>
+  ),
+  shield: (
+    <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M12 3l7 4v5.5c0 5-3.5 8.5-7 9.5-3.5-1-7-4.5-7-9.5V7l7-4Z" />
+      <path d="M9 11h6" />
+      <path d="M9 15h4" />
+    </svg>
+  ),
+  chart: (
+    <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M4 20h16" />
+      <path d="M8 16v-4" />
+      <path d="M12 16v-8" />
+      <path d="M16 16v-6" />
+      <path d="M4 12h16" opacity="0.15" />
+    </svg>
+  ),
+};
 
 const STATS = [
-  { value: "500+", label: "Élèves gérés", icon: "🎓" },
-  { value: "12",   label: "Classes actives", icon: "🏫" },
-  { value: "98%",  label: "Paiements tracés", icon: "✅" },
-  { value: "4",    label: "Rôles utilisateurs", icon: "👥" },
+  { value: "500+", label: "Élèves gérés", icon: ICONS.student },
+  { value: "12", label: "Classes actives", icon: ICONS.classroom },
+  { value: "98%", label: "Paiements tracés", icon: ICONS.payment },
+  { value: "3", label: "Rôles utilisateurs", icon: ICONS.users },
 ];
 
 const FEATURES = [
   {
-    icon: "📋",
     title: "Inscriptions",
     desc: "Inscrivez vos élèves, affectez-les aux classes et générez automatiquement leurs tranches de paiement.",
+    icon: ICONS.clipboard,
     color: "#06B6D4",
+    image: "https://images.unsplash.com/photo-1529070538774-1843cb3265df?auto=format&fit=crop&w=1200&q=80",
   },
   {
-    icon: "💰",
     title: "Paiements",
     desc: "Suivez chaque versement, consultez les impayés et éditez des factures PDF en un clic.",
+    icon: ICONS.creditCard,
     color: "#6D28D9",
+    image: "https://images.unsplash.com/photo-1556740749-887f6717d7e4?auto=format&fit=crop&w=1200&q=80",
   },
   {
-    icon: "📝",
     title: "Notes & Bulletins",
     desc: "Saisie des notes par matière, calcul automatique des moyennes, bulletins PDF prêts à imprimer.",
+    icon: ICONS.notebook,
     color: "#06B6D4",
+    image: "https://images.unsplash.com/photo-1515378791036-0648a3ef77b2?auto=format&fit=crop&w=1200&q=80",
   },
   {
-    icon: "🚌",
     title: "Transport",
     desc: "Gérez les abonnements bus, les mensualités et suivez les impayés de transport par élève.",
+    icon: ICONS.bus,
     color: "#6D28D9",
+    image: "https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=1200&q=80",
   },
   {
-    icon: "⚠️",
     title: "Discipline",
     desc: "Signalez les incidents, appliquez des sanctions et gardez un historique complet par élève.",
+    icon: ICONS.shield,
     color: "#06B6D4",
+    image: "https://images.unsplash.com/photo-1521737604893-d14cc237f11d?auto=format&fit=crop&w=1200&q=80",
   },
   {
-    icon: "📊",
     title: "Tableaux de bord",
     desc: "Chaque acteur dispose d'une vue personnalisée avec les indicateurs clés de son périmètre.",
+    icon: ICONS.chart,
     color: "#6D28D9",
+    image: "https://images.unsplash.com/photo-1498050108023-c5249f4df085?auto=format&fit=crop&w=1200&q=80",
   },
+];
+
+const ROLES = [
+  { title: "Administrateur", role: "Pilotage global", details: "Configuration, supervision et contrôle d'accès de l'ensemble du réseau intranet." },
+  { title: "Secrétaire", role: "Gestion administrative", details: "Saisie des inscriptions, validation des documents et gestion des communications internes." },
+  { title: "Comptable", role: "Suivi financier", details: "Contrôle des paiements, des factures et des états journaliers de la trésorerie." },
+  { title: "Enseignant", role: "Classe & pédagogie", details: "Saisie des notes, suivi des absences et communication rapide avec les parents." },
 ];
 
 export default function Home() {
   const [scrollY, setScrollY] = useState(0);
-  const [menuOpen, setMenuOpen] = useState(false);
   const [visible, setVisible] = useState(false);
 
   useEffect(() => {
-    const timer = setTimeout(() => setVisible(true), 100);
+    const timer = setTimeout(() => setVisible(true), 120);
     const onScroll = () => setScrollY(window.scrollY);
     window.addEventListener("scroll", onScroll);
-    return () => { window.removeEventListener("scroll", onScroll); clearTimeout(timer); };
+    return () => {
+      clearTimeout(timer);
+      window.removeEventListener("scroll", onScroll);
+    };
   }, []);
 
   return (
-    <div style={{ fontFamily: "'Outfit', 'Segoe UI', sans-serif", background: "#F8FAFF", color: "#1E1B4B", overflowX: "hidden" }}>
-
-      {/* ── Google Font ── */}
+    <div style={{ fontFamily: "'Outfit', 'Segoe UI', sans-serif", background: "#0B0F19", color: "#E2E8F0", minHeight: "100vh", overflowX: "hidden" }}>
       <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
 
-      {/* ══════════════════ NAVBAR ══════════════════ */}
       <nav style={{
-        position: "fixed", top: 0, left: 0, right: 0, zIndex: 100,
-        background: scrollY > 60 ? "rgba(30,11,59,0.97)" : "transparent",
-        backdropFilter: scrollY > 60 ? "blur(12px)" : "none",
+        position: "fixed",
+        top: 0,
+        left: 0,
+        right: 0,
+        zIndex: 100,
+        background: scrollY > 60 ? "rgba(6,14,34,0.94)" : "transparent",
+        backdropFilter: scrollY > 60 ? "blur(14px)" : "none",
         borderBottom: scrollY > 60 ? "1px solid rgba(6,182,212,0.15)" : "none",
         transition: "all 0.4s ease",
         padding: "0 5%",
-        display: "flex", alignItems: "center", justifyContent: "space-between",
-        height: 68,
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "space-between",
+        height: 72,
       }}>
-        {/* Logo */}
-        <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-          <div style={{
-            width: 38, height: 38, borderRadius: 10,
-            background: "linear-gradient(135deg, #4C1D95, #06B6D4)",
-            display: "flex", alignItems: "center", justifyContent: "center",
-            fontWeight: 900, fontSize: 16, color: "#fff", letterSpacing: 1,
-          }}>G</div>
-          <span style={{ fontWeight: 800, fontSize: 20, color: "#fff", letterSpacing: 0.5 }}>
-            GEP <span style={{ color: "#06B6D4", fontWeight: 300, fontSize: 16 }}>Nebula</span>
-          </span>
+        <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
+          <div style={{ width: 40, height: 40, borderRadius: 12, background: "linear-gradient(135deg, #4C1D95, #06B6D4)", display: "grid", placeItems: "center", color: "#fff", fontWeight: 900, letterSpacing: 0.5 }}>
+            G
+          </div>
+          <div>
+            <div style={{ fontSize: 16, fontWeight: 800, color: "#fff" }}>GEP Nebula</div>
+            <div style={{ fontSize: 12, color: "#94A3B8" }}>Intranet scolaire</div>
+          </div>
         </div>
 
-        {/* Desktop links */}
         <div style={{ display: "flex", gap: 32, alignItems: "center" }}>
-          {["Fonctionnalités", "À propos", "Contact"].map((l) => (
-            <a key={l} href="#" style={{
-              color: "rgba(255,255,255,0.75)", fontSize: 15, textDecoration: "none",
-              fontWeight: 400, transition: "color 0.2s",
-            }}
-              onMouseEnter={e => e.target.style.color = "#06B6D4"}
-              onMouseLeave={e => e.target.style.color = "rgba(255,255,255,0.75)"}
-            >{l}</a>
+          {['Fonctionnalités', 'À propos', 'Contact'].map((label) => (
+            <a key={label} href="#" style={{ color: "rgba(255,255,255,0.75)", textDecoration: "none", fontSize: 15, fontWeight: 400, transition: "color 0.2s" }}
+              onMouseEnter={(e) => (e.currentTarget.style.color = '#06B6D4')}
+              onMouseLeave={(e) => (e.currentTarget.style.color = 'rgba(255,255,255,0.75)')}
+            >
+              {label}
+            </a>
           ))}
-          <a href="/login" style={{
-            background: "linear-gradient(135deg, #4C1D95, #06B6D4)",
-            color: "#fff", padding: "9px 22px", borderRadius: 8,
-            fontWeight: 600, fontSize: 14, textDecoration: "none",
-            boxShadow: "0 0 20px rgba(6,182,212,0.3)",
-            transition: "transform 0.2s, box-shadow 0.2s",
-          }}
-            onMouseEnter={e => { e.target.style.transform = "translateY(-2px)"; e.target.style.boxShadow = "0 4px 24px rgba(6,182,212,0.5)"; }}
-            onMouseLeave={e => { e.target.style.transform = "none"; e.target.style.boxShadow = "0 0 20px rgba(6,182,212,0.3)"; }}
+          <a href="/login" style={{ background: "linear-gradient(135deg, #4C1D95, #06B6D4)", color: "#fff", padding: "10px 22px", borderRadius: 10, textDecoration: "none", fontWeight: 700, fontSize: 14, boxShadow: "0 0 24px rgba(6,182,212,0.28)", transition: "transform 0.2s, box-shadow 0.2s" }}
+            onMouseEnter={(e) => { e.currentTarget.style.transform = 'translateY(-2px)'; e.currentTarget.style.boxShadow = '0 0 30px rgba(6,182,212,0.42)'; }}
+            onMouseLeave={(e) => { e.currentTarget.style.transform = 'none'; e.currentTarget.style.boxShadow = '0 0 24px rgba(6,182,212,0.28)'; }}
           >Se connecter</a>
         </div>
       </nav>
 
-      {/* ══════════════════ HERO ══════════════════ */}
-      <section style={{
-        position: "relative", minHeight: "100vh",
-        display: "flex", alignItems: "center",
-        overflow: "hidden",
-      }}>
-        {/* Photo de fond ultra nette — Enfants en classe */}
-        <div style={{
-          position: "absolute", inset: 0,
-          backgroundImage: "url('https://images.unsplash.com/photo-1503676260728-1c00da094a0b?w=1600&q=80')",
-          backgroundSize: "cover", backgroundPosition: "center 35%",
-          transform: `translateY(${scrollY * 0.25}px)`,
-          transition: "transform 0.1s linear",
-        }} />
+      <section style={{ position: "relative", minHeight: "100vh", display: "flex", alignItems: "center", overflow: "hidden" }}>
+        <div style={{ position: "absolute", inset: 0, backgroundImage: "url('https://images.unsplash.com/photo-1504384308090-c894fdcc538d?auto=format&fit=crop&w=1600&q=80')", backgroundSize: "cover", backgroundPosition: "center", transform: `translateY(${scrollY * 0.18}px)`, filter: "brightness(0.68)" }} />
+        <div style={{ position: "absolute", inset: 0, background: "linear-gradient(120deg, rgba(6,14,34,0.92), rgba(6,182,212,0.18) 60%)" }} />
 
-        {/* Overlay dégradé ajusté pour plus de netteté sur l'image */}
-        <div style={{
-          position: "absolute", inset: 0,
-          background: "linear-gradient(120deg, rgba(30,11,59,0.88) 0%, rgba(76,29,149,0.75) 40%, rgba(6,182,212,0.12) 100%)",
-        }} />
+        <div style={{ position: "absolute", width: 220, height: 220, borderRadius: "50%", top: "18%", left: "10%", background: "radial-gradient(circle, rgba(6,182,212,0.22), transparent 70%)", pointerEvents: "none" }} />
+        <div style={{ position: "absolute", width: 140, height: 140, borderRadius: "50%", top: "46%", right: "12%", background: "radial-gradient(circle, rgba(109,40,217,0.18), transparent 68%)", pointerEvents: "none" }} />
 
-        {/* Particules lumineuses */}
-        {[...Array(8)].map((_, i) => (
-          <div key={i} style={{
-            position: "absolute",
-            width: [180, 120, 200, 90, 150, 100, 80, 160][i],
-            height: [180, 120, 200, 90, 150, 100, 80, 160][i],
-            borderRadius: "50%",
-            background: i % 2 === 0
-              ? "radial-gradient(circle, rgba(6,182,212,0.12) 0%, transparent 70%)"
-              : "radial-gradient(circle, rgba(109,40,217,0.15) 0%, transparent 70%)",
-            left: `${[10, 80, 60, 25, 70, 40, 15, 85][i]}%`,
-            top: `${[20, 10, 60, 80, 40, 70, 50, 30][i]}%`,
-            animation: `float${i % 3} ${4 + i}s ease-in-out infinite alternate`,
-            pointerEvents: "none",
-          }} />
-        ))}
-
-        {/* Contenu Hero */}
-        <div style={{
-          position: "relative", zIndex: 2,
-          maxWidth: 760, marginLeft: "8%",
-          padding: "120px 0 80px",
-          opacity: visible ? 1 : 0,
-          transform: visible ? "none" : "translateY(30px)",
-          transition: "opacity 0.9s ease, transform 0.9s ease",
-        }}>
-          {/* Badge */}
-          <div style={{
-            display: "inline-flex", alignItems: "center", gap: 8,
-            background: "rgba(6,182,212,0.15)",
-            border: "1px solid rgba(6,182,212,0.35)",
-            borderRadius: 50, padding: "6px 16px", marginBottom: 28,
-          }}>
-            <div style={{ width: 7, height: 7, borderRadius: "50%", background: "#06B6D4", animation: "pulse 2s infinite" }} />
-            <span style={{ color: "#22D3EE", fontSize: 13, fontWeight: 500 }}>
-              Système de gestion scolaire — Réseau local
-            </span>
+        <div style={{ position: "relative", zIndex: 2, maxWidth: 720, marginLeft: "8%", padding: "120px 0 100px", opacity: visible ? 1 : 0, transform: visible ? "none" : "translateY(30px)", transition: "opacity 0.9s ease, transform 0.9s ease" }}>
+          <div style={{ display: "inline-flex", alignItems: "center", gap: 10, background: "rgba(255,255,255,0.07)", border: "1px solid rgba(6,182,212,0.22)", borderRadius: 999, padding: "8px 18px", marginBottom: 28 }}>
+            <span style={{ width: 10, height: 10, borderRadius: "50%", background: "#06B6D4" }} />
+            <span style={{ color: "#C7D2FE", fontSize: 13, fontWeight: 500 }}>Intranet scolaire localisé pour l'enseignement primaire</span>
           </div>
 
-          {/* Titre */}
-          <h1 style={{
-            fontSize: "clamp(42px, 6vw, 76px)",
-            fontWeight: 900, lineHeight: 1.05,
-            color: "#fff", margin: "0 0 48px",
-            letterSpacing: -1.5,
-          }}>
-            L'école primaire,{" "}
-            <span style={{
-              background: "linear-gradient(90deg, #06B6D4, #22D3EE, #A78BFA)",
-              WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent",
-            }}>
-              gérée avec précision
-            </span>
+          <h1 style={{ margin: 0, fontSize: "clamp(42px, 6vw, 72px)", lineHeight: 1.02, fontWeight: 900, color: "#fff", letterSpacing: -1.5 }}>
+            L'école primaire,
+            <span style={{ background: "linear-gradient(90deg, #06B6D4, #A78BFA)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent" }}> gérée avec précision</span>
           </h1>
 
-          {/* CTA Buttons */}
+          <p style={{ margin: "28px 0 36px", maxWidth: 560, color: "rgba(255,255,255,0.78)", fontSize: 18, lineHeight: 1.75, fontWeight: 300 }}>
+            GEP Nebula centralise scolarité, paiements, notes et discipline au sein d'un intranet sécurisé — simple, clair et parfaitement adapté à votre établissement.
+          </p>
+
           <div style={{ display: "flex", gap: 16, flexWrap: "wrap" }}>
-            <a href="/login" style={{
-              background: "linear-gradient(135deg, #4C1D95 0%, #06B6D4 100%)",
-              color: "#fff", padding: "15px 36px",
-              borderRadius: 10, fontWeight: 700, fontSize: 16,
-              textDecoration: "none", display: "inline-flex",
-              alignItems: "center", gap: 8,
-              boxShadow: "0 8px 32px rgba(6,182,212,0.35)",
-              transition: "transform 0.25s, box-shadow 0.25s",
-            }}
-              onMouseEnter={e => { e.currentTarget.style.transform = "translateY(-3px)"; e.currentTarget.style.boxShadow = "0 12px 40px rgba(6,182,212,0.5)"; }}
-              onMouseLeave={e => { e.currentTarget.style.transform = "none"; e.currentTarget.style.boxShadow = "0 8px 32px rgba(6,182,212,0.35)"; }}
+            <a href="/login" style={{ padding: "15px 36px", borderRadius: 12, background: "linear-gradient(135deg, #4C1D95, #06B6D4)", color: "#fff", fontWeight: 700, fontSize: 16, textDecoration: "none", display: "inline-flex", alignItems: "center", justifyContent: "center", boxShadow: "0 16px 40px rgba(6,182,212,0.28)", transition: "transform 0.25s, box-shadow 0.25s" }}
+              onMouseEnter={(e) => { e.currentTarget.style.transform = "translateY(-2px)"; e.currentTarget.style.boxShadow = "0 20px 52px rgba(6,182,212,0.38)"; }}
+              onMouseLeave={(e) => { e.currentTarget.style.transform = "none"; e.currentTarget.style.boxShadow = "0 16px 40px rgba(6,182,212,0.28)"; }}
             >
-              Accéder à l'application →
+              Accéder à l'application
             </a>
-            <a href="#features" style={{
-              background: "rgba(255,255,255,0.08)",
-              border: "1px solid rgba(255,255,255,0.2)",
-              color: "#fff", padding: "15px 30px",
-              borderRadius: 10, fontWeight: 500, fontSize: 15,
-              textDecoration: "none",
-              backdropFilter: "blur(8px)",
-              transition: "background 0.25s, border 0.25s",
-            }}
-              onMouseEnter={e => { e.currentTarget.style.background = "rgba(255,255,255,0.14)"; }}
-              onMouseLeave={e => { e.currentTarget.style.background = "rgba(255,255,255,0.08)"; }}
-            >
+            <a href="#features" style={{ padding: "15px 32px", borderRadius: 12, background: "rgba(255,255,255,0.08)", border: "1px solid rgba(255,255,255,0.18)", color: "#fff", fontWeight: 600, textDecoration: "none", display: "inline-flex", alignItems: "center", justifyContent: "center" }}>
               Découvrir les modules
             </a>
           </div>
         </div>
-
-        {/* Scroll indicator */}
-        <div style={{
-          position: "absolute", bottom: 36, left: "50%",
-          transform: "translateX(-50%)",
-          display: "flex", flexDirection: "column", alignItems: "center",
-          gap: 6, opacity: 0.5, animation: "bounce 2s ease-in-out infinite",
-        }}>
-          <span style={{ color: "#fff", fontSize: 11, letterSpacing: 2, fontWeight: 300 }}>DÉFILER</span>
-          <div style={{ width: 1, height: 40, background: "linear-gradient(to bottom, #06B6D4, transparent)" }} />
-        </div>
       </section>
 
-      {/* ══════════════════ STATS ══════════════════ */}
-      <section style={{
-        background: "linear-gradient(135deg, #1E0B3B 0%, #2D0F5E 100%)",
-        padding: "60px 8%",
-        display: "grid",
-        gridTemplateColumns: "repeat(auto-fit, minmax(160px, 1fr))",
-        gap: 32,
-        borderTop: "1px solid rgba(6,182,212,0.2)",
-        borderBottom: "1px solid rgba(6,182,212,0.2)",
-      }}>
-        {STATS.map((s, i) => (
-          <div key={i} style={{
-            textAlign: "center",
-            opacity: visible ? 1 : 0,
-            transform: visible ? "none" : "translateY(20px)",
-            transition: `opacity 0.6s ease ${i * 0.15}s, transform 0.6s ease ${i * 0.15}s`,
-          }}>
-            <div style={{ fontSize: 32, marginBottom: 8 }}>{s.icon}</div>
-            <div style={{
-              fontSize: 42, fontWeight: 900, color: "#fff",
-              background: "linear-gradient(90deg, #06B6D4, #A78BFA)",
-              WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent",
-              lineHeight: 1,
-            }}>{s.value}</div>
-            <div style={{ fontSize: 13, color: "rgba(255,255,255,0.5)", marginTop: 8, fontWeight: 300 }}>{s.label}</div>
+      <section style={{ padding: "72px 8%", display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(160px, 1fr))", gap: 24, borderTop: "1px solid rgba(255,255,255,0.05)", borderBottom: "1px solid rgba(255,255,255,0.05)" }}>
+        {STATS.map((entry, index) => (
+          <div key={entry.label} style={{ padding: 24, borderRadius: 24, background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.08)", display: "flex", flexDirection: "column", alignItems: "flex-start", gap: 14, opacity: visible ? 1 : 0, transform: visible ? "none" : "translateY(20px)", transition: `opacity 0.5s ease ${index * 0.12}s, transform 0.5s ease ${index * 0.12}s` }}>
+            <div style={{ width: 44, height: 44, borderRadius: 14, display: "grid", placeItems: "center", background: "rgba(6,182,212,0.12)", color: "#06B6D4" }}>
+              {entry.icon}
+            </div>
+            <div style={{ fontSize: 36, fontWeight: 800, color: "#fff", lineHeight: 1 }}>{entry.value}</div>
+            <div style={{ color: "rgba(255,255,255,0.65)", fontSize: 14, fontWeight: 400 }}>{entry.label}</div>
           </div>
         ))}
       </section>
 
-      {/* ══════════════════ FEATURES ══════════════════ */}
-      <section id="features" style={{ padding: "100px 8%" }}>
-        {/* Titre section */}
-        <div style={{ textAlign: "center", marginBottom: 72 }}>
-          <div style={{
-            display: "inline-block",
-            background: "rgba(76,29,149,0.1)",
-            border: "1px solid rgba(76,29,149,0.2)",
-            borderRadius: 50, padding: "5px 18px", marginBottom: 20,
-          }}>
-            <span style={{ color: "#6D28D9", fontSize: 13, fontWeight: 600 }}>MODULES DISPONIBLES</span>
+      <section id="features" style={{ padding: "90px 8%" }}>
+        <div style={{ textAlign: "center", marginBottom: 64 }}>
+          <div style={{ display: "inline-flex", alignItems: "center", justifyContent: "center", gap: 10, borderRadius: 999, padding: "8px 18px", background: "rgba(6,182,212,0.12)", border: "1px solid rgba(6,182,212,0.2)", marginBottom: 20 }}>
+            <span style={{ fontSize: 13, fontWeight: 700, color: "#06B6D4", letterSpacing: "0.16em", textTransform: "uppercase" }}>Modules disponibles</span>
           </div>
-          <h2 style={{
-            fontSize: "clamp(28px, 4vw, 48px)", fontWeight: 800,
-            color: "#1E1B4B", lineHeight: 1.15, margin: "0 0 16px",
-            letterSpacing: -1,
-          }}>
-            Tout ce dont une école{" "}
-            <span style={{ color: "#4C1D95" }}>a besoin</span>
+          <h2 style={{ margin: 0, fontSize: "clamp(34px, 4vw, 54px)", fontWeight: 900, color: "#fff", lineHeight: 1.08 }}>
+            Tout ce dont une école a besoin.
           </h2>
-          <p style={{
-            fontSize: 17, color: "#6B7280", maxWidth: 500,
-            margin: "0 auto", fontWeight: 300, lineHeight: 1.7,
-          }}>
-            Six modules intégrés, un seul outil. Chaque acteur accède
-            uniquement à son périmètre de responsabilité.
+          <p style={{ margin: "20px auto 0", maxWidth: 560, color: "rgba(226,232,240,0.78)", fontSize: 17, lineHeight: 1.75, fontWeight: 300 }}>
+            Six modules intégrés et une interface cohérente, pensée pour les équipes administratives et pédagogiques.
           </p>
         </div>
 
-        {/* Grille de features */}
-        <div style={{
-          display: "grid",
-          gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))",
-          gap: 24,
-        }}>
-          {FEATURES.map((f, i) => (
-            <div key={i} style={{
-              background: "#fff",
-              borderRadius: 16,
-              padding: "32px 28px",
-              border: "1px solid rgba(76,29,149,0.08)",
-              boxShadow: "0 2px 20px rgba(76,29,149,0.06)",
-              transition: "transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease",
-              cursor: "default",
-              opacity: visible ? 1 : 0,
-              transitionDelay: `${i * 0.08}s`,
-            }}
-              onMouseEnter={e => {
-                e.currentTarget.style.transform = "translateY(-6px)";
-                e.currentTarget.style.boxShadow = `0 16px 40px rgba(76,29,149,0.14)`;
-                e.currentTarget.style.borderColor = f.color + "44";
-              }}
-              onMouseLeave={e => {
-                e.currentTarget.style.transform = "none";
-                e.currentTarget.style.boxShadow = "0 2px 20px rgba(76,29,149,0.06)";
-                e.currentTarget.style.borderColor = "rgba(76,29,149,0.08)";
-              }}
-            >
-              {/* Icône */}
-              <div style={{
-                width: 52, height: 52, borderRadius: 14,
-                background: f.color === "#06B6D4"
-                  ? "linear-gradient(135deg, #E0F7FA, #B2EBF2)"
-                  : "linear-gradient(135deg, #EDE9FE, #DDD6FE)",
-                display: "flex", alignItems: "center",
-                justifyContent: "center", fontSize: 24,
-                marginBottom: 20,
-              }}>{f.icon}</div>
-
-              {/* Titre */}
-              <h3 style={{
-                fontSize: 19, fontWeight: 700,
-                color: "#1E1B4B", margin: "0 0 10px",
-              }}>{f.title}</h3>
-
-              {/* Description */}
-              <p style={{
-                fontSize: 14.5, color: "#6B7280",
-                lineHeight: 1.7, margin: 0, fontWeight: 300,
-              }}>{f.desc}</p>
-
-              {/* Tag couleur */}
-              <div style={{
-                marginTop: 22,
-                display: "inline-block",
-                background: f.color + "15",
-                border: `1px solid ${f.color}30`,
-                borderRadius: 50, padding: "4px 14px",
-              }}>
-                <span style={{ fontSize: 12, fontWeight: 600, color: f.color }}>
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(310px, 1fr))", gap: 24 }}>
+          {FEATURES.map((feature, index) => (
+            <div key={feature.title} style={{ overflow: "hidden", borderRadius: 24, background: "#08111F", border: "1px solid rgba(255,255,255,0.06)", boxShadow: "0 20px 60px rgba(0,0,0,0.16)", opacity: visible ? 1 : 0, transform: visible ? "none" : "translateY(24px)", transition: `opacity 0.6s ease ${index * 0.1}s, transform 0.6s ease ${index * 0.1}s` }}>
+              <div style={{ position: "relative", height: 220, overflow: "hidden" }}>
+                <img src={feature.image} alt={feature.title} style={{ width: "100%", height: "100%", objectFit: "cover", filter: "brightness(0.72)" }} />
+                <div style={{ position: "absolute", inset: 0, background: "linear-gradient(180deg, transparent 40%, rgba(11,15,25,0.92) 100%)" }} />
+              </div>
+              <div style={{ padding: 28, display: "grid", gap: 16 }}>
+                <div style={{ display: "inline-flex", alignItems: "center", justifyContent: "center", width: 52, height: 52, borderRadius: 16, background: feature.color === "#06B6D4" ? "rgba(6,182,212,0.14)" : "rgba(109,40,217,0.14)", color: feature.color }}>
+                  {feature.icon}
+                </div>
+                <div>
+                  <h3 style={{ margin: 0, fontSize: 20, color: "#F8FAFC" }}>{feature.title}</h3>
+                  <p style={{ margin: "12px 0 0", color: "rgba(226,232,240,0.75)", fontSize: 15, lineHeight: 1.7, fontWeight: 300 }}>{feature.desc}</p>
+                </div>
+                <span style={{ alignSelf: "flex-start", marginTop: 18, padding: "8px 16px", borderRadius: 999, background: feature.color + "20", color: feature.color, fontSize: 12, fontWeight: 700, letterSpacing: "0.08em" }}>
                   Inclus dans GEP
                 </span>
               </div>
@@ -360,89 +285,42 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ══════════════════ ACCES ROLES ══════════════════ */}
-      <section style={{
-        background: "linear-gradient(135deg, #1E0B3B 0%, #2D0F5E 100%)",
-        padding: "90px 8%",
-      }}>
-        <div style={{
-          maxWidth: 900, margin: "0 auto",
-          display: "grid", gridTemplateColumns: "1fr 1fr",
-          gap: 60, alignItems: "center",
-        }}>
-          {/* Texte gauche */}
+      <section style={{ background: "linear-gradient(135deg, #100A28 0%, #1E143D 100%)", padding: "90px 8%", borderRadius: 32, border: "1px solid rgba(6,182,212,0.12)" }}>
+        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 48, alignItems: "center" }}>
           <div>
-            <div style={{
-              background: "rgba(6,182,212,0.12)",
-              border: "1px solid rgba(6,182,212,0.25)",
-              borderRadius: 50, padding: "5px 16px",
-              display: "inline-block", marginBottom: 24,
-            }}>
-              <span style={{ color: "#22D3EE", fontSize: 12, fontWeight: 600 }}>ACCÈS SÉCURISÉ</span>
+            <div style={{ display: "inline-flex", alignItems: "center", gap: 10, marginBottom: 24, padding: "8px 18px", borderRadius: 999, border: "1px solid rgba(6,182,212,0.24)", background: "rgba(6,182,212,0.08)" }}>
+              <span style={{ color: "#06B6D4", fontSize: 12, fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.18em" }}>Accès sécurisé</span>
             </div>
-            <h2 style={{
-              fontSize: "clamp(26px, 3.5vw, 40px)",
-              fontWeight: 800, color: "#fff",
-              lineHeight: 1.2, margin: "0 0 18px",
-            }}>
-              Chaque acteur a{" "}
-              <span style={{ color: "#06B6D4" }}>son espace</span>
+            <h2 style={{ margin: 0, fontSize: "clamp(32px, 4vw, 46px)", fontWeight: 900, color: "#fff", lineHeight: 1.08 }}>
+              Chaque acteur a <span style={{ color: "#06B6D4" }}>son espace</span>
             </h2>
-            <p style={{
-              color: "rgba(255,255,255,0.6)", fontSize: 15.5,
-              lineHeight: 1.75, fontWeight: 300, margin: "0 0 28px",
-            }}>
-              Les droits d'accès sont contrôlés par JWT côté serveur.
-              Personne n'accède à ce qui ne le concerne pas.
+            <p style={{ margin: "24px 0 32px", maxWidth: 520, fontSize: 16, color: "rgba(226,232,240,0.75)", lineHeight: 1.8, fontWeight: 300 }}>
+              Les droits d'accès sont strictement segmentés pour que chaque utilisateur n'accède qu'aux données de son périmètre.
             </p>
-            <a href="/login" style={{
-              background: "linear-gradient(135deg, #06B6D4, #4C1D95)",
-              color: "#fff", padding: "13px 28px",
-              borderRadius: 9, fontWeight: 600, fontSize: 14,
-              textDecoration: "none",
-              boxShadow: "0 6px 24px rgba(6,182,212,0.3)",
-              display: "inline-block",
-              transition: "transform 0.2s",
-            }}
-              onMouseEnter={e => e.currentTarget.style.transform = "translateY(-2px)"}
-              onMouseLeave={e => e.currentTarget.style.transform = "none"}
+            <a href="/login" style={{ display: "inline-flex", alignItems: "center", justifyContent: "center", padding: "14px 30px", borderRadius: 12, background: "linear-gradient(135deg, #06B6D4, #4C1D95)", color: "#fff", fontWeight: 700, textDecoration: "none", boxShadow: "0 12px 32px rgba(6,182,212,0.28)", transition: "transform 0.2s" }}
+              onMouseEnter={(e) => (e.currentTarget.style.transform = 'translateY(-2px)')}
+              onMouseLeave={(e) => (e.currentTarget.style.transform = 'none')}
             >
               Se connecter →
             </a>
           </div>
 
-          {/* Cartes rôles */}
-          <div style={{ display: "flex", flexDirection: "column", gap: 14 }}>
+          <div style={{ display: "grid", gap: 18 }}>
             {[
-              { role: "Administrateur", desc: "Vue complète, configuration du système, gestion des utilisateurs", icon: "🛡️", badge: "#A78BFA" },
-              { role: "Secrétaire", desc: "Inscriptions, paiements, transport, impressions et exports", icon: "📌", badge: "#06B6D4" },
-              { role: "Comptable", desc: "Gestion globale de la caisse, validation des tranches et suivi financier", icon: "📊", badge: "#EC4899" },
-              { role: "Enseignant", desc: "Saisie des notes, signalement absences et incidents de classe", icon: "📚", badge: "#34D399" },
-            ].map((r, i) => (
-              <div key={i} style={{
-                background: "rgba(255,255,255,0.05)",
-                border: "1px solid rgba(255,255,255,0.08)",
-                borderRadius: 12, padding: "18px 20px",
-                display: "flex", alignItems: "flex-start", gap: 16,
-                backdropFilter: "blur(8px)",
-                transition: "background 0.2s, border 0.2s",
-              }}
-                onMouseEnter={e => { e.currentTarget.style.background = "rgba(255,255,255,0.09)"; e.currentTarget.style.borderColor = r.badge + "44"; }}
-                onMouseLeave={e => { e.currentTarget.style.background = "rgba(255,255,255,0.05)"; e.currentTarget.style.borderColor = "rgba(255,255,255,0.08)"; }}
-              >
-                <div style={{ fontSize: 24, marginTop: 2 }}>{r.icon}</div>
-                <div style={{ flex: 1 }}>
-                  <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 5 }}>
-                    <span style={{ color: "#fff", fontWeight: 700, fontSize: 15 }}>{r.role}</span>
-                    <span style={{
-                      background: r.badge + "22",
-                      border: `1px solid ${r.badge}44`,
-                      color: r.badge, fontSize: 11,
-                      fontWeight: 600, padding: "2px 10px",
-                      borderRadius: 50,
-                    }}>Actif</span>
+              { label: "Administrateur", desc: "Vue complète, configuration du système, gestion des utilisateurs", badge: "#A78BFA" },
+              { label: "Secrétaire", desc: "Inscriptions, paiements, transport et exports", badge: "#06B6D4" },
+              { label: "Enseignant", desc: "Notes, absences et suivi pédagogique", badge: "#34D399" },
+            ].map((item) => (
+              <div key={item.label} style={{ display: "flex", gap: 16, alignItems: "flex-start", padding: 18, borderRadius: 16, background: "rgba(255,255,255,0.05)", border: "1px solid rgba(255,255,255,0.08)", backdropFilter: "blur(10px)", transition: "background 0.2s, border 0.2s" }}>
+                <div style={{ width: 44, height: 44, borderRadius: 14, background: item.badge + "22", display: "grid", placeItems: "center", color: item.badge, fontSize: 20 }}>
+                  •
+                </div>
+                <div>
+                  <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 6 }}>
+                    <span style={{ color: "#fff", fontWeight: 700 }}>{item.label}</span>
+                    <span style={{ padding: "4px 12px", borderRadius: 999, background: item.badge + "22", color: item.badge, fontSize: 11, fontWeight: 700, letterSpacing: "0.04em" }}>Actif</span>
                   </div>
-                  <p style={{ color: "rgba(255,255,255,0.5)", fontSize: 13, margin: 0, lineHeight: 1.6, fontWeight: 300 }}>{r.desc}</p>
+                  <p style={{ margin: 0, color: "rgba(226,232,240,0.72)", fontSize: 14, lineHeight: 1.7, fontWeight: 300 }}>{item.desc}</p>
                 </div>
               </div>
             ))}
@@ -450,116 +328,44 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ══════════════════ CTA FINAL ══════════════════ */}
-      <section style={{
-        padding: "110px 8%", textAlign: "center",
-        background: "#F8FAFF",
-        position: "relative", overflow: "hidden",
-      }}>
-        <div style={{
-          position: "absolute", width: 600, height: 600,
-          borderRadius: "50%", top: "50%", left: "50%",
-          transform: "translate(-50%, -50%)",
-          background: "radial-gradient(circle, rgba(76,29,149,0.06) 0%, transparent 70%)",
-          pointerEvents: "none",
-        }} />
-
-        <div style={{ position: "relative", zIndex: 1 }}>
-          <h2 style={{
-            fontSize: "clamp(28px, 4vw, 52px)",
-            fontWeight: 900, color: "#1E1B4B",
-            margin: "0 0 20px", letterSpacing: -1.2,
-          }}>
-            Prêt à transformer{" "}
-            <span style={{
-              background: "linear-gradient(90deg, #4C1D95, #06B6D4)",
-              WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent",
-            }}>votre école ?</span>
+      <section style={{ padding: "110px 8%", textAlign: "center", background: "#0B0F19", position: "relative", overflow: "hidden" }}>
+        <div style={{ position: "absolute", inset: 0, opacity: 0.15, background: "radial-gradient(circle at top, rgba(6,182,212,0.25), transparent 40%)" }} />
+        <div style={{ position: "relative", zIndex: 2, maxWidth: 720, margin: "0 auto" }}>
+          <h2 style={{ margin: 0, fontSize: "clamp(32px, 4vw, 52px)", fontWeight: 900, color: "#fff", lineHeight: 1.08 }}>
+            Prêt à transformer <span style={{ background: "linear-gradient(90deg, #06B6D4, #A78BFA)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent" }}>votre école ?</span>
           </h2>
-          <p style={{
-            fontSize: 17, color: "#6B7280", maxWidth: 460,
-            margin: "0 auto 44px", lineHeight: 1.7, fontWeight: 300,
-          }}>
-            Connectez-vous depuis n'importe quelle machine du réseau
-            et commencez à gérer votre établissement.
+          <p style={{ margin: "22px auto 40px", maxWidth: 520, color: "rgba(226,232,240,0.75)", fontSize: 17, lineHeight: 1.8, fontWeight: 300 }}>
+            Connectez-vous depuis n'importe quelle machine du réseau et commencez à piloter votre établissement avec une solution interne dédiée.
           </p>
-          <a href="/login" style={{
-            background: "linear-gradient(135deg, #4C1D95 0%, #06B6D4 100%)",
-            color: "#fff", padding: "17px 48px",
-            borderRadius: 12, fontWeight: 800, fontSize: 17,
-            textDecoration: "none",
-            boxShadow: "0 10px 40px rgba(76,29,149,0.3)",
-            display: "inline-block",
-            transition: "transform 0.25s, box-shadow 0.25s",
-            letterSpacing: 0.3,
-          }}
-            onMouseEnter={e => { e.currentTarget.style.transform = "translateY(-4px) scale(1.02)"; e.currentTarget.style.boxShadow = "0 18px 50px rgba(76,29,149,0.45)"; }}
-            onMouseLeave={e => { e.currentTarget.style.transform = "none"; e.currentTarget.style.boxShadow = "0 10px 40px rgba(76,29,149,0.3)"; }}
+          <a href="/login" style={{ display: "inline-flex", alignItems: "center", justifyContent: "center", padding: "16px 42px", borderRadius: 14, background: "linear-gradient(135deg, #4C1D95, #06B6D4)", color: "#fff", fontWeight: 800, fontSize: 16, textDecoration: "none", boxShadow: "0 14px 40px rgba(76,29,149,0.28)", transition: "transform 0.25s, box-shadow 0.25s" }}
+            onMouseEnter={(e) => { e.currentTarget.style.transform = "translateY(-2px)"; e.currentTarget.style.boxShadow = "0 18px 50px rgba(76,29,149,0.35)"; }}
+            onMouseLeave={(e) => { e.currentTarget.style.transform = "none"; e.currentTarget.style.boxShadow = "0 14px 40px rgba(76,29,149,0.28)"; }}
           >
             Accéder à GEP Nebula →
           </a>
         </div>
       </section>
 
-      {/* ══════════════════ FOOTER ══════════════════ */}
-      <footer style={{
-        background: "#1E0B3B",
-        padding: "40px 8%",
-        display: "flex", justifyContent: "space-between",
-        alignItems: "center", flexWrap: "wrap", gap: 16,
-        borderTop: "1px solid rgba(6,182,212,0.15)",
-      }}>
-        <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-          <div style={{
-            width: 32, height: 32, borderRadius: 8,
-            background: "linear-gradient(135deg, #4C1D95, #06B6D4)",
-            display: "flex", alignItems: "center", justifyContent: "center",
-            fontWeight: 900, fontSize: 13, color: "#fff",
-          }}>G</div>
-          <span style={{ color: "#fff", fontWeight: 700, fontSize: 15 }}>GEP <span style={{ color: "#06B6D4", fontWeight: 300 }}>Nebula</span></span>
+      <footer style={{ background: "#090E20", padding: "42px 8%", display: "flex", flexWrap: "wrap", justifyContent: "space-between", alignItems: "center", gap: 16, borderTop: "1px solid rgba(6,182,212,0.15)" }}>
+        <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
+          <div style={{ width: 34, height: 34, borderRadius: 10, background: "linear-gradient(135deg, #4C1D95, #06B6D4)", display: "grid", placeItems: "center", color: "#fff", fontWeight: 900 }}>G</div>
+          <div>
+            <div style={{ color: "#fff", fontWeight: 700 }}>GEP Nebula</div>
+            <div style={{ color: "rgba(255,255,255,0.55)", fontSize: 13 }}>Intranet scolaire</div>
+          </div>
         </div>
-        <p style={{ color: "rgba(255,255,255,0.3)", fontSize: 13, margin: 0, fontWeight: 300 }}>
-          © 2026 GEP Nebula — Génie Informatique — Réseau intranet scolaire
-        </p>
-        <div style={{ display: "flex", gap: 20 }}>
-          {["Connexion", "À propos", "Support"].map(l => (
-            <a key={l} href="#" style={{
-              color: "rgba(255,255,255,0.35)", fontSize: 13,
-              textDecoration: "none", fontWeight: 300,
-              transition: "color 0.2s",
-            }}
-              onMouseEnter={e => e.target.style.color = "#06B6D4"}
-              onMouseLeave={e => e.target.style.color = "rgba(255,255,255,0.35)"}
-            >{l}</a>
+        <p style={{ margin: 0, color: "rgba(255,255,255,0.38)", fontSize: 13, fontWeight: 300 }}>© 2026 GEP Nebula — Réseau intranet scolaire</p>
+        <div style={{ display: "flex", gap: 20, flexWrap: "wrap" }}>
+          {['Connexion', 'À propos', 'Support'].map((label) => (
+            <a key={label} href="#" style={{ color: "rgba(255,255,255,0.55)", textDecoration: "none", fontSize: 13, fontWeight: 300, transition: "color 0.2s" }}
+              onMouseEnter={(e) => (e.currentTarget.style.color = '#06B6D4')}
+              onMouseLeave={(e) => (e.currentTarget.style.color = 'rgba(255,255,255,0.55)')}
+            >
+              {label}
+            </a>
           ))}
         </div>
       </footer>
-
-      {/* ══════════════════ KEYFRAMES ══════════════════ */}
-      <style>{`
-        @keyframes pulse {
-          0%, 100% { opacity: 1; transform: scale(1); }
-          50% { opacity: 0.5; transform: scale(0.85); }
-        }
-        @keyframes bounce {
-          0%, 100% { transform: translateX(-50%) translateY(0); }
-          50% { transform: translateX(-50%) translateY(8px); }
-        }
-        @keyframes float0 {
-          from { transform: translate(0, 0) scale(1); }
-          to   { transform: translate(12px, -18px) scale(1.06); }
-        }
-        @keyframes float1 {
-          from { transform: translate(0, 0) scale(1); }
-          to   { transform: translate(-10px, 14px) scale(0.95); }
-        }
-        @keyframes float2 {
-          from { transform: translate(0, 0) rotate(0deg); }
-          to   { transform: translate(8px, -10px) rotate(5deg); }
-        }
-        * { box-sizing: border-box; }
-        html { scroll-behavior: smooth; }
-      `}</style>
     </div>
   );
 }
