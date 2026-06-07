@@ -1,5 +1,7 @@
-import { useEffect, useState } from "react";
+import React, { useState, useEffect } from "react";
+import BrandLogo from "../components/BrandLogo";
 
+// 1. Définition des icônes SVG
 const ICONS = {
   student: (
     <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
@@ -80,9 +82,8 @@ const ICONS = {
     </svg>
   ),
 };
-import { useState, useEffect } from "react";
-import BrandLogo from "../components/BrandLogo";
 
+// 2. Données statiques
 const STATS = [
   { value: "500+", label: "Élèves gérés", icon: ICONS.student },
   { value: "12", label: "Classes actives", icon: ICONS.classroom },
@@ -114,7 +115,7 @@ const FEATURES = [
   },
   {
     title: "Transport",
-    desc: "Gérez les abonnements bus, les mensualités et suivez les impayés de transport par élève.",
+    desc: "Gérerez les abonnements bus, les mensualités et suivez les impayés de transport par élève.",
     icon: ICONS.bus,
     color: "#6D28D9",
     image: "https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=1200&q=80",
@@ -135,13 +136,7 @@ const FEATURES = [
   },
 ];
 
-const ROLES = [
-  { title: "Administrateur", role: "Pilotage global", details: "Configuration, supervision et contrôle d'accès de l'ensemble du réseau intranet." },
-  { title: "Secrétaire", role: "Gestion administrative", details: "Saisie des inscriptions, validation des documents et gestion des communications internes." },
-  { title: "Comptable", role: "Suivi financier", details: "Contrôle des paiements, des factures et des états journaliers de la trésorerie." },
-  { title: "Enseignant", role: "Classe & pédagogie", details: "Saisie des notes, suivi des absences et communication rapide avec les parents." },
-];
-
+// 3. Composant principal
 export default function Home() {
   const [scrollY, setScrollY] = useState(0);
   const [visible, setVisible] = useState(false);
@@ -160,6 +155,7 @@ export default function Home() {
     <div style={{ fontFamily: "'Outfit', 'Segoe UI', sans-serif", background: "#0B0F19", color: "#E2E8F0", minHeight: "100vh", overflowX: "hidden" }}>
       <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
 
+      {/* Barre de navigation */}
       <nav style={{
         position: "fixed",
         top: 0,
@@ -176,23 +172,11 @@ export default function Home() {
         justifyContent: "space-between",
         height: 72,
       }}>
-<<<<<<< HEAD
-        <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
-          <div style={{ width: 40, height: 40, borderRadius: 12, background: "linear-gradient(135deg, #4C1D95, #06B6D4)", display: "grid", placeItems: "center", color: "#fff", fontWeight: 900, letterSpacing: 0.5 }}>
-            G
-          </div>
-          <div>
-            <div style={{ fontSize: 16, fontWeight: 800, color: "#fff" }}>GEP Nebula</div>
-            <div style={{ fontSize: 12, color: "#94A3B8" }}>Intranet scolaire</div>
-          </div>
-=======
-        {/* Logo */}
         <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
           <BrandLogo />
           <span style={{ fontWeight: 800, fontSize: 20, color: "#fff", letterSpacing: 0.5, lineHeight: 1 }}>
             GEP <span style={{ color: "#38bdf8", fontWeight: 700, fontSize: 13 }}>Nebular</span>
           </span>
->>>>>>> 74920de87e379dc60ab0258d2e4a9eae8d89057c
         </div>
 
         <div style={{ display: "flex", gap: 32, alignItems: "center" }}>
@@ -211,6 +195,7 @@ export default function Home() {
         </div>
       </nav>
 
+      {/* Section Héro */}
       <section style={{ position: "relative", minHeight: "100vh", display: "flex", alignItems: "center", overflow: "hidden" }}>
         <div style={{ position: "absolute", inset: 0, backgroundImage: "url('https://images.unsplash.com/photo-1504384308090-c894fdcc538d?auto=format&fit=crop&w=1600&q=80')", backgroundSize: "cover", backgroundPosition: "center", transform: `translateY(${scrollY * 0.18}px)`, filter: "brightness(0.68)" }} />
         <div style={{ position: "absolute", inset: 0, background: "linear-gradient(120deg, rgba(6,14,34,0.92), rgba(6,182,212,0.18) 60%)" }} />
@@ -247,6 +232,7 @@ export default function Home() {
         </div>
       </section>
 
+      {/* Section Statistiques */}
       <section style={{ padding: "72px 8%", display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(160px, 1fr))", gap: 24, borderTop: "1px solid rgba(255,255,255,0.05)", borderBottom: "1px solid rgba(255,255,255,0.05)" }}>
         {STATS.map((entry, index) => (
           <div key={entry.label} style={{ padding: 24, borderRadius: 24, background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.08)", display: "flex", flexDirection: "column", alignItems: "flex-start", gap: 14, opacity: visible ? 1 : 0, transform: visible ? "none" : "translateY(20px)", transition: `opacity 0.5s ease ${index * 0.12}s, transform 0.5s ease ${index * 0.12}s` }}>
@@ -259,6 +245,7 @@ export default function Home() {
         ))}
       </section>
 
+      {/* Section Fonctionnalités */}
       <section id="features" style={{ padding: "90px 8%" }}>
         <div style={{ textAlign: "center", marginBottom: 64 }}>
           <div style={{ display: "inline-flex", alignItems: "center", justifyContent: "center", gap: 10, borderRadius: 999, padding: "8px 18px", background: "rgba(6,182,212,0.12)", border: "1px solid rgba(6,182,212,0.2)", marginBottom: 20 }}>
@@ -296,7 +283,8 @@ export default function Home() {
         </div>
       </section>
 
-      <section style={{ background: "linear-gradient(135deg, #100A28 0%, #1E143D 100%)", padding: "90px 8%", borderRadius: 32, border: "1px solid rgba(6,182,212,0.12)" }}>
+      {/* Section Rôles & Accès */}
+      <section style={{ background: "linear-gradient(135deg, #100A28 0%, #1E143D 100%)", padding: "90px 8%", borderRadius: 32, border: "1px solid rgba(6,182,212,0.12)", marginBottom: 60 }}>
         <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 48, alignItems: "center" }}>
           <div>
             <div style={{ display: "inline-flex", alignItems: "center", gap: 10, marginBottom: 24, padding: "8px 18px", borderRadius: 999, border: "1px solid rgba(6,182,212,0.24)", background: "rgba(6,182,212,0.08)" }}>
@@ -322,7 +310,7 @@ export default function Home() {
               { label: "Secrétaire", desc: "Inscriptions, paiements, transport et exports", badge: "#06B6D4" },
               { label: "Enseignant", desc: "Notes, absences et suivi pédagogique", badge: "#34D399" },
             ].map((item) => (
-              <div key={item.label} style={{ display: "flex", gap: 16, alignItems: "flex-start", padding: 18, borderRadius: 16, background: "rgba(255,255,255,0.05)", border: "1px solid rgba(255,255,255,0.08)", backdropFilter: "blur(10px)", transition: "background 0.2s, border 0.2s" }}>
+              <div key={item.label} style={{ display: "flex", gap: 16, alignItems: "flex-start", padding: 18, borderRadius: 16, background: "rgba(255,255,255,0.05)", border: "1px solid rgba(255,255,255,0.08)", backdropFilter: "blur(10px)" }}>
                 <div style={{ width: 44, height: 44, borderRadius: 14, background: item.badge + "22", display: "grid", placeItems: "center", color: item.badge, fontSize: 20 }}>
                   •
                 </div>
@@ -339,6 +327,7 @@ export default function Home() {
         </div>
       </section>
 
+      {/* Appel à l'action final */}
       <section style={{ padding: "110px 8%", textAlign: "center", background: "#0B0F19", position: "relative", overflow: "hidden" }}>
         <div style={{ position: "absolute", inset: 0, opacity: 0.15, background: "radial-gradient(circle at top, rgba(6,182,212,0.25), transparent 40%)" }} />
         <div style={{ position: "relative", zIndex: 2, maxWidth: 720, margin: "0 auto" }}>
@@ -357,31 +346,15 @@ export default function Home() {
         </div>
       </section>
 
-<<<<<<< HEAD
-      <footer style={{ background: "#090E20", padding: "42px 8%", display: "flex", flexWrap: "wrap", justifyContent: "space-between", alignItems: "center", gap: 16, borderTop: "1px solid rgba(6,182,212,0.15)" }}>
-        <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
-          <div style={{ width: 34, height: 34, borderRadius: 10, background: "linear-gradient(135deg, #4C1D95, #06B6D4)", display: "grid", placeItems: "center", color: "#fff", fontWeight: 900 }}>G</div>
-          <div>
-            <div style={{ color: "#fff", fontWeight: 700 }}>GEP Nebula</div>
-            <div style={{ color: "rgba(255,255,255,0.55)", fontSize: 13 }}>Intranet scolaire</div>
-          </div>
-        </div>
-        <p style={{ margin: 0, color: "rgba(255,255,255,0.38)", fontSize: 13, fontWeight: 300 }}>© 2026 GEP Nebula — Réseau intranet scolaire</p>
-        <div style={{ display: "flex", gap: 20, flexWrap: "wrap" }}>
-          {['Connexion', 'À propos', 'Support'].map((label) => (
-            <a key={label} href="#" style={{ color: "rgba(255,255,255,0.55)", textDecoration: "none", fontSize: 13, fontWeight: 300, transition: "color 0.2s" }}
-              onMouseEnter={(e) => (e.currentTarget.style.color = '#06B6D4')}
-              onMouseLeave={(e) => (e.currentTarget.style.color = 'rgba(255,255,255,0.55)')}
-            >
-              {label}
-            </a>
-=======
-      {/* ══════════════════ FOOTER ══════════════════ */}
+      {/* Footer Propre Unique */}
       <footer style={{
         background: "#1E0B3B",
         padding: "40px 8%",
-        display: "flex", justifyContent: "space-between",
-        alignItems: "center", flexWrap: "wrap", gap: 16,
+        display: "flex", 
+        justifyContent: "space-between",
+        alignItems: "center", 
+        flexWrap: "wrap", 
+        gap: 16,
         borderTop: "1px solid rgba(6,182,212,0.15)",
       }}>
         <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
@@ -400,10 +373,9 @@ export default function Home() {
               textDecoration: "none", fontWeight: 300,
               transition: "color 0.2s",
             }}
-              onMouseEnter={e => e.target.style.color = "#06B6D4"}
-              onMouseLeave={e => e.target.style.color = "rgba(255,255,255,0.35)"}
+              onMouseEnter={e => { e.currentTarget.style.color = "#06B6D4"; }}
+              onMouseLeave={e => { e.currentTarget.style.color = "rgba(255,255,255,0.35)"; }}
             >{l}</a>
->>>>>>> 74920de87e379dc60ab0258d2e4a9eae8d89057c
           ))}
         </div>
       </footer>
