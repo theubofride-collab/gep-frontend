@@ -1,6 +1,6 @@
 import { NavLink } from 'react-router-dom'
-import BrandLogo from '../../../BrandLogo'
-import './Sidebar.css'
+import BrandLogo from '../ui/BrandLogo'
+import './AdminSidebar.css'
 
 const nav = [
   { to: '/admin/dashboard', icon: '⊞', label: 'Tableau de bord' },

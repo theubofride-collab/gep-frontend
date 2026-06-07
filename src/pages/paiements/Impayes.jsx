@@ -1,12 +1,12 @@
 import { useMemo, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import Module36Layout from '../../../../components/Ps/Module_3.6/Module36Layout'
+import Module36Layout from './Module36Layout'
 import {
   formatFcfa,
   getRetardBadge,
   getUnpaidSummary,
   module36UnpaidList,
-} from '../../../../components/Ps/Module_3.6/module36Data'
+} from './module36Data'
 
 export default function Impayes() {
   const navigate = useNavigate()

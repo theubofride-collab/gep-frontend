@@ -1,5 +1,5 @@
-import Module35Layout from '../../../../components/Ps/Module_3.5/Module35Layout'
-import { getClassById } from '../../../../components/Ps/Module_3.5/module35Data'
+import Module35Layout from './Module35Layout'
+import { getClassById } from './module35Data'
 import { useMemo, useState } from 'react'
 
 export default function Edit() {

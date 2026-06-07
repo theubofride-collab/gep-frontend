@@ -1,5 +1,5 @@
 import { useMemo, useState } from 'react'
-import Module36Layout from '../../../../../components/Ps/Module_3.6/Module36Layout'
+import Module36Layout from '../Module36Layout'
 import {
   computeBulletinAverage,
   module36BulletinGrades,
@@ -8,7 +8,7 @@ import {
   module36ExportClasses,
   module36PrintActions,
   module36StudentProfiles,
-} from '../../../../../components/Ps/Module_3.6/module36Data'
+} from '../module36Data'
 
 export default function Bulletin() {
   const [eleve, setEleve] = useState(module36BulletinStudents[0])

@@ -1,11 +1,11 @@
 import { useState } from 'react'
-import Module36Layout from '../../../../../components/Ps/Module_3.6/Module36Layout'
+import Module36Layout from '../Module36Layout'
 import {
   module36ListStatusStyles,
   module36PrintActions,
   module36StudentProfiles,
   module36Students,
-} from '../../../../../components/Ps/Module_3.6/module36Data'
+} from '../module36Data'
 
 export default function FicheEleve() {
   const [eleve, setEleve] = useState(module36Students[0])

@@ -1,11 +1,11 @@
 import { useMemo, useState } from 'react'
-import Module36Layout from '../../../../../components/Ps/Module_3.6/Module36Layout'
+import Module36Layout from '../Module36Layout'
 import {
   module36ClassStudents,
   module36ExportClasses,
   module36ListStatusStyles,
   module36PrintActions,
-} from '../../../../../components/Ps/Module_3.6/module36Data'
+} from '../module36Data'
 
 const DEFAULT_CLASS = 'CM2-A'
 

@@ -1,34 +1,31 @@
 import { Routes, Route, Navigate } from 'react-router-dom'
-import Sidebar from '../components/Ps/ModuleAdmin/Sidebar/Sidebar'
-import Dashboard from '../pages/Ps/ModuleAdmin/Dashboard/Dashboard'
-import Eleves from '../pages/Ps/ModuleAdmin/Eleves/Eleves'
-import Enseignants from '../pages/Ps/ModuleAdmin/Enseignants/Enseignants'
-import Parents from '../pages/Ps/ModuleAdmin/Parents/Parents'
-import Compte from '../pages/Ps/ModuleAdmin/Compte/Compte'
-import Classes from '../pages/Ps/ModuleAdmin/Classes/Classes'
-import Examens from '../pages/Ps/ModuleAdmin/Examens/Examens'
-import Transport from '../pages/Ps/ModuleAdmin/Transport/Transport'
-import Annonces from '../pages/Ps/ModuleAdmin/Annonces/Annonces'
-import Parametres from '../pages/Ps/ModuleAdmin/Parametres/Parametres'
-import Sauvegardes from '../pages/Ps/ModuleAdmin/Sauvegardes/Sauvegardes'
+import AdminSidebar from '../components/layout/AdminSidebar'
+import Dashboard from '../pages/administration/Dashboard'
+import Enseignants from '../pages/administration/Enseignants'
+import Parents from '../pages/administration/Parents'
+import Compte from '../pages/administration/Compte'
+import Examens from '../pages/administration/Examens'
+import Transport from '../pages/transport/Transport'
+import Annonces from '../pages/administration/Annonces'
+import Parametres from '../pages/administration/Parametres'
+import Sauvegardes from '../pages/administration/Sauvegardes'
 
 export default function AppRouter() {
   return (
     <div className="app-layout">
-      <Sidebar />
+      <AdminSidebar />
       <main className="main-content">
         <Routes>
           <Route index element={<Navigate to="dashboard" replace />} />
           <Route path="dashboard" element={<Dashboard />} />
-          <Route path="eleves" element={<Eleves />} />
+          <Route path="eleves" element={<Navigate to="/eleves" replace />} />
           <Route path="enseignants" element={<Enseignants />} />
           <Route path="parents" element={<Parents />} />
           <Route path="compte" element={<Compte />} />
-          <Route path="classes" element={<Classes />} />
+          <Route path="classes" element={<Navigate to="/classes" replace />} />
           <Route path="examens" element={<Examens />} />
           <Route path="transport" element={<Transport />} />
           <Route path="annonces" element={<Annonces />} />
-          
           <Route path="parametres" element={<Parametres />} />
           <Route path="sauvegardes" element={<Sauvegardes />} />
           <Route path="*" element={<Navigate to="dashboard" replace />} />

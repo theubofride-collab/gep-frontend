@@ -1,9 +1,9 @@
 import { useState } from 'react'
-import Module36Layout from '../../../../../components/Ps/Module_3.6/Module36Layout'
+import Module36Layout from '../Module36Layout'
 import {
   module36ExcelExports,
   module36HistoryPeriods,
-} from '../../../../../components/Ps/Module_3.6/module36Data'
+} from '../module36Data'
 
 export default function ExportExcel() {
   const [periode, setPeriode] = useState(module36HistoryPeriods[0])

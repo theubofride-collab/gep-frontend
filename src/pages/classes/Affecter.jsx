@@ -1,5 +1,5 @@
-import Module35Layout from '../../../../components/Ps/Module_3.5/Module35Layout'
-import { module35CandidateStudents } from '../../../../components/Ps/Module_3.5/module35Data'
+import Module35Layout from './Module35Layout'
+import { module35CandidateStudents } from './module35Data'
 import { useState } from 'react'
 
 export default function Affecter() {

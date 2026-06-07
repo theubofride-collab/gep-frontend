@@ -1,9 +1,9 @@
-import Module36Layout from '../../../../components/Ps/Module_3.6/Module36Layout'
+import Module36Layout from './Module36Layout'
 import {
   formatFcfa,
   module36Invoice,
   module36InvoiceActions,
-} from '../../../../components/Ps/Module_3.6/module36Data'
+} from './module36Data'
 
 export default function Factures() {
   const sousTotal = module36Invoice.lines.reduce((sum, line) => sum + line.qte * line.prix, 0)

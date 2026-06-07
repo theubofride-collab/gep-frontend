@@ -1,5 +1,5 @@
 import { Link, NavLink } from 'react-router-dom'
-import BrandLogo from '../../BrandLogo'
+import BrandLogo from '../../components/ui/BrandLogo'
 import './module34.css'
 
 const NAV_GROUPS = [

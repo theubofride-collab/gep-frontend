@@ -1,9 +1,9 @@
-import Module36Layout from '../../../../components/Ps/Module_3.6/Module36Layout'
+import Module36Layout from './Module36Layout'
 import {
   module36DashboardStats,
   module36RecentPayments,
   module36UrgentUnpaid,
-} from '../../../../components/Ps/Module_3.6/module36Data'
+} from './module36Data'
 
 export default function Dashboard() {
   return (

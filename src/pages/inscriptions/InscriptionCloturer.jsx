@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import Module34Layout from '../../../../components/Ps/Module_3.4/Module34Layout'
-import { module34Profile } from '../../../../components/Ps/Module_3.4/module34Data'
+import Module34Layout from './Module34Layout'
+import { module34Profile } from './module34Data'
 
 const MOTIFS = [
   { label: "Fin d'année scolaire", value: 'fin' },

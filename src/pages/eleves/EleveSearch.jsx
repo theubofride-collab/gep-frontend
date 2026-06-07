@@ -1,6 +1,6 @@
 import { useMemo, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import Module33Layout from '../../../../components/Ps/Module_3.3/Module33Layout'
+import Module33Layout from '../inscriptions/Module33Layout'
 import {
   formatSearchDate,
   getStudentStatusClass,
@@ -10,7 +10,7 @@ import {
   module33SearchModes,
   module33Sections,
   module33Students,
-} from '../../../../components/Ps/Module_3.3/module33Data'
+} from '../inscriptions/module33Data'
 
 export default function Search() {
   const navigate = useNavigate()

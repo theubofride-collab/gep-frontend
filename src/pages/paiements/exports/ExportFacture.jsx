@@ -1,11 +1,11 @@
 import { useState } from 'react'
-import Module36Layout from '../../../../../components/Ps/Module_3.6/Module36Layout'
+import Module36Layout from '../Module36Layout'
 import {
   formatFcfa,
   module36Invoice,
   module36PaymentsList,
   module36PrintActions,
-} from '../../../../../components/Ps/Module_3.6/module36Data'
+} from '../module36Data'
 
 export default function ExportFacture() {
   const [selectedFacture, setSelectedFacture] = useState(module36PaymentsList[0].facture)
